@@ -30,6 +30,19 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 # Create executable with all found source files
 add_executable(SpaceInvaders ${SOURCES})
 
+# Tell the compiler where to look for header files (.h/.hpp)
+target_include_directories(SpaceInvaders PRIVATE 
+    "include"
+    "src"
+)
+
+# Copy assets to build directory
+add_custom_command(TARGET SpaceInvaders POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets
+    $<TARGET_FILE_DIR:SpaceInvaders>/assets
+)
+
 # Set C++20 Standard
 set_property(TARGET SpaceInvaders PROPERTY CXX_STANDARD 20)
 
