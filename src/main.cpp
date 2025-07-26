@@ -6,15 +6,18 @@ constexpr int SCREEN_WIDTH = 1600;
 constexpr int SCREEN_HEIGHT = 900;
 
 int main() {
-	const sf::Texture texture("assets/sprites/alien.png");
-    
 	sf::RenderWindow window(sf::VideoMode({ static_cast<unsigned int>(SCREEN_WIDTH),
 		                                    static_cast<unsigned int>(SCREEN_HEIGHT)}),
 		                                    "Space Invaders Clone");
 
-	sf::Sprite sprite(texture);
-	sprite.setTextureRect({ {10, 10}, {50, 30} });
-	sprite.setColor({ 255, 255, 255, 200 });
+	const sf::Vector2u textureSize = texture.getSize();
+	const float scaleX = desiredWidth / textureSize.x;
+	const float scaleY = desiredHeight / textureSize.y;
+
+	// Apply the scale
+	sprite.setScale({ scaleX, scaleY });
+
+	sprite.setColor({ 255, 255, 255, 255 });
 	sprite.setPosition({ 100.f, 25.f });
 
 	// Run as long as the window is open
@@ -27,10 +30,12 @@ int main() {
 			}
 		}
 
-		window.clear();
-		// window.draw(sprite);
+		window.clear(sf::Color::White);
+		window.draw(sprite);
 		window.display();
 	}
+
+	std::cout << __cplusplus << "\n";
 
 	return 0;
 }

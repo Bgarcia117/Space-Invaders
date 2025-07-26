@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "game_object.h"
+#include "core/game_object.h"
+#include "managers/resource_manager.h"
 
 GameObject::GameObject() {
-	// const sf::Texture texture();
+	
 }

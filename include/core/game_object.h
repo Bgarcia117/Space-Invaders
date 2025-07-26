@@ -5,5 +5,6 @@ public:
 	GameObject();
 
 protected:
+	virtual void move() = 0;
 
 };
