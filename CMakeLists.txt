@@ -1,20 +1,15 @@
-﻿# CMakeList.txt CMake project for Space Invaders
-cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 4.0)
+project(SpaceInvaders CXX)
 
-# Enable Hot Reload for MSVC compilers if supported.
-# Allows for code changes without full rebuilds in Visual Studio
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Project Name and Language Specification
-project("Space Invaders" LANGUAGES CXX)
-
-# Set ouput directory for executable
+# Set output directory for executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Fetch and build SFML
+# ----------------------------------------------------------------------------
+# Fetch SFML from GitHub using FetchContent
+# ----------------------------------------------------------------------------
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -24,27 +19,39 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-# Find all source files (.cpp) in src/ and all subdirectories recursively
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+# ----------------------------------------------------------------------------
+# Collect all source files and header files
+# Use CONFIGURE_DEPENDS to let CMake re-run automatically
+# if new files are added to these folders (supported in newer CMake versions)
+# ----------------------------------------------------------------------------
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "src/*.cpp" "src/*.c")
+file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*.h" "include/*.hpp")
 
-# Create executable with all found source files
-add_executable(SpaceInvaders ${SOURCES})
+# ----------------------------------------------------------------------------
+# Create the executable from all source and header files
+# ----------------------------------------------------------------------------
+add_executable(SpaceInvaders ${SOURCE_FILES} ${HEADER_FILES})
 
-# Tell the compiler where to look for header files (.h/.hpp)
-target_include_directories(SpaceInvaders PRIVATE 
-    "include"
-    "src"
-)
-
-# Copy assets to build directory
+# ----------------------------------------------------------------------------
+# Copy assets to build directory after building
+# ----------------------------------------------------------------------------
 add_custom_command(TARGET SpaceInvaders POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets
-    $<TARGET_FILE_DIR:SpaceInvaders>/assets
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
 )
 
-# Set C++20 Standard
-set_property(TARGET SpaceInvaders PROPERTY CXX_STANDARD 20)
+# ----------------------------------------------------------------------------
+# Add the include directory so headers can be found with #include "..."
+# ----------------------------------------------------------------------------
+target_include_directories(SpaceInvaders PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-# Link SFML libraries to executable
+# ----------------------------------------------------------------------------
+# Use C++20 standard (or change to cxx_std_23 if you prefer)
+# ----------------------------------------------------------------------------
+target_compile_features(SpaceInvaders PRIVATE cxx_std_20)
+
+# ----------------------------------------------------------------------------
+# Link the SFML graphics module (includes Window, System, etc.)
+# ----------------------------------------------------------------------------
 target_link_libraries(SpaceInvaders PRIVATE SFML::Graphics)
