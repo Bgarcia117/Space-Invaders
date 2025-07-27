@@ -4,5 +4,5 @@
 
 class Player : public GameObject {
 public:
-	Player(ResourceManager& manager);
+	// Player(ResourceManager& manager);
 };

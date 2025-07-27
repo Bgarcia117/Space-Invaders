@@ -1,13 +1,19 @@
 #include <iostream>
 #include <filesystem>
 #include <SFML/Graphics.hpp>
-#include "game_objects/alien.h" // Testing 
+#include "core/game.h" // Testing 
+#include "game_objects/alien.h"
 #include "managers/resource_manager.h"
 
 constexpr int SCREEN_WIDTH = 1600;
 constexpr int SCREEN_HEIGHT = 900;
 
 int main() {
+	// ========= TESTING =========
+	Game game;
+	game.begin();
+
+
 	sf::RenderWindow window(sf::VideoMode({ static_cast<unsigned int>(SCREEN_WIDTH),
 		                                    static_cast<unsigned int>(SCREEN_HEIGHT)}),
 		                                    "Space Invaders Clone");

@@ -6,7 +6,7 @@
 
 class Alien : public GameObject {
 public:
-	Alien(ResourceManager& resourceManager);
+	Alien(const ResourceManager& resourceManager);
 	void move() override;
 
 private:
