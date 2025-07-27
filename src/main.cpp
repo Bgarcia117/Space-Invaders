@@ -1,6 +1,8 @@
 #include <iostream>
 #include <filesystem>
 #include <SFML/Graphics.hpp>
+#include "game_objects/alien.h" // Testing 
+#include "managers/resource_manager.h"
 
 constexpr int SCREEN_WIDTH = 1600;
 constexpr int SCREEN_HEIGHT = 900;
@@ -9,16 +11,6 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode({ static_cast<unsigned int>(SCREEN_WIDTH),
 		                                    static_cast<unsigned int>(SCREEN_HEIGHT)}),
 		                                    "Space Invaders Clone");
-
-	const sf::Vector2u textureSize = texture.getSize();
-	const float scaleX = desiredWidth / textureSize.x;
-	const float scaleY = desiredHeight / textureSize.y;
-
-	// Apply the scale
-	sprite.setScale({ scaleX, scaleY });
-
-	sprite.setColor({ 255, 255, 255, 255 });
-	sprite.setPosition({ 100.f, 25.f });
 
 	// Run as long as the window is open
 	while (window.isOpen()) {
@@ -31,11 +23,8 @@ int main() {
 		}
 
 		window.clear(sf::Color::White);
-		window.draw(sprite);
 		window.display();
 	}
-
-	std::cout << __cplusplus << "\n";
 
 	return 0;
 }

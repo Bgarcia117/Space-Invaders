@@ -9,9 +9,9 @@ class ResourceManager {
 public:
 	ResourceManager();
 
-	bool loadTexture(const std::string& key, const std::string& filepath);
+	bool loadTexture(const std::string&, const std::string& filepath);
 	const sf::Texture& getTexture(const std::string& key) const;
-	const 
+	const sf::Vector2u getTextureSize(const std::string& key) const;
 
 private:
 	std::unordered_map<std::string, sf::Texture> textures;

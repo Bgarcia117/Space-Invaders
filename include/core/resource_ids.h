@@ -1,16 +1,16 @@
 #pragma once
-#include <string_view>
+#include <string>
 
 namespace ResourceKeys {
-	constexpr std::string_view playerKey = "player";
-	constexpr std::string_view alienKey = "alien";
-	constexpr std::string_view bulletKey = "bullet";
-	constexpr std::string_view barrierKey = "barrier";
+	const std::string playerKey = "player";
+	const std::string alienKey = "alien";
+	const std::string bulletKey = "bullet";
+	const std::string barrierKey = "barrier";
 }
 
 namespace ResourcePaths {
-	constexpr std::string_view playerPath;
-	constexpr std::string_view alienPath =  "assets/sprites/alien.png";
-	constexpr std::string_view bulletPath;
-	constexpr std::string_view barrierPath;
+	const std::string playerPath;
+	const std::string alienPath =  "assets/sprites/alien.png";
+	const std::string bulletPath;
+	const std::string barrierPath;
 }
