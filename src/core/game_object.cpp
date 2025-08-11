@@ -3,14 +3,17 @@
 #include "core/game_object.h"
 #include "managers/resource_manager.h"
 
-GameObject::GameObject(const ResourceManager& spriteManager, const std::string& textureKey, const sf::Vector2f scaler) {
-	// Load texture onto sprite
-	sprite.emplace(spriteManager.getTexture(textureKey));
+GameObject::GameObject(const ResourceManager& resourceManager, const std::string& spriteKey, 
+	                   const sf::Vector2f position) {
 
-	// Scale down sprite to desired size
-	sf::Vector2f textureSize = static_cast<sf::Vector2f>(spriteManager.getTextureSize(textureKey));
-	sf::Vector2f scaledSize = { textureSize.x / scaler.x, textureSize.y / scaler.y };
-	sprite->setScale({ scaledSize.x, scaledSize.y });
+	const SpriteConfig& spriteConfig = resourceManager.getSpriteConfig(spriteKey);
+	const sf::Texture& texture = resourceManager.getTexture(spriteConfig.textureKey);
+
+	// Load Texure onto sprite
+	sprite.emplace(texture);
+	sprite->setTextureRect(spriteConfig.textureRect);
+	sprite->setScale(spriteConfig.scale);
+	sprite->setPosition({position});
 }
 
 const sf::Sprite& GameObject::getSprite() const {
