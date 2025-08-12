@@ -18,7 +18,7 @@ GameObject::GameObject(const ResourceManager& resourceManager, const std::string
 
 const sf::Sprite& GameObject::getSprite() const {
 	if (!sprite.has_value()) {
-		throw std::runtime_error("Texture has not been loaded!");
+		std::cerr << "Texture has not been loaded!" << std::endl;
 	}
 
 	return *sprite;
@@ -26,7 +26,7 @@ const sf::Sprite& GameObject::getSprite() const {
 
 void GameObject::setPosition(sf::Vector2f pos) {
 	if (!sprite.has_value()) {
-		throw std::runtime_error("Sprite has not been initializied!");
+		std::cerr << "Sprite has not been initializied!" << std::endl;
 	}
 
 	sprite->setPosition(pos);

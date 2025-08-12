@@ -14,12 +14,16 @@ class ResourceManager {
 public:
 	ResourceManager();
 
+	bool loadFont(const std::string& filepath);
+	const sf::Font& getFont() const { return font; }
+
 	const sf::Texture& getTexture(const std::string& key) const;
 	// const sf::Vector2u getTextureSize(const std::string& key) const;
 	const SpriteConfig& getSpriteConfig(const std::string& spriteKey) const;
 
 
 private:
+	sf::Font font;
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, SpriteConfig> spriteConfigs;
 
