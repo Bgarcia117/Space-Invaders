@@ -14,7 +14,7 @@ public:
 	Game();
 	void init();
 	void begin();
-	void update(sf::RenderTarget& target);
+	void update(sf::RenderTarget& target, float deltaTime);
 
 private:
 	ResourceManager resourceManager;

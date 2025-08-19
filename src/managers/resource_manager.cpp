@@ -6,24 +6,15 @@
 
 ResourceManager::ResourceManager() {
     if (!loadAllTextures()) {
-        throw std::runtime_error("Failed to load required game textures!");
+        std::cerr << "Failed to load required game textures!" << std::endl;
     }
 
     if (!font.openFromFile("assets/fonts/font.ttf")) {
         std::cerr << "Failed to load font!" << std::endl;
     }
 
-    /*
+ 
     // ===================== Start positions ============
-    defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {2.f,   2.f} });  // Arms Crossed
-    defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.75f, 1.75f} });   // Arms Up
-    defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.75f, 1.75f} });   // Arms Out
-    defineSpriteConfig("UFO",     { ResourceKeys::alienKey, sf::IntRect({0, 77},{ 24, 14 }), {1.75f, 1.75f} });
-    defineSpriteConfig("player",  { ResourceKeys::playerKey, sf::IntRect({0, 0},{ 32, 32 }), {1.75f, 1.75f} });
-    */
-
-
-    // =================== TEST ===========================
     defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });  // Arms Crossed
     defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   // Arms Up
     defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });   // Arms Out
@@ -33,9 +24,9 @@ ResourceManager::ResourceManager() {
 
 
     // ===================== Second position ============
-    // defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }), {4.0f, 4.0f} }); // Arms Open   
-    // defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {3.f, 3.f} });  // Arms Down
-    // defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {3.f, 3.f} });  // Arms Closed
+    defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }),  {1.75f, 1.75f} }); // Arms Open   
+    defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {1.50f, 1.50f} });  // Arms Down
+    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {1.50f, 1.50f} });  // Arms Closed
 }
 
 

@@ -11,6 +11,10 @@ Player::Player(const ResourceManager& resourceManager, sf::Vector2f position) :
 
 }
 
+void Player::update(float deltaTime) {
+
+}
+
 void Player::move() {
 
 }

@@ -5,7 +5,7 @@
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
 
-
+constexpr float switchSpriteTimer = 2.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager),
@@ -42,10 +42,13 @@ void Game::begin() {
 	
 }
 
-void Game::update(sf::RenderTarget& target) {
-	for (auto alien : aliens) {
-		target.draw(alien.getSprite());
+void Game::update(sf::RenderTarget& target, float deltaTime) {
+	
+	for (auto& alien : aliens) {
+		alien.update(deltaTime);
+		target.draw(alien.getCurrentSprite());
 	}
+
 
 	// TODO: Add options for game states
 	target.draw(p1ScoreText);
