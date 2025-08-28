@@ -16,13 +16,6 @@ GameObject::GameObject(const ResourceManager& resourceManager, const std::string
 	sprite->setPosition({position});
 }
 
-const sf::Sprite& GameObject::getSprite() const {
-	if (!sprite.has_value()) {
-		std::cerr << "Texture has not been loaded!" << std::endl;
-	}
-
-	return *sprite;
-}
 
 void GameObject::setPosition(sf::Vector2f pos) {
 	if (!sprite.has_value()) {
@@ -30,4 +23,20 @@ void GameObject::setPosition(sf::Vector2f pos) {
 	}
 
 	sprite->setPosition(pos);
+}
+
+void GameObject::move(sf::Vector2f offset) {
+	if (!sprite.has_value()) {
+		std::cerr << "Sprite has not been initializied!" << std::endl;
+	}
+
+	sprite->move({offset.x, offset.y});
+}
+
+const sf::Sprite& GameObject::getSprite() const {
+	if (!sprite.has_value()) {
+		std::cerr << "Texture has not been loaded!" << std::endl;
+	}
+
+	return *sprite;
 }

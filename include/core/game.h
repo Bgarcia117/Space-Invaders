@@ -17,14 +17,20 @@ public:
 	void update(sf::RenderTarget& target, float deltaTime);
 
 private:
+	enum alienDirection {LEFT, RIGHT, DOWN};
+
 	ResourceManager resourceManager;
 	Player player;
 	std::vector<Alien> aliens;
 	GameState gameState = GameState::MENU;
+	alienDirection aliensDirection = alienDirection::RIGHT;
 
 	bool gameOver = false;
 	int score = 0;
 	int highScore = 0;
+	int alienMoveCounter = 0;
+	float alienMoveTimer = 0.f;
+	int aliensMoved = 0;
 
 	sf::Text p1ScoreText;
 	sf::Text p1Score;
@@ -34,5 +40,6 @@ private:
 
 	void initPlayer();
 	void initAliens();
+	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
 	std::string convertScore(int score);
 };

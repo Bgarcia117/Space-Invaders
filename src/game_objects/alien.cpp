@@ -34,12 +34,19 @@ void Alien::update(float deltaTime) {
         useSprite1 = !useSprite1;
         spriteFlipTimer = SPRITE_FLIP_TIME;
     }
+
+}
+
+void Alien::move(sf::Vector2f offset) {
+    GameObject::move(offset);
+
+    if (!sprite2.has_value()) {
+        std::cerr << "Sprite Two has not been initializied!" << std::endl;
+    }
+    sprite2->move({ offset.x, offset.y });
 }
 
 
-void Alien::move() {
-
-}
 
 const sf::Sprite& Alien::getCurrentSprite() const {
     return useSprite1 ? getSprite() : *sprite2;

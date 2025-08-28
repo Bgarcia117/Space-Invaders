@@ -5,7 +5,10 @@
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
 
-constexpr float switchSpriteTimer = 2.f;
+constexpr int MAX_SIDE_MOVES = 3;
+constexpr float ALIEN_SPEED = 1.f;
+constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
+constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 
 Game::Game() : resourceManager(), 
                player(resourceManager),
@@ -13,7 +16,8 @@ Game::Game() : resourceManager(),
                p1Score(resourceManager.getFont(), "SCORE< 1 >"),
 	           p2ScoreText(resourceManager.getFont(), "SCORE< 2 >"),
                highScoreText(resourceManager.getFont(), "HI-SCORE"),
-               highScoreNum(resourceManager.getFont(), convertScore(highScore)) {
+               highScoreNum(resourceManager.getFont(), convertScore(highScore)),
+               alienMoveTimer(ALIEN_SPEED) {
 
 
 	p1ScoreText.setCharacterSize(40);
@@ -43,12 +47,13 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
+
+	moveAliens(aliens, deltaTime);
 	
 	for (auto& alien : aliens) {
 		alien.update(deltaTime);
 		target.draw(alien.getCurrentSprite());
 	}
-
 
 	// TODO: Add options for game states
 	target.draw(p1ScoreText);
@@ -64,7 +69,7 @@ void Game::initPlayer() {
 }
 
 void Game::initAliens() {
-	for (int row = 0; row < 5; row++) {
+	for (int row = 4; row >= 0; row--) {
 		for (int col = 0; col < 11; col++) {
 			AlienType type = AlienType::SQUID;
 			// Left offset + (col * spacing), Top offset + (row * spacing)
@@ -82,6 +87,49 @@ void Game::initAliens() {
 		}
 	}
 
+}
+
+// TODO: FIX ORDER IN WHICH THE ALIENS START MOVING & DECREASE STEP AMOUNT
+void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
+	alienMoveTimer -= deltaTime;
+
+	if (alienMoveTimer <= 0) {
+		if (alienMoveCounter < MAX_SIDE_MOVES && aliensDirection == alienDirection::RIGHT) {
+			for (int i = 0; i < 11 && aliensMoved < aliens.size(); i++)  {
+				aliens[aliensMoved].move(ALIEN_HORIZONTAL_STEP);
+				aliensMoved++;
+			}
+
+			if (aliensMoved >= aliens.size()) {
+				aliensMoved = 0;
+				alienMoveCounter++;
+			}
+
+		}
+		else if (alienMoveCounter == MAX_SIDE_MOVES) {
+			for (auto& alien : aliens) {
+				alien.move(ALIEN_VERTICAL_STEP);
+			}
+
+			alienMoveCounter = 0;
+			aliensDirection = (aliensDirection == alienDirection::RIGHT) ?
+				alienDirection::LEFT : alienDirection::RIGHT;
+
+		}
+		else if (alienMoveCounter < MAX_SIDE_MOVES && aliensDirection == alienDirection::LEFT) {
+			for (int i = 0; i < 11 && aliensMoved < aliens.size(); i++) {
+				aliens[aliensMoved].move({ -ALIEN_HORIZONTAL_STEP.x, ALIEN_HORIZONTAL_STEP.y });
+				aliensMoved++;
+			}
+
+			if (aliensMoved >= aliens.size()) {
+				aliensMoved = 0;
+				alienMoveCounter++;
+			}
+
+		}
+		alienMoveTimer = ALIEN_SPEED;
+	}
 }
 
 std::string Game::convertScore(int score) {

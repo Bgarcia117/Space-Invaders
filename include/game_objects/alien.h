@@ -14,7 +14,7 @@ class Alien : public GameObject {
 public:
 	Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Vector2f position);
 	void update(float deltaTime) override;
-	void move() override;
+	void move(sf::Vector2f offset) override;
 	const sf::Sprite& getCurrentSprite() const;
 
 private:

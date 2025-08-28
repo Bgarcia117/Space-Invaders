@@ -8,7 +8,6 @@ class Player : public GameObject {
 public:
 	Player(const ResourceManager& resourceManager, sf::Vector2f position = PLAYER_START_POS);
 	void update(float deltaTime) override;
-	void move() override;
 
 private:
 	int lives;
