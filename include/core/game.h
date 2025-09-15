@@ -37,8 +37,8 @@ private:
 	sf::Text p2ScoreText;
 	sf::Text highScoreText;
 	sf::Text highScoreNum;
+	sf::Text livesLeft;
 
-	void initPlayer();
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
 	std::string convertScore(int score);

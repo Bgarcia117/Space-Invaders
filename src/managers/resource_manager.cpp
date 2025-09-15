@@ -19,7 +19,7 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   // Arms Up
     defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });   // Arms Out
     defineSpriteConfig("UFO",     { ResourceKeys::alienKey, sf::IntRect({0, 77},{ 24, 14 }), {1.25f, 1.25f} });
-    defineSpriteConfig("player",  { ResourceKeys::playerKey, sf::IntRect({0, 0},{ 32, 32 }), {1.25f, 1.25f} });
+    defineSpriteConfig("player",  { ResourceKeys::playerKey, sf::IntRect({9, 12},{ 22, 20 }), {2.5f, 2.5f} });
 
 
 

@@ -6,17 +6,19 @@
 #include "game_objects/alien.h"
 
 constexpr int MAX_SIDE_MOVES = 3;
-constexpr float ALIEN_SPEED = 1.f;
+constexpr float ALIEN_SPEED = 0.25f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
+constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 950.f };
 
 Game::Game() : resourceManager(), 
-               player(resourceManager),
+               player(resourceManager, PLAYER_START_POS),
 	           p1ScoreText(resourceManager.getFont(), convertScore(score)),
                p1Score(resourceManager.getFont(), "SCORE< 1 >"),
 	           p2ScoreText(resourceManager.getFont(), "SCORE< 2 >"),
                highScoreText(resourceManager.getFont(), "HI-SCORE"),
                highScoreNum(resourceManager.getFont(), convertScore(highScore)),
+	           livesLeft(resourceManager.getFont(), "3"), 
                alienMoveTimer(ALIEN_SPEED) {
 
 
@@ -33,7 +35,8 @@ Game::Game() : resourceManager(),
 	highScoreNum.setCharacterSize(40);
 	highScoreNum.setPosition({ 345.f, 90.f });
 
-
+	livesLeft.setCharacterSize(40);
+	livesLeft.setPosition({ 70.f, 950.f });
 
 }
 
@@ -54,6 +57,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 		alien.update(deltaTime);
 		target.draw(alien.getCurrentSprite());
 	}
+	target.draw(player.getSprite());
 
 	// TODO: Add options for game states
 	target.draw(p1ScoreText);
@@ -61,11 +65,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	target.draw(p2ScoreText);
 	target.draw(highScoreText);
 	target.draw(highScoreNum);
-}
-
-void Game::initPlayer() {
-	// set position
-	// Call constructor:
+	target.draw(livesLeft);
 }
 
 void Game::initAliens() {
