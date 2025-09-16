@@ -9,7 +9,9 @@ constexpr int MAX_SIDE_MOVES = 3;
 constexpr float ALIEN_SPEED = 0.25f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
-constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 950.f };
+constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
+constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 975.f };
+constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -36,12 +38,13 @@ Game::Game() : resourceManager(),
 	highScoreNum.setPosition({ 345.f, 90.f });
 
 	livesLeft.setCharacterSize(40);
-	livesLeft.setPosition({ 70.f, 950.f });
+	livesLeft.setPosition({ 65.f, 960.f });
 
 }
 
 void Game::init() {
 	initAliens();
+	lifeSprite = resourceManager.createSprite("player");
 }
 
 void Game::begin() {
@@ -66,6 +69,12 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	target.draw(highScoreText);
 	target.draw(highScoreNum);
 	target.draw(livesLeft);
+
+	for (int i = 0; i < player.getLives() - 1; i++) {
+		lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
+		target.draw(*lifeSprite);
+	}
+
 }
 
 void Game::initAliens() {
@@ -130,6 +139,10 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 		}
 		alienMoveTimer = ALIEN_SPEED;
 	}
+}
+
+void Game::displayLives() {
+
 }
 
 std::string Game::convertScore(int score) {

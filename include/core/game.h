@@ -21,6 +21,7 @@ private:
 
 	ResourceManager resourceManager;
 	Player player;
+	std::optional<sf::Sprite> lifeSprite;
 	std::vector<Alien> aliens;
 	GameState gameState = GameState::MENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
@@ -41,5 +42,6 @@ private:
 
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
+	void displayLives();
 	std::string convertScore(int score);
 };

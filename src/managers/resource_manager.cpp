@@ -14,7 +14,7 @@ ResourceManager::ResourceManager() {
     }
 
  
-    // ===================== Start positions ============
+    // ===================== Sprite One ============
     defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });  // Arms Crossed
     defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   // Arms Up
     defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });   // Arms Out
@@ -23,7 +23,7 @@ ResourceManager::ResourceManager() {
 
 
 
-    // ===================== Second position ============
+    // ===================== Sprite Two ============
     defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }),  {1.75f, 1.75f} }); // Arms Open   
     defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {1.50f, 1.50f} });  // Arms Down
     defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {1.50f, 1.50f} });  // Arms Closed
@@ -57,22 +57,6 @@ const sf::Texture& ResourceManager::getTexture(const std::string& key) const {
     return it->second;
 }
 
-/*
- * @brief Gets the size of the texture
- * @param key The unique name for accessing texture
- * @return a vector of two unsigned ints, one is the width, the other is height
- * @throws std::runtime_error if texture is not found
-const sf::Vector2u ResourceManager::getTextureSize(const std::string& key) const {
-    auto it = textures.find(key);
-
-    if (it == textures.end()) {
-        //std::cout << "Error: Texture for " << key << "not found!" << std::endl;
-        throw std::runtime_error("Texture not found: " + key);
-    }
-
-    return it->second.getSize();
-}
-*/
 
 /*
  * @brief Loads texture from file and store it with a key
@@ -92,6 +76,27 @@ bool ResourceManager::loadTexture(const std::string& key, const std::string& fil
 
     std::cout << "Succeeded to load texture!" << std::endl;
     return true;
+}
+
+const SpriteConfig& ResourceManager::getSpriteConfig(const std::string& spriteKey) const {
+    auto it = spriteConfigs.find(spriteKey);
+
+    if (it == spriteConfigs.end()) {
+        throw std::runtime_error("Sprite not found: " + spriteKey);
+    }
+
+    return it->second;
+}
+
+sf::Sprite ResourceManager::createSprite(const std::string& spriteKey) const {
+    const SpriteConfig& spriteConfig = getSpriteConfig(spriteKey);
+    const sf::Texture& texture = getTexture(spriteConfig.textureKey);
+
+    sf::Sprite sprite(texture);
+    sprite.setTextureRect(spriteConfig.textureRect);
+    sprite.setScale(spriteConfig.scale);
+
+    return sprite;
 }
 
 /*
@@ -118,13 +123,3 @@ void ResourceManager::defineSpriteConfig(const std::string& spriteKey, const Spr
     spriteConfigs[spriteKey] = config;
 }
 
-
-const SpriteConfig& ResourceManager::getSpriteConfig(const std::string& spriteKey) const {
-    auto it = spriteConfigs.find(spriteKey);
-
-    if (it == spriteConfigs.end()) {
-        throw std::runtime_error("Sprite not found: " + spriteKey);
-    }
-
-    return it->second;
-}

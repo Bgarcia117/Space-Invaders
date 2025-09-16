@@ -18,8 +18,8 @@ public:
 	const sf::Font& getFont() const { return font; }
 
 	const sf::Texture& getTexture(const std::string& key) const;
-	// const sf::Vector2u getTextureSize(const std::string& key) const;
 	const SpriteConfig& getSpriteConfig(const std::string& spriteKey) const;
+	sf::Sprite createSprite(const std::string& spriteKey) const;
 
 
 private:
