@@ -42,6 +42,6 @@ private:
 
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
-	void displayLives();
+	void movePlayer(float deltaTime);
 	std::string convertScore(int score);
 };

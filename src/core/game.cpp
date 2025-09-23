@@ -10,6 +10,7 @@ constexpr float ALIEN_SPEED = 0.25f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
+constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
 constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 975.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
 
@@ -53,7 +54,7 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
-
+	movePlayer(deltaTime);
 	moveAliens(aliens, deltaTime);
 	
 	for (auto& alien : aliens) {
@@ -141,7 +142,16 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 	}
 }
 
-void Game::displayLives() {
+void Game::movePlayer(float deltaTime) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left)) {
+		player.move({ -PLAYER_SPEED.x * deltaTime, PLAYER_SPEED.y });
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right)) { 
+		player.move({ PLAYER_SPEED.x * deltaTime, PLAYER_SPEED.y });
+	}
 
 }
 

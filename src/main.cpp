@@ -12,6 +12,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode({ static_cast<unsigned int>(SCREEN_WIDTH),
 		                                    static_cast<unsigned int>(SCREEN_HEIGHT)}),
 		                                    "Space Invaders Clone");
+	window.setFramerateLimit(60);
 
 	sf::Clock clock;
 
