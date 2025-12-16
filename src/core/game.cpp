@@ -4,6 +4,7 @@
 #include "managers/resource_manager.h"
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
+#include <UI/ui.h>
 
 constexpr int MAX_SIDE_MOVES = 3;
 constexpr float ALIEN_SPEED = 0.25f;
@@ -16,30 +17,9 @@ constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
-	           p1ScoreText(resourceManager.getFont(), convertScore(score)),
-               p1Score(resourceManager.getFont(), "SCORE< 1 >"),
-	           p2ScoreText(resourceManager.getFont(), "SCORE< 2 >"),
-               highScoreText(resourceManager.getFont(), "HI-SCORE"),
-               highScoreNum(resourceManager.getFont(), convertScore(highScore)),
-	           livesLeft(resourceManager.getFont(), "3"), 
-               alienMoveTimer(ALIEN_SPEED) {
+	           alienMoveTimer(ALIEN_SPEED),
+	           ui(resourceManager, score, highScore, player.getLives()) {
 
-
-	p1ScoreText.setCharacterSize(40);
-	p1ScoreText.setPosition({ 115.f, 90.f });
-	p1Score.setCharacterSize(40);
-	p1Score.setPosition({ 70.f, 45.f });
-
-	p2ScoreText.setCharacterSize(40);
-	p2ScoreText.setPosition({ 520.f, 45.f });
-
-	highScoreText.setCharacterSize(40);
-	highScoreText.setPosition({ 310.f, 45.f });
-	highScoreNum.setCharacterSize(40);
-	highScoreNum.setPosition({ 345.f, 90.f });
-
-	livesLeft.setCharacterSize(40);
-	livesLeft.setPosition({ 65.f, 960.f });
 
 }
 
@@ -54,22 +34,19 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
+	// TODO: Add options for game states
+	ui.renderMenu(target);
+
 	movePlayer(deltaTime);
 	moveAliens(aliens, deltaTime);
 	
+	// Draw alien after flipping sprite
 	for (auto& alien : aliens) {
 		alien.update(deltaTime);
 		target.draw(alien.getCurrentSprite());
 	}
 	target.draw(player.getSprite());
 
-	// TODO: Add options for game states
-	target.draw(p1ScoreText);
-	target.draw(p1Score);
-	target.draw(p2ScoreText);
-	target.draw(highScoreText);
-	target.draw(highScoreNum);
-	target.draw(livesLeft);
 
 	for (int i = 0; i < player.getLives() - 1; i++) {
 		lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
@@ -99,7 +76,6 @@ void Game::initAliens() {
 
 }
 
-// TODO: FIX ORDER IN WHICH THE ALIENS START MOVING & DECREASE STEP AMOUNT
 void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 	alienMoveTimer -= deltaTime;
 
@@ -163,4 +139,8 @@ std::string Game::convertScore(int score) {
 	}
 
 	return strScore;
+}
+
+void Game::displayMenu() {
+
 }

@@ -27,6 +27,7 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
 
 }
 
+// Updates sprite using deltaTime
 void Alien::update(float deltaTime) {
     spriteFlipTimer -= deltaTime;
 

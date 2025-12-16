@@ -6,8 +6,9 @@
 #include "managers/resource_manager.h"
 #include "game_objects/alien.h"
 #include "game_objects/player.h"
+#include <UI/ui.h>
 
-enum GameState { MENU, PLAYING, GAMEOVER };
+enum GameState { MENU, PLAYING, GAMEOVER }; // Check if used by other classes
 
 class Game {
 public:
@@ -20,6 +21,7 @@ private:
 	enum alienDirection {LEFT, RIGHT, DOWN};
 
 	ResourceManager resourceManager;
+	
 	Player player;
 	std::optional<sf::Sprite> lifeSprite;
 	std::vector<Alien> aliens;
@@ -33,15 +35,19 @@ private:
 	float alienMoveTimer = 0.f;
 	int aliensMoved = 0;
 
+	UI ui;
+	/*
 	sf::Text p1ScoreText;
 	sf::Text p1Score;
 	sf::Text p2ScoreText;
 	sf::Text highScoreText;
 	sf::Text highScoreNum;
 	sf::Text livesLeft;
+	*/
 
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
 	void movePlayer(float deltaTime);
 	std::string convertScore(int score);
+	void displayMenu();
 };
