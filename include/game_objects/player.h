@@ -6,7 +6,7 @@ class Player : public GameObject {
 public:
 	Player(const ResourceManager& resourceManager, sf::Vector2f position);
 	void update(float deltaTime) override;
-	int getLives() { return lives; }
+	int getLives() const { return lives; }
 
 private:
 	int lives;

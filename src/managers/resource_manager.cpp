@@ -16,18 +16,25 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("player",  { ResourceKeys::playerKey, sf::IntRect({9, 12},  { 22, 20 }), {2.5f, 2.5f} });
     defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, sf::IntRect({96, 54}, {102, 84}), {1.f, 1.f} });
  
-    // ===================== Alien Sprite One ============
-    defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });   // Arms Crossed
-    defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   // Arms Up
-    defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });   // Arms Out
+    // ===================== Alien Sprite Position One ============
+    // Squid Arms Crossed
+    defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });   
+    // Crab Arms Up
+    defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   
+    // Octopus Arms Out
+    defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });  
+   
     defineSpriteConfig("UFO",     { ResourceKeys::alienKey, sf::IntRect({0, 77},{ 24, 14 }), {1.25f, 1.25f} });
 
 
 
-    // ===================== Alien Sprite Two ============
-    defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }),  {1.75f, 1.75f} }); // Arms Open   
-    defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {1.50f, 1.50f} });  // Arms Down
-    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {1.50f, 1.50f} });  // Arms Closed
+    // ===================== Alien Sprite Position Two ============
+    // Squid Arms Open   
+    defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }),  {1.75f, 1.75f} }); 
+    // Crabs Arms Down
+    defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {1.50f, 1.50f} });  
+    // Octopus Arms Closed
+    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {1.50f, 1.50f} });  
 }
 
 
@@ -89,6 +96,7 @@ const SpriteConfig& ResourceManager::getSpriteConfig(const std::string& spriteKe
     return it->second;
 }
 
+// Applies texture and creates texture rect for sprite
 sf::Sprite ResourceManager::createSprite(const std::string& spriteKey) const {
     const SpriteConfig& spriteConfig = getSpriteConfig(spriteKey);
     const sf::Texture& texture = getTexture(spriteConfig.textureKey);

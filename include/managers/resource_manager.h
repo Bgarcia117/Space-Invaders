@@ -15,7 +15,7 @@ public:
 	ResourceManager();
 
 	bool loadFont(const std::string& filepath);
-	const sf::Font& getFont() const { return font; }
+	sf::Font& getFont() { return font; } // Cannot be const
 
 	const sf::Texture& getTexture(const std::string& key) const;
 	const SpriteConfig& getSpriteConfig(const std::string& spriteKey) const;

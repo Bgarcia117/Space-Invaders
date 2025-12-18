@@ -12,8 +12,6 @@ constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
-constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 975.f };
-constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -25,7 +23,6 @@ Game::Game() : resourceManager(),
 
 void Game::init() {
 	initAliens();
-	lifeSprite = resourceManager.createSprite("player");
 }
 
 void Game::begin() {
@@ -34,27 +31,34 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
-	// TODO: Add options for game states
-	ui.renderMenu(target);
+	switch (gameState) {
+	    case MENU: 
+		    ui.renderMenu(target);
+		    break;
+	    case PLAYING:
+		    ui.renderHUD(target, player);
 
-	movePlayer(deltaTime);
-	moveAliens(aliens, deltaTime);
-	
-	// Draw alien after flipping sprite
-	for (auto& alien : aliens) {
-		alien.update(deltaTime);
-		target.draw(alien.getCurrentSprite());
-	}
-	target.draw(player.getSprite());
+		    movePlayer(deltaTime);
+		    moveAliens(aliens, deltaTime);
 
+		    // Draw alien after flipping sprite
+		    for (auto& alien : aliens) {
+			    alien.update(deltaTime);
+			    target.draw(alien.getCurrentSprite());
+		    }
+		    target.draw(player.getSprite());
 
-	for (int i = 0; i < player.getLives() - 1; i++) {
-		lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
-		target.draw(*lifeSprite);
+		    break;
+	    default:
+		    ui.renderHUD(target, player);
+		    std::cout << "Default case! Check code!";
+
 	}
 
 }
 
+
+// Puts aliens in initial positions
 void Game::initAliens() {
 	for (int row = 4; row >= 0; row--) {
 		for (int col = 0; col < 11; col++) {
