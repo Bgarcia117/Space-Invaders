@@ -10,7 +10,9 @@ constexpr int TEXT_SIZE = 40;
 // Menu Text Positions
 constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 355.f, 204.f };
 constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 250.f, 284.f };
-constexpr sf::Vector2f SCORE_TABLE_POS = { 195.f, 404 };
+constexpr sf::Vector2f SCORE_TABLE_POS = { 195.f, 404.f };
+constexpr sf::Vector2f UFO_POINTS_TEXT_POS = { 320.f, 460.f };
+constexpr sf::Vector2f SQUID_POINTS_TEXT_POS = { 320.f, 510.f };
 
 // Menu Alien Sprite Positions
 constexpr sf::Vector2f MENU_UFO_POS = { 275.f, 480.f };
@@ -18,7 +20,13 @@ constexpr sf::Vector2f MENU_SQUID_POS = { 286.f, 525.f };
 constexpr sf::Vector2f MENU_CRAB_POS = { 282.f, 575.f };
 constexpr sf::Vector2f MENU_OCTOPUS_POS = { 283.f, 625.f };
 
-// HUD Text Positions
+// Menu Alien Sprite Scales (Scales sprite size)
+constexpr sf::Vector2f MENU_UFO_SCALE = { 1.75f, 1.60f };
+constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
+constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
+constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.54f };
+
+// In-game HUD Text Positions
 // Player 1
 constexpr sf::Vector2f P1_SCORE_TEXT_POS = { 115.f, 90.f };
 constexpr sf::Vector2f P1_SCORE_POS = { 70.f, 45.f };
@@ -31,23 +39,21 @@ constexpr sf::Vector2f LIVES_LEFT_POS = { 65.f, 960.f };
 constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 975.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
 
-
-
-
-
 UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLives) 
 	: font(resourceManager.getFont()),
-	  titleTopLine(font),
-	  titleBottomLine(font),
-	  scoreTable(font),
 	  p1ScoreText(font, scoreToText(score)),
 	  p1Score(font),
 	  p2ScoreText(font),
 	  highScoreText(font),
 	  highScoreNum(font, scoreToText(highScore)),
-	  livesLeft(font, std::to_string(playerLives)) { 
-	
-
+	  titleTopLine(font),
+	  titleBottomLine(font),
+	  scoreTable(font),
+      ufoPointsText(font),
+      squidPointsText(font),
+      crabPointsText(font),
+      octopusPointsText(font),
+	  livesLeft(font, std::to_string(playerLives)) {
 
 	setUpMenuText();
 	setUpMenuSprites(resourceManager);
@@ -80,6 +86,8 @@ void UI::renderMenu(sf::RenderTarget& target) {
 	target.draw(*menuAliensSprites[1]);
 	target.draw(*menuAliensSprites[2]);
 	target.draw(*menuAliensSprites[3]);
+	target.draw(ufoPointsText);
+	target.draw(squidPointsText);
 }
 
 
@@ -112,6 +120,22 @@ void UI::setUpMenuText() {
 	scoreTable.setString("*SCORE ADVANCE TABLE*");
 	scoreTable.setCharacterSize(TEXT_SIZE);
 	scoreTable.setPosition(SCORE_TABLE_POS);
+
+	ufoPointsText.setString("=? MYSTERY");
+	ufoPointsText.setCharacterSize(TEXT_SIZE);
+	ufoPointsText.setPosition(UFO_POINTS_TEXT_POS);
+
+	squidPointsText.setString("=30 POINTS");
+	squidPointsText.setCharacterSize(TEXT_SIZE);
+	squidPointsText.setPosition(SQUID_POINTS_TEXT_POS);
+
+	/*
+	crabPointsText.setString("=20 POINTS");
+	crabPointsText.setCharacterSize(TEXT_SIZE);
+
+	octopusPointsText.setString("10 POINTS");
+	octopusPointsText.setCharacterSize(TEXT_SIZE);
+	*/
 }
 
 
@@ -126,20 +150,20 @@ void UI::setUpMenuSprites(ResourceManager& resourceManager) {
 
 	// UFO
 	menuAliensSprites[0]->setPosition(MENU_UFO_POS);
-	menuAliensSprites[0]->setScale({ 1.75f, 1.60f });
+	menuAliensSprites[0]->setScale(MENU_UFO_SCALE);
 	// TODO: Fix colors: menuAliensSprites[0]->setColor(sf::Color::White);
 
 	// Squid
 	menuAliensSprites[1]->setPosition(MENU_SQUID_POS);
-	menuAliensSprites[1]->setScale({ 1.5f, 1.5f });
+	menuAliensSprites[1]->setScale(MENU_SQUID_SCALE);
 
 	// Crab
 	menuAliensSprites[2]->setPosition(MENU_CRAB_POS);
-	menuAliensSprites[2]->setScale({ 1.37f, 1.35f });
+	menuAliensSprites[2]->setScale(MENU_CRAB_SCALE);
 
 	// Octopus
 	menuAliensSprites[3]->setPosition(MENU_OCTOPUS_POS);
-	menuAliensSprites[3]->setScale({ 1.62f, 1.54f });
+	menuAliensSprites[3]->setScale(MENU_OCTOPUS_POS);
 
 
 	

@@ -15,22 +15,28 @@ public:
 
 
 private:
-	// Start menu
+	// Displayed on menu & HUD
 	sf::Font& font;
-	sf::Text titleTopLine;
-	sf::Text titleBottomLine;
-	sf::Text scoreTable;
-
-
-	// HUD while in game
 	sf::Text p1ScoreText;
 	sf::Text p1Score;
 	sf::Text p2ScoreText;
 	sf::Text highScoreText;
 	sf::Text highScoreNum;
+
+	// Displayed on Start menu
+	sf::Text titleTopLine;
+	sf::Text titleBottomLine;
+	sf::Text scoreTable;
+	sf::Text ufoPointsText;
+	sf::Text squidPointsText;
+	sf::Text crabPointsText;
+	sf::Text octopusPointsText;
+	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
+
+
+	// HUD display while in game
 	sf::Text livesLeft;
 	std::optional<sf::Sprite> lifeSprite;
-	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
 
 	void setUpMenuText();
 	void setUpMenuSprites(ResourceManager& resourceManager);
