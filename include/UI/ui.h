@@ -22,6 +22,7 @@ private:
 	sf::Text p2ScoreText;
 	sf::Text highScoreText;
 	sf::Text highScoreNum;
+	sf::Text creditsText;
 
 	// Displayed on Start menu
 	sf::Text titleTopLine;

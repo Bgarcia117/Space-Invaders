@@ -7,12 +7,18 @@
 
 constexpr int TEXT_SIZE = 40; 
 
+// Colors
+constexpr sf::Color LIGHT_GREEN(42, 249, 50);
+
 // Menu Text Positions
 constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 355.f, 204.f };
 constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 250.f, 284.f };
 constexpr sf::Vector2f SCORE_TABLE_POS = { 195.f, 404.f };
 constexpr sf::Vector2f UFO_POINTS_TEXT_POS = { 320.f, 460.f };
 constexpr sf::Vector2f SQUID_POINTS_TEXT_POS = { 320.f, 510.f };
+constexpr sf::Vector2f CRAB_POINTS_TEXT_POS = { 320.f, 560.f };
+constexpr sf::Vector2f OCTOPUS_POINTS_TEXT_POS = { 320.f, 610.f };
+constexpr sf::Vector2f CREDITS_TEXT_POS = { 520.f, 960.f };
 
 // Menu Alien Sprite Positions
 constexpr sf::Vector2f MENU_UFO_POS = { 275.f, 480.f };
@@ -24,7 +30,7 @@ constexpr sf::Vector2f MENU_OCTOPUS_POS = { 283.f, 625.f };
 constexpr sf::Vector2f MENU_UFO_SCALE = { 1.75f, 1.60f };
 constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
-constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.54f };
+constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
 // In-game HUD Text Positions
 // Player 1
@@ -46,6 +52,7 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
 	  p2ScoreText(font),
 	  highScoreText(font),
 	  highScoreNum(font, scoreToText(highScore)),
+	  creditsText(font),
 	  titleTopLine(font),
 	  titleBottomLine(font),
 	  scoreTable(font),
@@ -88,6 +95,9 @@ void UI::renderMenu(sf::RenderTarget& target) {
 	target.draw(*menuAliensSprites[3]);
 	target.draw(ufoPointsText);
 	target.draw(squidPointsText);
+	target.draw(crabPointsText);
+	target.draw(octopusPointsText);
+	target.draw(creditsText);
 }
 
 
@@ -129,13 +139,19 @@ void UI::setUpMenuText() {
 	squidPointsText.setCharacterSize(TEXT_SIZE);
 	squidPointsText.setPosition(SQUID_POINTS_TEXT_POS);
 
-	/*
 	crabPointsText.setString("=20 POINTS");
 	crabPointsText.setCharacterSize(TEXT_SIZE);
+	crabPointsText.setPosition(CRAB_POINTS_TEXT_POS);
 
-	octopusPointsText.setString("10 POINTS");
+	octopusPointsText.setString("=10 POINTS");
 	octopusPointsText.setCharacterSize(TEXT_SIZE);
-	*/
+	octopusPointsText.setPosition(OCTOPUS_POINTS_TEXT_POS);
+	octopusPointsText.setFillColor(LIGHT_GREEN);
+
+	creditsText.setString("CREDIT  00");
+	creditsText.setCharacterSize(TEXT_SIZE);
+	creditsText.setPosition(CREDITS_TEXT_POS);
+
 }
 
 
@@ -163,7 +179,8 @@ void UI::setUpMenuSprites(ResourceManager& resourceManager) {
 
 	// Octopus
 	menuAliensSprites[3]->setPosition(MENU_OCTOPUS_POS);
-	menuAliensSprites[3]->setScale(MENU_OCTOPUS_POS);
+	menuAliensSprites[3]->setScale(MENU_OCTOPUS_SCALE);
+	menuAliensSprites[3]->setColor(LIGHT_GREEN);
 
 
 	

@@ -18,7 +18,7 @@ ResourceManager::ResourceManager() {
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed
-    defineSpriteConfig("squid",   { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });   
+    defineSpriteConfig("squid", { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });
     // Crab Arms Up
     defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   
     // Octopus Arms Out
