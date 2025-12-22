@@ -83,11 +83,6 @@ std::string UI::scoreToText(int score) {
 void UI::renderMenu(sf::RenderTarget& target) {
 	target.draw(titleTopLine);
 	target.draw(titleBottomLine);
-	target.draw(p1ScoreText);
-	target.draw(p1Score);
-	target.draw(p2ScoreText);
-	target.draw(highScoreText);
-	target.draw(highScoreNum);
 	target.draw(scoreTable);
 	target.draw(*menuAliensSprites[0]);
 	target.draw(*menuAliensSprites[1]);

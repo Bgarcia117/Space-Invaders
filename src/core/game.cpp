@@ -34,6 +34,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	switch (gameState) {
 	    case MENU: 
 		    ui.renderMenu(target);
+			ui.renderHUD(target, player);
 		    break;
 	    case PLAYING:
 		    ui.renderHUD(target, player);
@@ -143,8 +144,4 @@ std::string Game::convertScore(int score) {
 	}
 
 	return strScore;
-}
-
-void Game::displayMenu() {
-
 }
