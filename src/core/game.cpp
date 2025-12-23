@@ -33,11 +33,13 @@ void Game::begin() {
 void Game::update(sf::RenderTarget& target, float deltaTime) {
 	switch (gameState) {
 	    case MENU: 
+
+			ui.renderHUD(target, player, false);
+			// ui.renderCoinMenu(target);
 		    ui.renderMenu(target);
-			ui.renderHUD(target, player);
 		    break;
 	    case PLAYING:
-		    ui.renderHUD(target, player);
+		    ui.renderHUD(target, player, true);
 
 		    movePlayer(deltaTime);
 		    moveAliens(aliens, deltaTime);
@@ -51,7 +53,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 		    break;
 	    default:
-		    ui.renderHUD(target, player);
+		    ui.renderHUD(target, player, true);
 		    std::cout << "Default case! Check code!";
 
 	}

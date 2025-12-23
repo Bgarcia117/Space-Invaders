@@ -31,20 +31,20 @@ constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
 constexpr sf::Vector2f TWO_PLAYER_TEXT_POS = { 180.f, 550.f };
 
 // Menu Table Text Positions
-constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 355.f, 204.f };
-constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 250.f, 284.f };
-constexpr sf::Vector2f SCORE_TABLE_POS = { 195.f, 404.f };
-constexpr sf::Vector2f UFO_POINTS_TEXT_POS = { 320.f, 460.f };
-constexpr sf::Vector2f SQUID_POINTS_TEXT_POS = { 320.f, 510.f };
-constexpr sf::Vector2f CRAB_POINTS_TEXT_POS = { 320.f, 560.f };
-constexpr sf::Vector2f OCTOPUS_POINTS_TEXT_POS = { 320.f, 610.f };
+constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 345.f, 224.f };
+constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 210.f, 304.f };
+constexpr sf::Vector2f SCORE_TABLE_POS = { 160.f, 414.f };
+constexpr sf::Vector2f UFO_POINTS_TEXT_POS = { 290.f, 480.f };
+constexpr sf::Vector2f SQUID_POINTS_TEXT_POS = { 290.f, 530.f };
+constexpr sf::Vector2f CRAB_POINTS_TEXT_POS = { 290.f, 580.f };
+constexpr sf::Vector2f OCTOPUS_POINTS_TEXT_POS = { 290.f, 630.f };
 constexpr sf::Vector2f CREDITS_TEXT_POS = { 520.f, 960.f };
 
 // Menu Table Alien Sprite Positions
-constexpr sf::Vector2f MENU_UFO_POS = { 275.f, 480.f };
-constexpr sf::Vector2f MENU_SQUID_POS = { 286.f, 525.f };
-constexpr sf::Vector2f MENU_CRAB_POS = { 282.f, 575.f };
-constexpr sf::Vector2f MENU_OCTOPUS_POS = { 283.f, 625.f };
+constexpr sf::Vector2f MENU_UFO_POS = { 245.f, 480.f };
+constexpr sf::Vector2f MENU_SQUID_POS = { 256.f, 528.f };
+constexpr sf::Vector2f MENU_CRAB_POS = { 252.f, 580.f };
+constexpr sf::Vector2f MENU_OCTOPUS_POS = { 253.f, 630.f };
 
 // Menu Table Alien Sprite Scales (Scales sprite size)
 constexpr sf::Vector2f MENU_UFO_SCALE = { 1.75f, 1.60f };
