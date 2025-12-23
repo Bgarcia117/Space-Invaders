@@ -5,12 +5,32 @@
 #include <managers/resource_manager.h>
 #include "game_objects/player.h"
 
-constexpr int TEXT_SIZE = 40; 
+constexpr int TEXT_SIZE = 22;
 
 // Colors
 constexpr sf::Color LIGHT_GREEN(42, 249, 50);
 
-// Menu Text Positions
+// HUD Text Positions
+// Player 1
+constexpr sf::Vector2f P1_SCORE_TEXT_POS = { 115.f, 90.f };
+constexpr sf::Vector2f P1_SCORE_POS = { 70.f, 45.f };
+// Player 2
+constexpr sf::Vector2f P2_SCORE_TEXT_POS = { 530.f, 45.f };
+
+constexpr sf::Vector2f HIGH_SCORE_TEXT_POS = { 300.f, 45.f };
+constexpr sf::Vector2f HIGH_SCORE_NUM_POS = { 320.f, 90.f };
+constexpr sf::Vector2f LIVES_LEFT_POS = { 65.f, 960.f };
+constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 960.f };
+constexpr float LIFE_SPRITE_SPACING = 45.f;
+
+// Coin Menu Text Positons
+
+constexpr sf::Vector2f INSERT_COINT_TEXT_POS = { 250.f, 300.f };
+constexpr sf::Vector2f SELECT_PROMPT_TEXT_POS = { 180.f, 400.f };
+constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
+constexpr sf::Vector2f TWO_PLAYER_TEXT_POS = { 180.f, 550.f };
+
+// Menu Table Text Positions
 constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 355.f, 204.f };
 constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 250.f, 284.f };
 constexpr sf::Vector2f SCORE_TABLE_POS = { 195.f, 404.f };
@@ -20,30 +40,19 @@ constexpr sf::Vector2f CRAB_POINTS_TEXT_POS = { 320.f, 560.f };
 constexpr sf::Vector2f OCTOPUS_POINTS_TEXT_POS = { 320.f, 610.f };
 constexpr sf::Vector2f CREDITS_TEXT_POS = { 520.f, 960.f };
 
-// Menu Alien Sprite Positions
+// Menu Table Alien Sprite Positions
 constexpr sf::Vector2f MENU_UFO_POS = { 275.f, 480.f };
 constexpr sf::Vector2f MENU_SQUID_POS = { 286.f, 525.f };
 constexpr sf::Vector2f MENU_CRAB_POS = { 282.f, 575.f };
 constexpr sf::Vector2f MENU_OCTOPUS_POS = { 283.f, 625.f };
 
-// Menu Alien Sprite Scales (Scales sprite size)
+// Menu Table Alien Sprite Scales (Scales sprite size)
 constexpr sf::Vector2f MENU_UFO_SCALE = { 1.75f, 1.60f };
 constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
-// In-game HUD Text Positions
-// Player 1
-constexpr sf::Vector2f P1_SCORE_TEXT_POS = { 115.f, 90.f };
-constexpr sf::Vector2f P1_SCORE_POS = { 70.f, 45.f };
-// Player 2
-constexpr sf::Vector2f P2_SCORE_TEXT_POS = { 520.f, 45.f };
 
-constexpr sf::Vector2f HIGH_SCORE_TEXT_POS = { 320.f, 45.f };
-constexpr sf::Vector2f HIGH_SCORE_NUM_POS = { 355.f, 90.f };
-constexpr sf::Vector2f LIVES_LEFT_POS = { 65.f, 960.f };
-constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 975.f };
-constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLives) 
 	: font(resourceManager.getFont()),
@@ -60,11 +69,16 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
       squidPointsText(font),
       crabPointsText(font),
       octopusPointsText(font),
-	  livesLeft(font, std::to_string(playerLives)) {
+	  livesLeft(font, std::to_string(playerLives)),
+	  insertCoinText(font),
+	  selectPromptText(font),
+	  onePlayerText(font),
+	  twoPlayerText(font) {
 
-	setUpMenuText();
-	setUpMenuSprites(resourceManager);
 	setUpHUD();
+	setUpCoinMenu();
+	setUpMenuText();
+	setUpSprites(resourceManager);
 	// Add game over screen
 
 }
@@ -77,6 +91,32 @@ std::string UI::scoreToText(int score) {
 	}
 
 	return strScore;
+}
+
+// Displays the HUD overlay
+void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives) {
+	target.draw(p1ScoreText);
+	target.draw(p1Score);
+	target.draw(p2ScoreText);
+	target.draw(highScoreText);
+	target.draw(highScoreNum);
+
+
+	if (showLives) {
+		target.draw(livesLeft);
+		//	Displays a player sprite for each life left
+		for (int i = 0; i < playerOne.getLives() - 1; i++) {
+			lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
+			target.draw(*lifeSprite);
+		}
+	}
+}
+
+void UI::renderCoinMenu(sf::RenderTarget& target) {
+	target.draw(insertCoinText);
+	target.draw(selectPromptText);
+	target.draw(onePlayerText);
+	target.draw(twoPlayerText);
 }
 
 // Displays the start menu
@@ -96,22 +136,48 @@ void UI::renderMenu(sf::RenderTarget& target) {
 }
 
 
-// Displays the in-game HUD
-void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne) {
-	target.draw(p1ScoreText);
-	target.draw(p1Score);
-	target.draw(p2ScoreText);
-	target.draw(highScoreText);
-	target.draw(highScoreNum);
-	target.draw(livesLeft);
+// Private Functions
+void UI::setUpHUD() {
+	// Player 1
+	p1ScoreText.setCharacterSize(TEXT_SIZE);
+	p1ScoreText.setPosition(P1_SCORE_TEXT_POS);
+	p1Score.setString("SCORE<1>"); // TODO: Swap score and score text
+	p1Score.setCharacterSize(TEXT_SIZE);
+	p1Score.setPosition(P1_SCORE_POS);
 
+	// Player 2
+	p2ScoreText.setString("SCORE<2>");
+	p2ScoreText.setCharacterSize(TEXT_SIZE);
+	p2ScoreText.setPosition(P2_SCORE_TEXT_POS);
 
-	//	Displays a player sprite for each life left
-	for (int i = 0; i < playerOne.getLives() - 1; i++) {
-		lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
-		target.draw(*lifeSprite);
-	}
+	highScoreText.setString("HI-SCORE");
+	highScoreText.setCharacterSize(TEXT_SIZE);
+	highScoreText.setPosition(HIGH_SCORE_TEXT_POS);
+	highScoreNum.setCharacterSize(TEXT_SIZE);
+	highScoreNum.setPosition(HIGH_SCORE_NUM_POS);
+
+	livesLeft.setCharacterSize(TEXT_SIZE);
+	livesLeft.setPosition(LIVES_LEFT_POS);
 }
+
+void UI::setUpCoinMenu() {
+	insertCoinText.setString("INSERT   COIN");
+	insertCoinText.setCharacterSize(TEXT_SIZE);
+	insertCoinText.setPosition(INSERT_COINT_TEXT_POS);
+
+	selectPromptText.setString("<1  OR  2 PLAYERS>");
+	selectPromptText.setCharacterSize(TEXT_SIZE);
+	selectPromptText.setPosition(SELECT_PROMPT_TEXT_POS);
+
+	onePlayerText.setString("*1  PLAYER   1 COIN");
+	onePlayerText.setCharacterSize(TEXT_SIZE);
+	onePlayerText.setPosition(ONE_PLAYER_TEXT_POS);
+
+	twoPlayerText.setString("*2  PLAYERS  2 COINS");
+	twoPlayerText.setCharacterSize(TEXT_SIZE);
+	twoPlayerText.setPosition(TWO_PLAYER_TEXT_POS);
+}
+
 
 void UI::setUpMenuText() {
 	titleTopLine.setString("PLAY");
@@ -150,8 +216,7 @@ void UI::setUpMenuText() {
 }
 
 
-
-void UI::setUpMenuSprites(ResourceManager& resourceManager) {
+void UI::setUpSprites(ResourceManager& resourceManager) {
 	lifeSprite = resourceManager.createSprite("player");
 
 	menuAliensSprites[0] = resourceManager.createSprite("UFO");
@@ -181,25 +246,3 @@ void UI::setUpMenuSprites(ResourceManager& resourceManager) {
 	
 }
 
-void UI::setUpHUD() {
-	// Player 1
-	p1ScoreText.setCharacterSize(TEXT_SIZE); 
-	p1ScoreText.setPosition(P1_SCORE_TEXT_POS);
-	p1Score.setString("SCORE< 1 >"); // TODO: Swap score and score text
-	p1Score.setCharacterSize(TEXT_SIZE);
-	p1Score.setPosition(P1_SCORE_POS);
-
-	// Player 2
-	p2ScoreText.setString("SCORE< 2 >");
-	p2ScoreText.setCharacterSize(TEXT_SIZE);
-	p2ScoreText.setPosition(P2_SCORE_TEXT_POS);
-
-	highScoreText.setString("HI-SCORE");
-	highScoreText.setCharacterSize(TEXT_SIZE);
-	highScoreText.setPosition(HIGH_SCORE_TEXT_POS);
-	highScoreNum.setCharacterSize(TEXT_SIZE);
-	highScoreNum.setPosition(HIGH_SCORE_NUM_POS);
-
-	livesLeft.setCharacterSize(TEXT_SIZE);
-	livesLeft.setPosition(LIVES_LEFT_POS);
-}

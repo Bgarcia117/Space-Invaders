@@ -10,13 +10,15 @@ class UI {
 public:
 	UI(ResourceManager& resourceManager, int score, int highScore, int playerLives);
 	std::string scoreToText(int score);
+	void renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives);
+	void renderCoinMenu(sf::RenderTarget& target);
 	void renderMenu(sf::RenderTarget& target);
-	void renderHUD(sf::RenderTarget& target, const Player& playerOne);
 
 
 private:
-	// Displayed on menu & HUD
 	sf::Font& font;
+
+	// HUD Text
 	sf::Text p1ScoreText;
 	sf::Text p1Score;
 	sf::Text p2ScoreText;
@@ -34,13 +36,20 @@ private:
 	sf::Text octopusPointsText;
 	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
 
+	// Displayed on coin menu
+	sf::Text insertCoinText;
+	sf::Text selectPromptText;
+	sf::Text onePlayerText;
+	sf::Text twoPlayerText;
+
 
 	// HUD display while in game
 	sf::Text livesLeft;
 	std::optional<sf::Sprite> lifeSprite;
 
-	void setUpMenuText();
-	void setUpMenuSprites(ResourceManager& resourceManager);
 	void setUpHUD();
+	void setUpCoinMenu();
+	void setUpMenuText();
+	void setUpSprites(ResourceManager& resourceManager);
 
 };
