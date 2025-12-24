@@ -35,8 +35,8 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	    case MENU: 
 
 			ui.renderHUD(target, player, false);
-			// ui.renderCoinMenu(target);
-		    ui.renderMenu(target);
+			ui.renderCoinMenu(target);
+		    // ui.renderMenu(target);
 		    break;
 	    case PLAYING:
 		    ui.renderHUD(target, player, true);
@@ -86,6 +86,7 @@ void Game::initAliens() {
 void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 	alienMoveTimer -= deltaTime;
 
+	// Only moves them if timer hits zero 
 	if (alienMoveTimer <= 0) {
 		if (alienMoveCounter < MAX_SIDE_MOVES && aliensDirection == alienDirection::RIGHT) {
 			for (int i = 0; i < 11 && aliensMoved < aliens.size(); i++)  {
@@ -121,6 +122,7 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 			}
 
 		}
+		// Reset timer
 		alienMoveTimer = ALIEN_SPEED;
 	}
 }

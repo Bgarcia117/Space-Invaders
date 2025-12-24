@@ -24,7 +24,7 @@ private:
 	
 	Player player;
 	std::vector<Alien> aliens;
-	GameState gameState = GameState::MENU;
+	GameState gameState = GameState::PLAYING;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
 	bool gameOver = false;
