@@ -32,12 +32,17 @@ void Game::begin() {
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
 	switch (gameState) {
-	    case MENU: 
+	    case COINMENU: 
 
 			ui.renderHUD(target, player, false);
 			ui.renderCoinMenu(target);
-		    // ui.renderMenu(target);
 		    break;
+
+		case TABLEMENU:
+			ui.renderHUD(target, player, false);
+			ui.renderTableMenu(target);
+			break;
+
 	    case PLAYING:
 		    ui.renderHUD(target, player, true);
 
@@ -60,6 +65,21 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 }
 
+void Game::handleInput(const sf::Event& event) {
+	if (event.is<sf::Event::KeyPressed>()) {
+		// Contains pointer to KeyPress struct
+		const auto& key = event.getIf<sf::Event::KeyPressed>();
+
+		if (gameState == GameState::COINMENU) {
+			ui.handleMenuInput(key->code); // Access which key is pressed
+
+			if (key->code == sf::Keyboard::Key::Enter) {
+				gameState = GameState::TABLEMENU;
+			}
+		}
+
+	}
+}
 
 // Puts aliens in initial positions
 void Game::initAliens() {

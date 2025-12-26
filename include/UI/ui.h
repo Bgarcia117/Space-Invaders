@@ -12,7 +12,8 @@ public:
 	std::string scoreToText(int score);
 	void renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives);
 	void renderCoinMenu(sf::RenderTarget& target);
-	void renderMenu(sf::RenderTarget& target);
+	void renderTableMenu(sf::RenderTarget& target);
+	void handleMenuInput(sf::Keyboard::Key key);
 
 
 private:

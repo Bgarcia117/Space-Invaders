@@ -24,7 +24,6 @@ constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 960.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 // Coin Menu Text Positons
-
 constexpr sf::Vector2f INSERT_COINT_TEXT_POS = { 250.f, 300.f };
 constexpr sf::Vector2f SELECT_PROMPT_TEXT_POS = { 180.f, 400.f };
 constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
@@ -120,7 +119,7 @@ void UI::renderCoinMenu(sf::RenderTarget& target) {
 }
 
 // Displays the start menu
-void UI::renderMenu(sf::RenderTarget& target) {
+void UI::renderTableMenu(sf::RenderTarget& target) {
 	target.draw(titleTopLine);
 	target.draw(titleBottomLine);
 	target.draw(scoreTable);
@@ -135,6 +134,17 @@ void UI::renderMenu(sf::RenderTarget& target) {
 	target.draw(creditsText);
 }
 
+void UI::handleMenuInput(sf::Keyboard::Key key) {
+	if (key == sf::Keyboard::Key::W || key == sf::Keyboard::Key::Up) {
+		onePlayerText.setFillColor(LIGHT_GREEN);
+		twoPlayerText.setFillColor(sf::Color::White);
+	}
+
+	if (key == sf::Keyboard::Key::S || key == sf::Keyboard::Key::Down) {
+		onePlayerText.setFillColor(sf::Color::White);
+		twoPlayerText.setFillColor(LIGHT_GREEN);
+	}
+}
 
 // Private Functions
 void UI::setUpHUD() {
@@ -172,6 +182,7 @@ void UI::setUpCoinMenu() {
 	onePlayerText.setString("*1  PLAYER   1 COIN");
 	onePlayerText.setCharacterSize(TEXT_SIZE);
 	onePlayerText.setPosition(ONE_PLAYER_TEXT_POS);
+	onePlayerText.setFillColor(LIGHT_GREEN);
 
 	twoPlayerText.setString("*2  PLAYERS  2 COINS");
 	twoPlayerText.setCharacterSize(TEXT_SIZE);
@@ -218,6 +229,7 @@ void UI::setUpMenuText() {
 
 void UI::setUpSprites(ResourceManager& resourceManager) {
 	lifeSprite = resourceManager.createSprite("player");
+	lifeSprite->setColor(LIGHT_GREEN);
 
 	menuAliensSprites[0] = resourceManager.createSprite("UFO");
 	menuAliensSprites[1] = resourceManager.createSprite("squid");
@@ -242,7 +254,5 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 	menuAliensSprites[3]->setScale(MENU_OCTOPUS_SCALE);
 	menuAliensSprites[3]->setColor(LIGHT_GREEN);
 
-
-	
 }
 

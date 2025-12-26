@@ -8,7 +8,7 @@
 #include "game_objects/player.h"
 #include <UI/ui.h>
 
-enum GameState { MENU, PLAYING, GAMEOVER };
+enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER };
 
 class Game {
 public:
@@ -16,6 +16,7 @@ public:
 	void init();
 	void begin();
 	void update(sf::RenderTarget& target, float deltaTime);
+	void handleInput(const sf::Event& event);
 
 private:
 	enum alienDirection {LEFT, RIGHT, DOWN};
@@ -24,7 +25,7 @@ private:
 	
 	Player player;
 	std::vector<Alien> aliens;
-	GameState gameState = GameState::PLAYING;
+	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
 	bool gameOver = false;

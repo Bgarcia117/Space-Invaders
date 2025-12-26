@@ -26,6 +26,8 @@ int main() {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
+
+			game.handleInput(*event);
 		}
 
 		window.clear(sf::Color::Black);
