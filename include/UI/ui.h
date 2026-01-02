@@ -2,6 +2,8 @@
 #include <optional>
 #include <array>
 #include <unordered_map>
+#include <string>
+#include <queue>
 #include <SFML/Graphics.hpp>
 #include <managers/resource_manager.h>
 #include "game_objects/player.h"
@@ -15,9 +17,30 @@ public:
 	void renderTableMenu(sf::RenderTarget& target);
 	void handleMenuInput(sf::Keyboard::Key key);
 
+	void startTypingCoinMenu();
+	void startNextText();
+	void updateTypeWriter(float deltaTime);
 
 private:
+	// Type writer helpers
+	struct TextToType {
+		std::string fullText;
+		sf::Text* textPtr;
+	};
+	std::queue<TextToType> typingQueue;
+	std::string currentFullText;
+	sf::Text* currentTextPtr = nullptr;
+	int charIndex = 0;
+	float timePassed = 0.0f;
+	float timePerChar = 0.05f;
+
 	sf::Font& font;
+
+	// Displayed on coin menu
+	sf::Text insertCoinText;
+	sf::Text selectPromptText;
+	sf::Text onePlayerText;
+	sf::Text twoPlayerText;
 
 	// HUD Text
 	sf::Text p1ScoreText;
@@ -36,12 +59,6 @@ private:
 	sf::Text crabPointsText;
 	sf::Text octopusPointsText;
 	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
-
-	// Displayed on coin menu
-	sf::Text insertCoinText;
-	sf::Text selectPromptText;
-	sf::Text onePlayerText;
-	sf::Text twoPlayerText;
 
 
 	// HUD display while in game

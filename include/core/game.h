@@ -16,6 +16,7 @@ public:
 	void init();
 	void begin();
 	void update(sf::RenderTarget& target, float deltaTime);
+	void render(sf::RenderTarget& target, float deltaTime);
 	void handleInput(const sf::Event& event);
 
 private:

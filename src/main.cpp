@@ -32,6 +32,7 @@ int main() {
 
 		window.clear(sf::Color::Black);
 		game.update(window, deltaTime);
+		game.render(window, deltaTime);
 		window.display();
 	}
 

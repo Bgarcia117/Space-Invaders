@@ -31,38 +31,40 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
+	ui.updateTypeWriter(deltaTime);
+}
+
+void Game::render(sf::RenderTarget& target, float deltaTime) {
 	switch (gameState) {
-	    case COINMENU: 
+	case COINMENU:
+		ui.renderHUD(target, player, false);
+		ui.renderCoinMenu(target);
+		break;
 
-			ui.renderHUD(target, player, false);
-			ui.renderCoinMenu(target);
-		    break;
+	case TABLEMENU:
+		ui.renderHUD(target, player, false);
+		ui.renderTableMenu(target);
+		break;
 
-		case TABLEMENU:
-			ui.renderHUD(target, player, false);
-			ui.renderTableMenu(target);
-			break;
+	case PLAYING:
+		ui.renderHUD(target, player, true);
 
-	    case PLAYING:
-		    ui.renderHUD(target, player, true);
+		movePlayer(deltaTime);
+		moveAliens(aliens, deltaTime);
 
-		    movePlayer(deltaTime);
-		    moveAliens(aliens, deltaTime);
+		// Draw alien after flipping sprite
+		for (auto& alien : aliens) {
+			alien.update(deltaTime);
+			target.draw(alien.getCurrentSprite());
+		}
+		target.draw(player.getSprite());
 
-		    // Draw alien after flipping sprite
-		    for (auto& alien : aliens) {
-			    alien.update(deltaTime);
-			    target.draw(alien.getCurrentSprite());
-		    }
-		    target.draw(player.getSprite());
-
-		    break;
-	    default:
-		    ui.renderHUD(target, player, true);
-		    std::cout << "Default case! Check code!";
+		break;
+	default:
+		ui.renderHUD(target, player, true);
+		std::cout << "Default case! Check code!";
 
 	}
-
 }
 
 void Game::handleInput(const sf::Event& event) {
@@ -77,6 +79,13 @@ void Game::handleInput(const sf::Event& event) {
 				gameState = GameState::TABLEMENU;
 			}
 		}
+		else if (gameState == GameState::TABLEMENU) {
+			if (key->code == sf::Keyboard::Key::Enter) {
+				gameState = GameState::PLAYING;
+			}
+		}
+
+		
 
 	}
 }

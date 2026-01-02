@@ -23,7 +23,7 @@ constexpr sf::Vector2f LIVES_LEFT_POS = { 65.f, 960.f };
 constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 960.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
 
-// Coin Menu Text Positons
+// Coin Menu Text Positons 
 constexpr sf::Vector2f INSERT_COINT_TEXT_POS = { 250.f, 300.f };
 constexpr sf::Vector2f SELECT_PROMPT_TEXT_POS = { 180.f, 400.f };
 constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
@@ -55,31 +55,31 @@ constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
 UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLives) 
 	: font(resourceManager.getFont()),
-	  p1ScoreText(font, scoreToText(score)),
-	  p1Score(font),
-	  p2ScoreText(font),
-	  highScoreText(font),
-	  highScoreNum(font, scoreToText(highScore)),
-	  creditsText(font),
-	  titleTopLine(font),
-	  titleBottomLine(font),
-	  scoreTable(font),
-      ufoPointsText(font),
-      squidPointsText(font),
-      crabPointsText(font),
-      octopusPointsText(font),
-	  livesLeft(font, std::to_string(playerLives)),
-	  insertCoinText(font),
-	  selectPromptText(font),
-	  onePlayerText(font),
-	  twoPlayerText(font) {
+	insertCoinText(font),
+	selectPromptText(font),
+	onePlayerText(font),
+	twoPlayerText(font),
+	p1ScoreText(font, scoreToText(score)),
+	p1Score(font),
+	p2ScoreText(font),
+	highScoreText(font),
+	highScoreNum(font, scoreToText(highScore)),
+	creditsText(font),
+	titleTopLine(font),
+	titleBottomLine(font),
+	scoreTable(font),
+    ufoPointsText(font),
+    squidPointsText(font),
+    crabPointsText(font),
+    octopusPointsText(font),
+	livesLeft(font, std::to_string(playerLives)) {
 
 	setUpHUD();
 	setUpCoinMenu();
 	setUpMenuText();
 	setUpSprites(resourceManager);
-	// Add game over screen
-
+	// TODO: Add game over screen
+	startTypingCoinMenu();
 }
 
 std::string UI::scoreToText(int score) {
@@ -175,16 +175,16 @@ void UI::setUpCoinMenu() {
 	insertCoinText.setCharacterSize(TEXT_SIZE);
 	insertCoinText.setPosition(INSERT_COINT_TEXT_POS);
 
-	selectPromptText.setString("<1  OR  2 PLAYERS>");
+	// selectPromptText.setString("<1  OR  2 PLAYERS>");
 	selectPromptText.setCharacterSize(TEXT_SIZE);
 	selectPromptText.setPosition(SELECT_PROMPT_TEXT_POS);
 
-	onePlayerText.setString("*1  PLAYER   1 COIN");
+	// onePlayerText.setString("*1  PLAYER   1 COIN");
 	onePlayerText.setCharacterSize(TEXT_SIZE);
 	onePlayerText.setPosition(ONE_PLAYER_TEXT_POS);
 	onePlayerText.setFillColor(LIGHT_GREEN);
 
-	twoPlayerText.setString("*2  PLAYERS  2 COINS");
+	// twoPlayerText.setString("*2  PLAYERS  2 COINS");
 	twoPlayerText.setCharacterSize(TEXT_SIZE);
 	twoPlayerText.setPosition(TWO_PLAYER_TEXT_POS);
 }
@@ -239,7 +239,6 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 	// UFO
 	menuAliensSprites[0]->setPosition(MENU_UFO_POS);
 	menuAliensSprites[0]->setScale(MENU_UFO_SCALE);
-	// TODO: Fix colors: menuAliensSprites[0]->setColor(sf::Color::White);
 
 	// Squid
 	menuAliensSprites[1]->setPosition(MENU_SQUID_POS);
@@ -256,3 +255,48 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 
 }
 
+void UI::startTypingCoinMenu() {
+	while (!typingQueue.empty()) {
+		typingQueue.pop();
+	}
+
+	typingQueue.push({ "<1  OR  2 PLAYERS>" , &selectPromptText });
+	typingQueue.push({ "*1  PLAYER   1 COIN" , &onePlayerText });
+	typingQueue.push({ "*2  PLAYERS  2 COINS", &twoPlayerText });
+
+	startNextText();
+}
+
+void UI::startNextText() {
+	if (typingQueue.empty()) {
+		currentTextPtr = nullptr;
+		return;
+	}
+
+	TextToType next = typingQueue.front();
+	typingQueue.pop();
+
+	currentFullText = next.fullText;
+	currentTextPtr = next.textPtr;
+	charIndex = 0;
+	timePassed = 0.0f;
+}
+
+void UI::updateTypeWriter(float deltaTime) {
+	if (!currentTextPtr) return;
+
+	timePassed += deltaTime;
+
+	while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
+		charIndex++;
+		timePassed -= timePerChar; 
+
+		// Show more of the full string
+		currentTextPtr->setString(currentFullText.substr(0, charIndex));
+
+		// Move to next text to show in the queue
+		if (charIndex >= currentFullText.length()) {
+			startNextText();
+		}
+	}
+}
