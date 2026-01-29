@@ -31,6 +31,7 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
+	
 	ui.updateTypeWriter(deltaTime);
 }
 
@@ -77,6 +78,7 @@ void Game::handleInput(const sf::Event& event) {
 
 			if (key->code == sf::Keyboard::Key::Enter) {
 				gameState = GameState::TABLEMENU;
+				ui.startTypingTableMenu();
 			}
 		}
 		else if (gameState == GameState::TABLEMENU) {

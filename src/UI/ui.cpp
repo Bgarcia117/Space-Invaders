@@ -76,10 +76,11 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
 
 	setUpHUD();
 	setUpCoinMenu();
-	setUpMenuText();
+	setUpTableMenu();
 	setUpSprites(resourceManager);
 	// TODO: Add game over screen
 	startTypingCoinMenu();
+	// startTypingTableMenu();
 }
 
 std::string UI::scoreToText(int score) {
@@ -175,31 +176,26 @@ void UI::setUpCoinMenu() {
 	insertCoinText.setCharacterSize(TEXT_SIZE);
 	insertCoinText.setPosition(INSERT_COINT_TEXT_POS);
 
-	// selectPromptText.setString("<1  OR  2 PLAYERS>");
 	selectPromptText.setCharacterSize(TEXT_SIZE);
 	selectPromptText.setPosition(SELECT_PROMPT_TEXT_POS);
 
-	// onePlayerText.setString("*1  PLAYER   1 COIN");
 	onePlayerText.setCharacterSize(TEXT_SIZE);
 	onePlayerText.setPosition(ONE_PLAYER_TEXT_POS);
 	onePlayerText.setFillColor(LIGHT_GREEN);
 
-	// twoPlayerText.setString("*2  PLAYERS  2 COINS");
 	twoPlayerText.setCharacterSize(TEXT_SIZE);
 	twoPlayerText.setPosition(TWO_PLAYER_TEXT_POS);
 }
 
 
-void UI::setUpMenuText() {
-	titleTopLine.setString("PLAY");
+void UI::setUpTableMenu() {
 	titleTopLine.setCharacterSize(TEXT_SIZE);
 	titleTopLine.setPosition(TITLE_TOP_LINE_POS);
 
-	titleBottomLine.setString("SPACE    INVADERS");
 	titleBottomLine.setCharacterSize(TEXT_SIZE);
 	titleBottomLine.setPosition(TITLE_BOTTOM_LINE_POS);
 
-	scoreTable.setString("*SCORE ADVANCE TABLE*");
+	// scoreTable.setString("*SCORE ADVANCE TABLE*");
 	scoreTable.setCharacterSize(TEXT_SIZE);
 	scoreTable.setPosition(SCORE_TABLE_POS);
 
@@ -265,6 +261,20 @@ void UI::startTypingCoinMenu() {
 	typingQueue.push({ "*2  PLAYERS  2 COINS", &twoPlayerText });
 
 	startNextText();
+}
+
+void UI::startTypingTableMenu() {
+	typingQueue.push({ "PLAY" , &titleTopLine });
+	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
+
+	
+
+
+	scoreTable.setString("*SCORE ADVANCE TABLE*");
+
+	startNextText();
+
+	
 }
 
 void UI::startNextText() {

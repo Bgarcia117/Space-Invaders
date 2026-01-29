@@ -18,6 +18,7 @@ public:
 	void handleMenuInput(sf::Keyboard::Key key);
 
 	void startTypingCoinMenu();
+	void startTypingTableMenu();
 	void startNextText();
 	void updateTypeWriter(float deltaTime);
 
@@ -67,7 +68,7 @@ private:
 
 	void setUpHUD();
 	void setUpCoinMenu();
-	void setUpMenuText();
+	void setUpTableMenu();
 	void setUpSprites(ResourceManager& resourceManager);
 
 };
