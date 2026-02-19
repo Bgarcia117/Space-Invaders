@@ -67,7 +67,7 @@ const sf::Texture& ResourceManager::getTexture(const std::string& key) const {
 
 
 /*
- * @brief Loads texture from file and store it with a key
+ * @brief Loads texture from file and stores it in a map with a key
  * @param key Unique name for the texture ("alien", "player", "bullet")
  * @param filepath Path to image file relative to executable
  * @return true if texture loads successfully, false if loading fails

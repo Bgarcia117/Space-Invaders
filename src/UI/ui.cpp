@@ -24,7 +24,7 @@ constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 960.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
 
 // Coin Menu Text Positons 
-constexpr sf::Vector2f INSERT_COINT_TEXT_POS = { 250.f, 300.f };
+constexpr sf::Vector2f INSERT_COIN_TEXT_POS = { 250.f, 300.f };
 constexpr sf::Vector2f SELECT_PROMPT_TEXT_POS = { 180.f, 400.f };
 constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
 constexpr sf::Vector2f TWO_PLAYER_TEXT_POS = { 180.f, 550.f };
@@ -174,7 +174,7 @@ void UI::setUpHUD() {
 void UI::setUpCoinMenu() {
 	insertCoinText.setString("INSERT   COIN");
 	insertCoinText.setCharacterSize(TEXT_SIZE);
-	insertCoinText.setPosition(INSERT_COINT_TEXT_POS);
+	insertCoinText.setPosition(INSERT_COIN_TEXT_POS);
 
 	selectPromptText.setCharacterSize(TEXT_SIZE);
 	selectPromptText.setPosition(SELECT_PROMPT_TEXT_POS);
