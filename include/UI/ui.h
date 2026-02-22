@@ -28,12 +28,12 @@ private:
 		std::string fullText;
 		sf::Text* textPtr;
 	};
-	std::queue<TextToType> typingQueue;
-	std::string currentFullText;
-	sf::Text* currentTextPtr = nullptr;
-	int charIndex = 0;
-	float timePassed = 0.0f;
-	float timePerChar = 0.05f;
+	std::queue<TextToType> typingQueue;  // Queue of strings to be typed
+	std::string currentFullText;         // Current entire string/text to be typed out
+	sf::Text* currentTextPtr = nullptr;  // Points to sf::Text obj being typed to
+	int charIndex = 0;                   // Tracks how much of a string has been shown
+	float timePassed = 0.0f;             // Tracks time passed since last char was shown
+	float timePerChar = 0.05f;           // Time between revealing characters
 
 	sf::Font& font;
 

@@ -279,28 +279,31 @@ void UI::startTypingTableMenu() {
 }
 
 void UI::startNextText() {
+	// Error handling for an empty queue
 	if (typingQueue.empty()) {
 		currentTextPtr = nullptr;
 		return;
 	}
 
+	// Copies struct from queue and removes it
 	TextToType next = typingQueue.front();
 	typingQueue.pop();
 
-	currentFullText = next.fullText;
-	currentTextPtr = next.textPtr;
-	charIndex = 0;
-	timePassed = 0.0f;
+	currentFullText = next.fullText;  // Sets full string to be typed
+	currentTextPtr = next.textPtr;    // Sets the text obj to be written to
+	charIndex = 0;                    // Starts at the beginning of the string
+	timePassed = 0.0f;                // Starts timer for chars to be revealed
 }
 
 void UI::updateTypeWriter(float deltaTime) {
+	// Error handling for text pointer
 	if (!currentTextPtr) return;
 
 	timePassed += deltaTime;
 
 	while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
 		charIndex++;
-		timePassed -= timePerChar; 
+		timePassed -= timePerChar; // Accounts for leftover time
 
 		// Show more of the full string
 		currentTextPtr->setString(currentFullText.substr(0, charIndex));
