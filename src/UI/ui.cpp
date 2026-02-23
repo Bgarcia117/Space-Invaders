@@ -278,6 +278,13 @@ void UI::startTypingTableMenu() {
 	
 }
 
+/**
+ * @brief Advances the typewriter to the next text to be displayed
+ *
+ * Pops the front entry from the typing queue and resets the typewriter to start
+ * revealing characters from the start of the string. If the queue is emtpy, the
+ * current pointer is set to nullptr which stops the typewriter
+ */
 void UI::startNextText() {
 	// Error handling for an empty queue
 	if (typingQueue.empty()) {
