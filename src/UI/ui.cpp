@@ -148,6 +148,60 @@ void UI::handleMenuInput(sf::Keyboard::Key key) {
 	}
 }
 
+void UI::startTypingCoinMenu() {
+	while (!typingQueue.empty()) {
+		typingQueue.pop();
+	}
+
+	typingQueue.push({ "<1  OR  2 PLAYERS>" , &selectPromptText });
+	typingQueue.push({ "*1  PLAYER   1 COIN" , &onePlayerText });
+	typingQueue.push({ "*2  PLAYERS  2 COINS", &twoPlayerText });
+
+	startNextText();
+}
+
+void UI::startTypingTableMenu() {
+	typingQueue.push({ "PLAY" , &titleTopLine });
+	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
+
+
+
+
+	scoreTable.setString("*SCORE ADVANCE TABLE*");
+
+	startNextText();
+
+
+}
+
+/**
+ * @brief Advances the typewriter to reveal the next letter in the text to be displayed.
+ *
+ * Reveals one letter at a time of the current full text to be displayed based on elapsed time.
+ * When the current text is fully revealed, it moves on to the next text in the queue.
+ *
+ * @param deltaTime the amount of time passed since the last frame was rendered
+ */
+void UI::updateTypeWriter(float deltaTime) {
+	// Error handling for text pointer
+	if (!currentTextPtr) return;
+
+	timePassed += deltaTime;
+
+	while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
+		charIndex++;
+		timePassed -= timePerChar; // Accounts for leftover time
+
+		// Show more of the full string
+		currentTextPtr->setString(currentFullText.substr(0, charIndex));
+
+		// Move to next text to show in the queue
+		if (charIndex >= currentFullText.length()) {
+			startNextText();
+		}
+	}
+}
+
 // Private Functions
 void UI::setUpHUD() {
 	// Player 1
@@ -252,38 +306,12 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 
 }
 
-void UI::startTypingCoinMenu() {
-	while (!typingQueue.empty()) {
-		typingQueue.pop();
-	}
-
-	typingQueue.push({ "<1  OR  2 PLAYERS>" , &selectPromptText });
-	typingQueue.push({ "*1  PLAYER   1 COIN" , &onePlayerText });
-	typingQueue.push({ "*2  PLAYERS  2 COINS", &twoPlayerText });
-
-	startNextText();
-}
-
-void UI::startTypingTableMenu() {
-	typingQueue.push({ "PLAY" , &titleTopLine });
-	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
-
-	
-
-
-	scoreTable.setString("*SCORE ADVANCE TABLE*");
-
-	startNextText();
-
-	
-}
-
 /**
- * @brief Advances the typewriter to the next text to be displayed
+ * @brief Advances the typewriter to the next text to be displayed.
  *
  * Pops the front entry from the typing queue and resets the typewriter to start
  * revealing characters from the start of the string. If the queue is emtpy, the
- * current pointer is set to nullptr which stops the typewriter
+ * current pointer is set to nullptr which stops the typewriter.
  */
 void UI::startNextText() {
 	// Error handling for an empty queue
@@ -300,24 +328,4 @@ void UI::startNextText() {
 	currentTextPtr = next.textPtr;    // Sets the text obj to be written to
 	charIndex = 0;                    // Starts at the beginning of the string
 	timePassed = 0.0f;                // Starts timer for chars to be revealed
-}
-
-void UI::updateTypeWriter(float deltaTime) {
-	// Error handling for text pointer
-	if (!currentTextPtr) return;
-
-	timePassed += deltaTime;
-
-	while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
-		charIndex++;
-		timePassed -= timePerChar; // Accounts for leftover time
-
-		// Show more of the full string
-		currentTextPtr->setString(currentFullText.substr(0, charIndex));
-
-		// Move to next text to show in the queue
-		if (charIndex >= currentFullText.length()) {
-			startNextText();
-		}
-	}
 }

@@ -19,7 +19,6 @@ public:
 
 	void startTypingCoinMenu();
 	void startTypingTableMenu();
-	void startNextText();
 	void updateTypeWriter(float deltaTime);
 
 private:
@@ -70,5 +69,6 @@ private:
 	void setUpCoinMenu();
 	void setUpTableMenu();
 	void setUpSprites(ResourceManager& resourceManager);
+	void startNextText();
 
 };
