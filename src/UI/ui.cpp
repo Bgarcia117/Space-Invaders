@@ -52,8 +52,6 @@ constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
-
-
 UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLives) 
 	: font(resourceManager.getFont()),
 	insertCoinText(font),
@@ -160,9 +158,14 @@ void UI::startTypingCoinMenu() {
 	startNextText();
 }
 
+// TODO: Finish fixing typing order
 void UI::startTypingTableMenu() {
 	typingQueue.push({ "PLAY" , &titleTopLine });
 	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
+
+	typingQueue.push({"continue", nullptr});
+	std::cout << "Return Successfull!" << std::endl;
+
 
 
 
@@ -323,6 +326,10 @@ void UI::startNextText() {
 	// Copies struct from queue and removes it
 	TextToType next = typingQueue.front();
 	typingQueue.pop();
+
+	if (currentFullText == "continue" && !currentTextPtr) {
+		return;
+	}
 
 	currentFullText = next.fullText;  // Sets full string to be typed
 	currentTextPtr = next.textPtr;    // Sets the text obj to be written to

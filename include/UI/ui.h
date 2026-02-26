@@ -24,10 +24,10 @@ public:
 private:
 	// Type writer helpers
 	struct TextToType {
-		std::string fullText;
-		sf::Text* textPtr;
+		std::string fullText;            // Full text to be typed
+		sf::Text* textPtr;               // Text obj pointer to be typed to
 	};
-	std::queue<TextToType> typingQueue;  // Queue of strings to be typed
+	std::queue<TextToType> typingQueue;  // Queue of TextToType structs define above
 	std::string currentFullText;         // Current entire string/text to be typed out
 	sf::Text* currentTextPtr = nullptr;  // Points to sf::Text obj being typed to
 	int charIndex = 0;                   // Tracks how much of a string has been shown
