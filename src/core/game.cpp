@@ -6,7 +6,7 @@
 #include "game_objects/alien.h"
 #include <UI/ui.h>
 
-constexpr int MAX_SIDE_MOVES = 3;
+constexpr int MAX_SIDE_MOVES = 8;
 constexpr float ALIEN_SPEED = 0.25f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
@@ -98,11 +98,11 @@ void Game::initAliens() {
 		for (int col = 0; col < 11; col++) {
 			AlienType type = AlienType::SQUID;
 			// Left offset + (col * spacing), Top offset + (row * spacing)
-			sf::Vector2f position = { 120.f + col * 50.f, 200.f + row * 50 };
+			sf::Vector2f position = { 89.f + col * 50.f, 200.f + row * 50 };
 
 			if (row > 0 && row < 3) {
 				type = AlienType::CRAB;
-				position = { 115.f + col * 50.f, 200.f + row * 50 };
+				position = { 84.f + col * 50.f, 200.f + row * 50 };
 			}
 			else if (row > 2) {
 				type = AlienType::OCTOPUS;
