@@ -175,6 +175,18 @@ void UI::startTypingTableMenu() {
 	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
 	typingQueue.push({"displayTable", nullptr});
 
+	typingQueue.push({"=? MYSTERY", &ufoPointsText});
+	typingQueue.push({"=30 POINTS", &squidPointsText});
+	typingQueue.push({"=20 POINTS", &crabPointsText});
+	typingQueue.push({"=10 POINTS", &octopusPointsText});
+	// ufoPointsText.setString("=? MYSTERY");
+	// squidPointsText.setString("=30 POINTS");
+	// crabPointsText.setString("=20 POINTS");
+	// octopusPointsText.setString("=10 POINTS");
+
+
+
+
 	startNextText();
 }
 
