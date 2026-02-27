@@ -34,6 +34,8 @@ private:
 	float timePassed = 0.0f;             // Tracks time passed since last char was shown
 	float timePerChar = 0.05f;           // Time between revealing characters
 
+	bool showTableSprites = false;
+
 	sf::Font& font;
 
 	// Displayed on coin menu

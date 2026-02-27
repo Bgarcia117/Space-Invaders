@@ -30,7 +30,7 @@ constexpr sf::Vector2f SELECT_PROMPT_TEXT_POS = { 180.f, 400.f };
 constexpr sf::Vector2f ONE_PLAYER_TEXT_POS = { 180.f, 475.f };
 constexpr sf::Vector2f TWO_PLAYER_TEXT_POS = { 180.f, 550.f };
 
-// Menu Table Text Positions
+// Table Menu Text Positions
 constexpr sf::Vector2f TITLE_TOP_LINE_POS = { 345.f, 224.f };
 constexpr sf::Vector2f TITLE_BOTTOM_LINE_POS = { 210.f, 304.f };
 constexpr sf::Vector2f SCORE_TABLE_POS = { 160.f, 414.f };
@@ -40,17 +40,20 @@ constexpr sf::Vector2f CRAB_POINTS_TEXT_POS = { 290.f, 580.f };
 constexpr sf::Vector2f OCTOPUS_POINTS_TEXT_POS = { 290.f, 630.f };
 constexpr sf::Vector2f CREDITS_TEXT_POS = { 520.f, 960.f };
 
-// Menu Table Alien Sprite Positions
+// Table Menu Alien Sprite Positions
 constexpr sf::Vector2f MENU_UFO_POS = { 245.f, 480.f };
 constexpr sf::Vector2f MENU_SQUID_POS = { 256.f, 528.f };
 constexpr sf::Vector2f MENU_CRAB_POS = { 252.f, 580.f };
 constexpr sf::Vector2f MENU_OCTOPUS_POS = { 253.f, 630.f };
 
-// Menu Table Alien Sprite Scales (Scales sprite size)
+// Table Menu Alien Sprite Scales (Scales sprite size)
 constexpr sf::Vector2f MENU_UFO_SCALE = { 1.75f, 1.60f };
 constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
+
+// Pause Duration before Revealing Table
+constexpr float TABLE_REVEAL_PAUSE = 1.0f;
 
 UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLives) 
 	: font(resourceManager.getFont()),
@@ -123,10 +126,14 @@ void UI::renderTableMenu(sf::RenderTarget& target) {
 	target.draw(titleTopLine);
 	target.draw(titleBottomLine);
 	target.draw(scoreTable);
-	target.draw(*menuAliensSprites[0]);
-	target.draw(*menuAliensSprites[1]);
-	target.draw(*menuAliensSprites[2]);
-	target.draw(*menuAliensSprites[3]);
+
+	if (showTableSprites) {
+		target.draw(*menuAliensSprites[0]);
+		target.draw(*menuAliensSprites[1]);
+		target.draw(*menuAliensSprites[2]);
+		target.draw(*menuAliensSprites[3]);
+	}
+
 	target.draw(ufoPointsText);
 	target.draw(squidPointsText);
 	target.draw(crabPointsText);
@@ -160,21 +167,15 @@ void UI::startTypingCoinMenu() {
 
 // TODO: Finish fixing typing order
 void UI::startTypingTableMenu() {
+	while (!typingQueue.empty()) {
+		typingQueue.pop();
+	}
+
 	typingQueue.push({ "PLAY" , &titleTopLine });
 	typingQueue.push({ "SPACE    INVADERS" , &titleBottomLine });
-
-	typingQueue.push({"continue", nullptr});
-	std::cout << "Return Successfull!" << std::endl;
-
-
-
-
-
-	scoreTable.setString("*SCORE ADVANCE TABLE*");
+	typingQueue.push({"displayTable", nullptr});
 
 	startNextText();
-
-
 }
 
 /**
@@ -182,30 +183,39 @@ void UI::startTypingTableMenu() {
  *
  * Reveals one letter at a time of the current full text to be displayed based on elapsed time.
  * When the current text is fully revealed, it moves on to the next text in the queue.
+ * If the current entry is "displayTable", waits for TABLE_REVEAL_PAUSE seconds before
+ * displaying the score advance table and its sprites. (Simulates the original game menu)
  *
  * @param deltaTime the amount of time passed since the last frame was rendered
  */
 void UI::updateTypeWriter(float deltaTime) {
 	// Error handling for text pointer
-	if (!currentTextPtr) return;
+	if (!currentTextPtr && currentFullText != "displayTable") return;
 
 	timePassed += deltaTime;
 
-	while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
-		charIndex++;
-		timePassed -= timePerChar; // Accounts for leftover time
+	if (currentTextPtr) {
+		while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
+			charIndex++;
+			timePassed -= timePerChar; // Accounts for leftover time
 
-		// Show more of the full string
-		currentTextPtr->setString(currentFullText.substr(0, charIndex));
+			// Show more of the full string
+			currentTextPtr->setString(currentFullText.substr(0, charIndex));
 
-		// Move to next text to show in the queue
-		if (charIndex >= currentFullText.length()) {
-			startNextText();
+			// Move to next text to show in the queue
+			if (charIndex >= currentFullText.length()) {
+				startNextText();
+			}
 		}
+
+	} else if (currentFullText == "displayTable" && timePassed >= TABLE_REVEAL_PAUSE) {
+		scoreTable.setString("*SCORE ADVANCE TABLE*");
+		startNextText();
+		showTableSprites = true;
 	}
 }
 
-// Private Functions
+// ================================= Private Functions ========================================
 void UI::setUpHUD() {
 	// Player 1
 	p1ScoreText.setCharacterSize(TEXT_SIZE);
@@ -257,19 +267,19 @@ void UI::setUpTableMenu() {
 	scoreTable.setCharacterSize(TEXT_SIZE);
 	scoreTable.setPosition(SCORE_TABLE_POS);
 
-	ufoPointsText.setString("=? MYSTERY");
+	// ufoPointsText.setString("=? MYSTERY");
 	ufoPointsText.setCharacterSize(TEXT_SIZE);
 	ufoPointsText.setPosition(UFO_POINTS_TEXT_POS);
 
-	squidPointsText.setString("=30 POINTS");
+	// squidPointsText.setString("=30 POINTS");
 	squidPointsText.setCharacterSize(TEXT_SIZE);
 	squidPointsText.setPosition(SQUID_POINTS_TEXT_POS);
 
-	crabPointsText.setString("=20 POINTS");
+	// crabPointsText.setString("=20 POINTS");
 	crabPointsText.setCharacterSize(TEXT_SIZE);
 	crabPointsText.setPosition(CRAB_POINTS_TEXT_POS);
 
-	octopusPointsText.setString("=10 POINTS");
+	// octopusPointsText.setString("=10 POINTS");
 	octopusPointsText.setCharacterSize(TEXT_SIZE);
 	octopusPointsText.setPosition(OCTOPUS_POINTS_TEXT_POS);
 	octopusPointsText.setFillColor(LIGHT_GREEN);
@@ -327,12 +337,9 @@ void UI::startNextText() {
 	TextToType next = typingQueue.front();
 	typingQueue.pop();
 
-	if (currentFullText == "continue" && !currentTextPtr) {
-		return;
-	}
+	currentFullText = next.fullText;     // Sets full string to be typed
+	currentTextPtr = next.textPtr;       // Sets the text obj to be written to
+	charIndex = 0;                       // Starts at the beginning of the string
+	timePassed = 0.0f;                   // Starts timer for chars to be revealed
 
-	currentFullText = next.fullText;  // Sets full string to be typed
-	currentTextPtr = next.textPtr;    // Sets the text obj to be written to
-	charIndex = 0;                    // Starts at the beginning of the string
-	timePassed = 0.0f;                // Starts timer for chars to be revealed
 }
