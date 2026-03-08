@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
@@ -161,14 +162,20 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 void Game::movePlayer(float deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left)) {
-		player.move({ -PLAYER_SPEED.x * deltaTime, PLAYER_SPEED.y });
+		player.move({ -PLAYER_SPEED.x * deltaTime, 0 });
+		
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right)) { 
-		player.move({ PLAYER_SPEED.x * deltaTime, PLAYER_SPEED.y });
+		player.move({ PLAYER_SPEED.x * deltaTime, 0 });
+		
 	}
 
+	// Returns player insides of bounds if it goes out of it
+	sf::Vector2f playerPos = player.getPosition();
+	playerPos.x = std::clamp(playerPos.x, 0.0f, 735.0f);
+	player.setPosition(playerPos);
 }
 
 std::string Game::convertScore(int score) {
