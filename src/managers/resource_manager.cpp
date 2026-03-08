@@ -4,6 +4,31 @@
 #include "managers/resource_manager.h"
 #include "core/resource_ids.h"
 
+// IntRect: {{x, y}  {width, height}} where {x, y} denote a position on the sprite sheet
+constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 22, 20 });
+constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 96, 54 }, { 102, 84 });
+constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
+constexpr sf::IntRect CRAB_RECT = sf::IntRect({ 1, 28 }, { 22, 16 });
+constexpr sf::IntRect OCTOPUS_RECT = sf::IntRect({ 3, 53 }, { 18, 14 });
+constexpr sf::IntRect UFO_RECT = sf::IntRect({ 0, 77 }, { 24, 14 });
+
+constexpr sf::IntRect SQUID_TWO_RECT = sf::IntRect({ 29, 4 }, { 14, 16 });
+constexpr sf::IntRect CRAB_TWO_RECT = sf::IntRect({ 25, 28 }, { 22, 16 });
+constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
+
+constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
+constexpr sf::Vector2f BULLET_SCALE = { 1.f, 1.f };
+
+constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
+constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
+constexpr sf::Vector2f OCTOPUS_SCALE = { 1.50f, 1.50f };
+constexpr sf::Vector2f UFO_SCALE = { 1.25f, 1.25f };
+
+constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
+constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
+constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
+
+
 ResourceManager::ResourceManager() {
     if (!loadAllTextures()) {
         std::cerr << "Failed to load required game textures!" << std::endl;
@@ -13,28 +38,28 @@ ResourceManager::ResourceManager() {
         std::cerr << "Failed to load font!" << std::endl;
     }
 
-    defineSpriteConfig("player",  { ResourceKeys::playerKey, sf::IntRect({9, 12},  { 22, 20 }), {2.5f, 2.5f} });
-    defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, sf::IntRect({96, 54}, {102, 84}), {1.f, 1.f} });
+    defineSpriteConfig("player", { ResourceKeys::playerKey, PLAYER_RECT, PLAYER_SCALE });
+    defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT });
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed
-    defineSpriteConfig("squid", { ResourceKeys::alienKey, sf::IntRect({5, 4}, { 14, 16 }), {1.75f, 1.75f} });
+    defineSpriteConfig("squid", { ResourceKeys::alienKey, SQUID_RECT, SQUID_SCALE });
     // Crab Arms Up
-    defineSpriteConfig("crab",    { ResourceKeys::alienKey, sf::IntRect({1, 28},{ 22, 16 }), {1.50f, 1.50f} });   
+    defineSpriteConfig("crab",    { ResourceKeys::alienKey, CRAB_RECT, CRAB_SCALE });   
     // Octopus Arms Out
-    defineSpriteConfig("octopus", { ResourceKeys::alienKey, sf::IntRect({3, 53},{ 18, 14 }), {1.50f, 1.50f} });  
+    defineSpriteConfig("octopus", { ResourceKeys::alienKey, OCTOPUS_RECT, OCTOPUS_SCALE });  
    
-    defineSpriteConfig("UFO",     { ResourceKeys::alienKey, sf::IntRect({0, 77},{ 24, 14 }), {1.25f, 1.25f} });
+    defineSpriteConfig("UFO",     { ResourceKeys::alienKey, UFO_RECT, UFO_SCALE });
 
 
 
     // ===================== Alien Sprite Position Two ============
     // Squid Arms Open   
-    defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, sf::IntRect({29, 4},{ 14, 16 }),  {1.75f, 1.75f} }); 
+    defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, SQUID_TWO_RECT,  SQUID_TWO_SCALE }); 
     // Crabs Arms Down
-    defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, sf::IntRect({25, 28},{ 22, 16 }), {1.50f, 1.50f} });  
+    defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, CRAB_TWO_RECT, CRAB_TWO_SCALE });  
     // Octopus Arms Closed
-    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, sf::IntRect({27, 53},{ 18, 14 }), {1.50f, 1.50f} });  
+    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, OCTOPUS_TWO_RECT, OCTOPUS_TWO_SCALE });  
 }
 
 
