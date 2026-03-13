@@ -1,4 +1,5 @@
-#include "game_objects/player.h"         // Header file
+#include "game_objects/player.h"        // Header file
+#include "game_objects/bullet.h"
 #include "core/game_object.h"           // Base Class
 #include "managers/resource_manager.h"  // Resource/Sprite Manager
 #include "core/resource_ids.h"          // Texture map keys and paths
@@ -14,4 +15,8 @@ Player::Player(const ResourceManager& resourceManager, sf::Vector2f position) :
 
 void Player::update(float deltaTime) {
 
+}
+
+Bullet Player::shoot(const ResourceManager& resourceManager) {
+	return Bullet(resourceManager, getPosition());
 }

@@ -19,7 +19,6 @@ Game::Game() : resourceManager(),
 	           alienMoveTimer(ALIEN_SPEED),
 	           ui(resourceManager, score, highScore, player.getLives()) {
 
-
 }
 
 void Game::init() {
@@ -59,6 +58,11 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 			alien.update(deltaTime);
 			target.draw(alien.getCurrentSprite());
 		}
+
+		for (auto& bullet : bullets) {
+			target.draw(bullet.getSprite());
+		}
+
 		target.draw(player.getSprite());
 
 		break;
@@ -74,21 +78,34 @@ void Game::handleInput(const sf::Event& event) {
 		// Contains pointer to KeyPress struct
 		const auto& key = event.getIf<sf::Event::KeyPressed>();
 
-		if (gameState == GameState::COINMENU) {
-			ui.handleMenuInput(key->code); // Access which key is pressed
+		switch (gameState) {
+			case COINMENU:
+				ui.handleMenuInput(key->code);
 
-			if (key->code == sf::Keyboard::Key::Enter) {
-				gameState = GameState::TABLEMENU;
-				ui.startTypingTableMenu();
-			}
-		}
-		else if (gameState == GameState::TABLEMENU) {
-			if (key->code == sf::Keyboard::Key::Enter) {
-				gameState = GameState::PLAYING;
-			}
-		}
+				if (key->code == sf::Keyboard::Key::Enter) {
+					gameState = GameState::TABLEMENU;
+					ui.startTypingTableMenu();
+				}
+				break;
 
-		
+			case TABLEMENU:
+				if (key->code == sf::Keyboard::Key::Enter) {
+					gameState = GameState::PLAYING;
+				}
+				break;
+
+			case PLAYING:
+				if (key->code == sf::Keyboard::Key::Space) {
+					bullets.push_back(player.shoot(resourceManager));
+				}
+				break;
+
+			case GAMEOVER:
+				break;
+
+			default:
+				break;
+		}
 
 	}
 }

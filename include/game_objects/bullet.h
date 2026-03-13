@@ -7,6 +7,7 @@
 class Bullet : public GameObject {
 public:
 	Bullet(const ResourceManager& resourceManager, const sf::Vector2f position);
+	void update(float deltaTime) override;
 
 
 };

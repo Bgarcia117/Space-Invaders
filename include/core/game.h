@@ -6,6 +6,7 @@
 #include "managers/resource_manager.h"
 #include "game_objects/alien.h"
 #include "game_objects/player.h"
+#include "game_objects/bullet.h"
 #include <UI/ui.h>
 
 enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER };
@@ -26,6 +27,7 @@ private:
 	
 	Player player;
 	std::vector<Alien> aliens;
+	std::vector<Bullet> bullets;
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 

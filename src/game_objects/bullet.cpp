@@ -7,3 +7,7 @@ Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position ) :
 	GameObject(resourceManager, "bullet", position)  {
 
 }
+
+void Bullet::update(float deltaTime) {
+
+}
