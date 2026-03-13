@@ -4,9 +4,10 @@
 #include "managers/resource_manager.h"
 #include "core/resource_ids.h"
 
+// Sprite Rectangles
 // IntRect: {{x, y}  {width, height}} where {x, y} denote a position on the sprite sheet
 constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 22, 20 });
-constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 96, 54 }, { 102, 84 });
+constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 96, 54 }, { 6, 30 });
 constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_RECT = sf::IntRect({ 1, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_RECT = sf::IntRect({ 3, 53 }, { 18, 14 });
@@ -16,8 +17,9 @@ constexpr sf::IntRect SQUID_TWO_RECT = sf::IntRect({ 29, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_TWO_RECT = sf::IntRect({ 25, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 
+// Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
-constexpr sf::Vector2f BULLET_SCALE = { 1.f, 1.f };
+constexpr sf::Vector2f BULLET_SCALE = { 0.5f, 0.4f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
@@ -39,7 +41,7 @@ ResourceManager::ResourceManager() {
     }
 
     defineSpriteConfig("player", { ResourceKeys::playerKey, PLAYER_RECT, PLAYER_SCALE });
-    defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT });
+    defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT, BULLET_SCALE });
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed
