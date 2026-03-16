@@ -33,6 +33,7 @@ void Game::begin() {
 void Game::update(sf::RenderTarget& target, float deltaTime) {
 	
 	ui.updateTypeWriter(deltaTime);
+	player.update(deltaTime);
 }
 
 void Game::render(sf::RenderTarget& target, float deltaTime) {
@@ -50,7 +51,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 	case PLAYING:
 		ui.renderHUD(target, player, true);
 
-		movePlayer(deltaTime);
+		// movePlayer(deltaTime);
 		moveAliens(aliens, deltaTime);
 
 		// Draw alien after flipping sprite
@@ -174,25 +175,6 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 		// Reset timer
 		alienMoveTimer = ALIEN_SPEED;
 	}
-}
-
-void Game::movePlayer(float deltaTime) {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A) || 
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left)) {
-		player.move({ -PLAYER_SPEED.x * deltaTime, 0 });
-		
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right)) { 
-		player.move({ PLAYER_SPEED.x * deltaTime, 0 });
-		
-	}
-
-	// Returns player insides of bounds if they go outside of it
-	sf::Vector2f playerPos = player.getPosition();
-	playerPos.x = std::clamp(playerPos.x, 0.0f, 735.0f);
-	player.setPosition(playerPos);
 }
 
 std::string Game::convertScore(int score) {
