@@ -31,9 +31,13 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
-	
+
 	ui.updateTypeWriter(deltaTime);
 	player.update(deltaTime);
+
+	for (auto& bullet : bullets) {
+		bullet.update(deltaTime);
+	}
 }
 
 void Game::render(sf::RenderTarget& target, float deltaTime) {
@@ -97,7 +101,18 @@ void Game::handleInput(const sf::Event& event) {
 
 			case PLAYING:
 				if (key->code == sf::Keyboard::Key::Space) {
-					bullets.push_back(player.shoot(resourceManager));
+					// Check if there is a player bullet in the vector
+					bool playerBulletExists = false;
+					for (const auto& bullet : bullets) {
+						if (bullet.getOwner() == BulletOwner::PLAYER) {
+							playerBulletExists = true;
+							break;
+						}
+					}
+
+					if (!playerBulletExists) {
+						bullets.push_back(player.shoot(resourceManager));
+					}
 				}
 				break;
 

@@ -34,5 +34,5 @@ void Player::update(float deltaTime) {
 }
 
 Bullet Player::shoot(const ResourceManager& resourceManager) {
-	return Bullet(resourceManager, getPosition());
+	return Bullet(resourceManager, getPosition(), BulletOwner::PLAYER);
 }

@@ -19,7 +19,7 @@ constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
-constexpr sf::Vector2f BULLET_SCALE = { 0.5f, 0.4f };
+constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
