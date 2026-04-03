@@ -1,4 +1,5 @@
 #pragma once
+#include <coroutine>
 #include <SFML/Graphics.hpp>
 #include "core/game_object.h"
 #include "managers/resource_manager.h"
@@ -19,6 +20,7 @@ public:
 
 private:
 	std::optional<sf::Sprite> sprite2;
+	std::optional<sf::Sprite> deathSprite;
 	AlienType type;
 	int pointValue;
 	bool useSprite1;

@@ -165,7 +165,6 @@ void UI::startTypingCoinMenu() {
 	startNextText();
 }
 
-// TODO: Finish fixing typing order
 void UI::startTypingTableMenu() {
 	while (!typingQueue.empty()) {
 		typingQueue.pop();

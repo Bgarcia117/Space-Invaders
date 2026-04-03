@@ -9,6 +9,7 @@ constexpr float	ALIEN_WIDTH = 50.f;
 constexpr float ALIEN_HEIGHT = 30.f;
 constexpr float SPRITE_FLIP_TIME = 1.f;
 constexpr sf::Vector2f ALIEN_START_POS = { 0.f, 0.f };
+constexpr sf::Color UFO_RED(223, 37, 28);
 
 Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Vector2f position) : 
 	GameObject(resourceManager, getSpriteKey(alienType), position), 
@@ -20,10 +21,14 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
     const SpriteConfig& spriteConfig = resourceManager.getSpriteConfig(getNextSpriteKey(alienType));
     const sf::Texture& texture = resourceManager.getTexture(spriteConfig.textureKey);
 
-    sprite2.emplace(texture);
-    sprite2->setTextureRect(spriteConfig.textureRect);
-    sprite2->setScale(spriteConfig.scale);
-    sprite2->setPosition({ position });
+    if (type != AlienType::UFO) {
+        sprite2.emplace(texture);
+        sprite2->setTextureRect(spriteConfig.textureRect);
+        sprite2->setScale(spriteConfig.scale);
+        sprite2->setPosition({ position });
+    } else {
+        setSpriteColor(UFO_RED);
+    }
 
 }
 

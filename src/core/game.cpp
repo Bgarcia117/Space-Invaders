@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <optional>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
@@ -23,6 +24,7 @@ Game::Game() : resourceManager(),
 
 void Game::init() {
 	initAliens();
+	spawnUFO();
 }
 
 void Game::begin() {
@@ -44,6 +46,8 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	std::erase_if(bullets, [](Bullet& bullet) {
 		return bullet.getPosition().y < 0.f;
 	});
+
+	checkBulletAlienCollision();
 }
 
 void Game::render(sf::RenderTarget& target, float deltaTime) {
@@ -75,8 +79,9 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		}
 
 		target.draw(player.getSprite());
-
+		target.draw(ufo->getSprite()); // DEBUGGING
 		break;
+
 	default:
 		ui.renderHUD(target, player, true);
 		std::cout << "Default case! Check code!";
@@ -118,6 +123,7 @@ void Game::handleInput(const sf::Event& event) {
 
 					if (!playerBulletExists) {
 						bullets.push_back(player.shoot(resourceManager));
+						playerShotCount++;
 					}
 				}
 				break;
@@ -196,6 +202,28 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 		// Reset timer
 		alienMoveTimer = ALIEN_SPEED;
 	}
+}
+
+void Game::updateUFOTimer(float deltaTime) {
+
+}
+
+void Game::spawnUFO() {
+	ufo = Alien(resourceManager, AlienType::UFO, {50.f, 150.f});
+}
+
+// TODO: have removal delayed so that death sprite can appear
+void Game::checkBulletAlienCollision() {
+		for (auto& bullet : bullets) {
+			if (bullet.getOwner() == BulletOwner::PLAYER) {
+				sf::FloatRect bulletBounds = bullet.getSprite().getGlobalBounds();
+
+				std::erase_if(aliens, [bulletBounds](Alien& alien) {
+					sf::FloatRect alienBounds = alien.getCurrentSprite().getGlobalBounds();
+					return alienBounds.findIntersection(bulletBounds);
+				});
+			}
+		}
 }
 
 std::string Game::convertScore(int score) {

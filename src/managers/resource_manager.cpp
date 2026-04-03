@@ -24,7 +24,7 @@ constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_SCALE = { 1.50f, 1.50f };
-constexpr sf::Vector2f UFO_SCALE = { 1.25f, 1.25f };
+constexpr sf::Vector2f UFO_SCALE = { 2.f, 1.75f };
 
 constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
@@ -146,6 +146,7 @@ sf::Sprite ResourceManager::createSprite(const std::string& spriteKey) const {
 bool ResourceManager::loadAllTextures() {
     bool success = true;
 
+    // loadTexture returns a boolean which affects the value of success if it fails
     success &= loadTexture(ResourceKeys::alienKey, ResourcePaths::alienPath);
     success &= loadTexture(ResourceKeys::playerKey, ResourcePaths::playerPath);
     success &= loadTexture(ResourceKeys::bulletKey, ResourcePaths::bulletPath);
