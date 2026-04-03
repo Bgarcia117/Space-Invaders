@@ -11,6 +11,6 @@ public:
 	BulletOwner getOwner() const { return owner; }
 
 private:
-	sf::Vector2f bulletSpeed = {0.f, -500.f};
+	sf::Vector2f bulletSpeed = {0.f, 500.f};
 	BulletOwner owner;
 };

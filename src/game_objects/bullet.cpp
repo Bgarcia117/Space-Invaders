@@ -4,10 +4,14 @@
 #include "core/game_object.h"
 
 Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, BulletOwner owner) :
-	GameObject(resourceManager, "bullet", position), owner((owner))  {
+	GameObject(resourceManager, "bullet", position), owner(owner)  {
 
 }
 
 void Bullet::update(float deltaTime) {
-	move({bulletSpeed.x, bulletSpeed.y * deltaTime});
+	if (owner == BulletOwner::PLAYER) {
+		move({bulletSpeed.x, -bulletSpeed.y * deltaTime});
+	} else {
+		move({bulletSpeed.x, bulletSpeed.y * deltaTime});
+	}
 }

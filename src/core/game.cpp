@@ -38,6 +38,12 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 	for (auto& bullet : bullets) {
 		bullet.update(deltaTime);
 	}
+
+	// Safely removes elements from vectors
+	// Takes a container and predicate (any callable such as a lambda or function)
+	std::erase_if(bullets, [](Bullet& bullet) {
+		return bullet.getPosition().y < 0.f;
+	});
 }
 
 void Game::render(sf::RenderTarget& target, float deltaTime) {
