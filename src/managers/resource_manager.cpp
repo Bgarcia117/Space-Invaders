@@ -17,6 +17,8 @@ constexpr sf::IntRect SQUID_TWO_RECT = sf::IntRect({ 29, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_TWO_RECT = sf::IntRect({ 25, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 
+constexpr sf::IntRect DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
+
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
 constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
@@ -30,6 +32,8 @@ constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
+constexpr sf::Vector2f DEATH_SCALE = { 0.45f, 0.55f };
+
 
 ResourceManager::ResourceManager() {
     if (!loadAllTextures()) {
@@ -42,6 +46,9 @@ ResourceManager::ResourceManager() {
 
     defineSpriteConfig("player", { ResourceKeys::playerKey, PLAYER_RECT, PLAYER_SCALE });
     defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT, BULLET_SCALE });
+
+    // TESTING
+    defineSpriteConfig("death", { ResourceKeys::effectsKey, DEATH_RECT, DEATH_SCALE });
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed
@@ -85,7 +92,7 @@ const sf::Texture& ResourceManager::getTexture(const std::string& key) const {
     auto it = textures.find(key);
 
     if (it == textures.end()) {
-        //std::cout << "Error: Texture for: " << key << " not found!" << std::endl;
+        // std::cout << "Error: Texture for: " << key << " not found!" << std::endl;
         throw std::runtime_error("Texture not found: " + key);
     }
 
@@ -151,6 +158,8 @@ bool ResourceManager::loadAllTextures() {
     success &= loadTexture(ResourceKeys::playerKey, ResourcePaths::playerPath);
     success &= loadTexture(ResourceKeys::bulletKey, ResourcePaths::bulletPath);
     // success &= loadTexture(ResourceKeys::barrierKey, ResourcePaths::barrierPath);
+    success &= loadTexture(ResourceKeys::effectsKey, ResourcePaths::effectsPath);
+
 
     return success;
 }

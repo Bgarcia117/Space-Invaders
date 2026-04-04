@@ -36,6 +36,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 	ui.updateTypeWriter(deltaTime);
 	player.update(deltaTime);
+	moveAliens(aliens, deltaTime);
 
 	for (auto& bullet : bullets) {
 		bullet.update(deltaTime);
@@ -64,9 +65,6 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 	case PLAYING:
 		ui.renderHUD(target, player, true);
-
-		// movePlayer(deltaTime);
-		moveAliens(aliens, deltaTime);
 
 		// Draw alien after flipping sprite
 		for (auto& alien : aliens) {

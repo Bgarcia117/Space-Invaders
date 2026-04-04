@@ -18,14 +18,26 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
     useSprite1(true),
     spriteFlipTimer(SPRITE_FLIP_TIME) { 
 
-    const SpriteConfig& spriteConfig = resourceManager.getSpriteConfig(getNextSpriteKey(alienType));
-    const sf::Texture& texture = resourceManager.getTexture(spriteConfig.textureKey);
-
     if (type != AlienType::UFO) {
+        // Second Sprite for "animation"
+        const SpriteConfig& spriteConfig = resourceManager.getSpriteConfig(getNextSpriteKey(alienType));
+        const sf::Texture& texture = resourceManager.getTexture(spriteConfig.textureKey);
+
         sprite2.emplace(texture);
         sprite2->setTextureRect(spriteConfig.textureRect);
         sprite2->setScale(spriteConfig.scale);
         sprite2->setPosition({ position });
+
+        // Sprite shown upon death
+        const SpriteConfig& spriteConfig2 = resourceManager.getSpriteConfig("death");
+        const sf::Texture& texture2 = resourceManager.getTexture(spriteConfig2.textureKey);
+
+        deathSprite.emplace(texture2);
+        deathSprite->setTextureRect(spriteConfig2.textureRect);
+        deathSprite->setScale(spriteConfig2.scale);
+        deathSprite->setPosition({ position });
+        deathSprite.emplace(texture2);
+      
     } else {
         setSpriteColor(UFO_RED);
     }
