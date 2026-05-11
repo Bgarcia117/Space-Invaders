@@ -34,6 +34,10 @@ sf::Vector2f GameObject::getPosition() {
 }
 
 void GameObject::setSpriteColor(sf::Color color) {
+	if (!sprite.has_value()) {
+		std::cerr << "Sprite has not been initializied!" << std::endl;
+	}
+
 	sprite->setColor(color);
 }
 
