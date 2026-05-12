@@ -12,10 +12,11 @@ constexpr sf::Vector2f ALIEN_START_POS = { 0.f, 0.f };
 constexpr sf::Color UFO_RED(223, 37, 28);
 
 Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Vector2f position) : 
-	GameObject(resourceManager, getSpriteKey(alienType), position), 
+	GameObject(resourceManager, getSpriteKey(alienType), position),
+    spritesState(SpriteState::ARMSUP),
     type(alienType), 
     pointValue(getPointValue(alienType)),
-    useSprite1(true),
+    dying(false),
     spriteFlipTimer(SPRITE_FLIP_TIME) { 
 
     if (type != AlienType::UFO) {
@@ -46,12 +47,20 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
 
 // Updates sprite using deltaTime
 void Alien::update(float deltaTime) {
-    spriteFlipTimer -= deltaTime;
+    if (!isDying()) {
+        spriteFlipTimer -= deltaTime;
 
-    if (spriteFlipTimer <= 0) {
-        useSprite1 = !useSprite1;
-        spriteFlipTimer = SPRITE_FLIP_TIME;
+        if (spriteFlipTimer <= 0) {
+            if (spritesState == SpriteState::ARMSUP) {
+                spritesState = SpriteState::ARMSDOWN;
+            } else {
+                spritesState = SpriteState::ARMSUP;
+            }
+
+            spriteFlipTimer = SPRITE_FLIP_TIME;
+        }
     }
+
 
 }
 
@@ -65,9 +74,18 @@ void Alien::move(sf::Vector2f offset) {
 }
 
 
-
+// TODO: Remove redundant getSprite()
 const sf::Sprite& Alien::getCurrentSprite() const {
-    return useSprite1 ? getSprite() : *sprite2;
+    switch(spritesState) {
+        case SpriteState::ARMSUP:
+            return getSprite();
+        case SpriteState::ARMSDOWN:
+            return *sprite2;
+        case SpriteState::DEATH:
+            return *deathSprite;
+        default:
+            return getSprite();
+    }
 }
 
 std::string Alien::getSpriteKey(AlienType type) {

@@ -216,10 +216,22 @@ void Game::checkBulletAlienCollision() {
 			if (bullet.getOwner() == BulletOwner::PLAYER) {
 				sf::FloatRect bulletBounds = bullet.getSprite().getGlobalBounds();
 
+				// Loop through aliens to check for collision with bullet
+				for (auto& alien : aliens) {
+					sf::FloatRect alienBounds = alien.getCurrentSprite().getGlobalBounds();
+
+					if (!alien.isDying() && alienBounds.findIntersection(bulletBounds)) {
+						alien.kill();
+					}
+				}
+
+
+				/* DEBUGGING
 				std::erase_if(aliens, [bulletBounds](Alien& alien) {
 					sf::FloatRect alienBounds = alien.getCurrentSprite().getGlobalBounds();
 					return alienBounds.findIntersection(bulletBounds);
 				});
+				*/
 			}
 		}
 }

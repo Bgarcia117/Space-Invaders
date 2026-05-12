@@ -17,13 +17,17 @@ public:
 	void update(float deltaTime) override;
 	void move(sf::Vector2f offset) override;
 	const sf::Sprite& getCurrentSprite() const;
+	bool isDying() const { return dying; }
+	void kill() { dying = true; }
 
 private:
+	enum class SpriteState { ARMSUP, ARMSDOWN, DEATH };
+	SpriteState spritesState;
 	std::optional<sf::Sprite> sprite2;
 	std::optional<sf::Sprite> deathSprite;
 	AlienType type;
 	int pointValue;
-	bool useSprite1;
+	bool dying;
 	float spriteFlipTimer;
 
 	std::string getSpriteKey(AlienType type);
