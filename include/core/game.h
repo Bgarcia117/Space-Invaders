@@ -37,7 +37,7 @@ private:
 	int highScore = 0;
 	int alienMoveCounter = 0;
 	float alienMoveTimer = 0.f;
-	int aliensMoved = 0;
+	std::size_t nextAlienToMove = 0;
 
 	// UFO Variables
 	int playerShotCount = 0;

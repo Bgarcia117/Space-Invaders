@@ -56,3 +56,11 @@ const sf::Sprite& GameObject::getSprite() const {
 
 	return *sprite;
 }
+
+
+bool GameObject::collidesWith(const GameObject &object) {
+	sf::FloatRect thisObjBounds = getSprite().getGlobalBounds();
+	sf::FloatRect otherObjBounds = object.getSprite().getGlobalBounds();
+
+	return thisObjBounds.findIntersection(otherObjBounds).has_value();
+}

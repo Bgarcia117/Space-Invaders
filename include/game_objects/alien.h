@@ -18,6 +18,7 @@ public:
 	void move(sf::Vector2f offset) override;
 	const sf::Sprite& getCurrentSprite() const;
 	bool isDying() const { return dying; }
+	bool isDead() const { return dying && deathTimer <= 0.f; }
 	void kill() { dying = true; }
 
 private:
@@ -28,6 +29,7 @@ private:
 	AlienType type;
 	int pointValue;
 	bool dying;
+	float deathTimer;
 	float spriteFlipTimer;
 
 	std::string getSpriteKey(AlienType type);

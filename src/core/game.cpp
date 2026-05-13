@@ -1,6 +1,7 @@
 #include <string>
 #include <algorithm>
 #include <optional>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
@@ -9,7 +10,7 @@
 #include <UI/ui.h>
 
 constexpr int MAX_SIDE_MOVES = 8;
-constexpr float ALIEN_SPEED = 0.25f;
+constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
@@ -33,22 +34,53 @@ void Game::begin() {
 }
 
 void Game::update(sf::RenderTarget& target, float deltaTime) {
+	switch (gameState) {
+		case COINMENU:
+			ui.updateTypeWriter(deltaTime);
+			break;
+		case TABLEMENU:
+			ui.updateTypeWriter(deltaTime);
+			break;
+		case PLAYING:
+			player.update(deltaTime);
+			moveAliens(aliens, deltaTime);
 
-	ui.updateTypeWriter(deltaTime);
-	player.update(deltaTime);
-	moveAliens(aliens, deltaTime);
+			for (auto& bullet : bullets) {
+				bullet.update(deltaTime);
+			}
 
-	for (auto& bullet : bullets) {
-		bullet.update(deltaTime);
+			for (auto& alien : aliens) {
+				alien.update(deltaTime);
+				target.draw(alien.getCurrentSprite());
+			}
+
+			checkBulletAlienCollision();
+
+			// TODO: ADD EXPLOSION ANIMATION LIKE IN ORIGINAL GAME (COLOR: RED)
+			// Remove bullets if they reach the top of the screen
+			std::erase_if(bullets, [](Bullet& bullet) {
+				return bullet.getPosition().y < 0.f;
+			});
+
+			// Manual erase so we can keep nextAlienToMove pointing at the same
+			// logical alien even when indices shift due to erasure mid-cycle.
+			for (auto it = aliens.begin(); it != aliens.end(); ) {
+				if (it->isDead()) {
+					std::size_t deadIndex = std::distance(aliens.begin(), it);
+					it = aliens.erase(it);
+					if (deadIndex < nextAlienToMove && nextAlienToMove > 0) {
+						nextAlienToMove--;
+					}
+				} else {
+					++it;
+				}
+			}
+
+			break;
+		case GAMEOVER:
+			break;
+
 	}
-
-	// Safely removes elements from vectors
-	// Takes a container and predicate (any callable such as a lambda or function)
-	std::erase_if(bullets, [](Bullet& bullet) {
-		return bullet.getPosition().y < 0.f;
-	});
-
-	checkBulletAlienCollision();
 }
 
 void Game::render(sf::RenderTarget& target, float deltaTime) {
@@ -68,7 +100,6 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 		// Draw alien after flipping sprite
 		for (auto& alien : aliens) {
-			alien.update(deltaTime);
 			target.draw(alien.getCurrentSprite());
 		}
 
@@ -161,43 +192,44 @@ void Game::initAliens() {
 void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 	alienMoveTimer -= deltaTime;
 
-	// Only moves them if timer hits zero 
 	if (alienMoveTimer <= 0) {
-		if (alienMoveCounter < MAX_SIDE_MOVES && aliensDirection == alienDirection::RIGHT) {
-			for (int i = 0; i < 11 && aliensMoved < aliens.size(); i++)  {
-				aliens[aliensMoved].move(ALIEN_HORIZONTAL_STEP);
-				aliensMoved++;
-			}
-
-			if (aliensMoved >= aliens.size()) {
-				aliensMoved = 0;
-				alienMoveCounter++;
-			}
-
+		// Case: All aliens are dead
+		if (aliens.empty()) {
+			alienMoveTimer = ALIEN_SPEED;
+			return;
 		}
-		else if (alienMoveCounter == MAX_SIDE_MOVES) {
+
+		if (alienMoveCounter == MAX_SIDE_MOVES) {
 			for (auto& alien : aliens) {
 				alien.move(ALIEN_VERTICAL_STEP);
 			}
-
 			alienMoveCounter = 0;
-			aliensDirection = (aliensDirection == alienDirection::RIGHT) ?
-				alienDirection::LEFT : alienDirection::RIGHT;
 
-		}
-		else if (alienMoveCounter < MAX_SIDE_MOVES && aliensDirection == alienDirection::LEFT) {
-			for (int i = 0; i < 11 && aliensMoved < aliens.size(); i++) {
-				aliens[aliensMoved].move({ -ALIEN_HORIZONTAL_STEP.x, ALIEN_HORIZONTAL_STEP.y });
-				aliensMoved++;
+			if (aliensDirection == alienDirection::RIGHT) {
+				aliensDirection = alienDirection::LEFT;
+			} else {
+				aliensDirection = alienDirection::RIGHT;
 			}
 
-			if (aliensMoved >= aliens.size()) {
-				aliensMoved = 0;
+			nextAlienToMove = 0;
+		}
+		else {
+			sf::Vector2f step;
+			if (aliensDirection == alienDirection::RIGHT) {
+				step = ALIEN_HORIZONTAL_STEP;
+			} else {
+				step = sf::Vector2f{ -ALIEN_HORIZONTAL_STEP.x, ALIEN_HORIZONTAL_STEP.y };
+			}
+
+			aliens[nextAlienToMove].move(step);
+			nextAlienToMove++;
+
+			if (nextAlienToMove >= aliens.size()) {
+				nextAlienToMove = 0;
 				alienMoveCounter++;
 			}
-
 		}
-		// Reset timer
+
 		alienMoveTimer = ALIEN_SPEED;
 	}
 }
@@ -210,30 +242,21 @@ void Game::spawnUFO() {
 	ufo = Alien(resourceManager, AlienType::UFO, {50.f, 150.f});
 }
 
-// TODO: have removal delayed so that death sprite can appear
 void Game::checkBulletAlienCollision() {
-		for (auto& bullet : bullets) {
-			if (bullet.getOwner() == BulletOwner::PLAYER) {
-				sf::FloatRect bulletBounds = bullet.getSprite().getGlobalBounds();
+	std::erase_if(bullets, [this](const Bullet& bullet) {
+		if (bullet.getOwner() != BulletOwner::PLAYER) {
+			return false;
+		}
 
-				// Loop through aliens to check for collision with bullet
-				for (auto& alien : aliens) {
-					sf::FloatRect alienBounds = alien.getCurrentSprite().getGlobalBounds();
-
-					if (!alien.isDying() && alienBounds.findIntersection(bulletBounds)) {
-						alien.kill();
-					}
-				}
-
-
-				/* DEBUGGING
-				std::erase_if(aliens, [bulletBounds](Alien& alien) {
-					sf::FloatRect alienBounds = alien.getCurrentSprite().getGlobalBounds();
-					return alienBounds.findIntersection(bulletBounds);
-				});
-				*/
+		for (auto& alien : aliens) {
+			if (!alien.isDying() && alien.collidesWith(bullet)) {
+				alien.kill();
+				return true;
 			}
 		}
+
+		return false;
+	});
 }
 
 std::string Game::convertScore(int score) {

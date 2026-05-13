@@ -7,6 +7,7 @@
 
 constexpr float	ALIEN_WIDTH = 50.f;
 constexpr float ALIEN_HEIGHT = 30.f;
+constexpr float DEATH_TIME = 0.10f;
 constexpr float SPRITE_FLIP_TIME = 1.f;
 constexpr sf::Vector2f ALIEN_START_POS = { 0.f, 0.f };
 constexpr sf::Color UFO_RED(223, 37, 28);
@@ -17,6 +18,7 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
     type(alienType), 
     pointValue(getPointValue(alienType)),
     dying(false),
+    deathTimer(DEATH_TIME),
     spriteFlipTimer(SPRITE_FLIP_TIME) { 
 
     if (type != AlienType::UFO) {
@@ -37,7 +39,6 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
         deathSprite->setTextureRect(spriteConfig2.textureRect);
         deathSprite->setScale(spriteConfig2.scale);
         deathSprite->setPosition({ position });
-        deathSprite.emplace(texture2);
       
     } else {
         setSpriteColor(UFO_RED);
@@ -59,6 +60,9 @@ void Alien::update(float deltaTime) {
 
             spriteFlipTimer = SPRITE_FLIP_TIME;
         }
+    } else {
+        spritesState = SpriteState::DEATH;
+        deathTimer -= deltaTime;
     }
 
 
