@@ -71,10 +71,12 @@ void Alien::update(float deltaTime) {
 void Alien::move(sf::Vector2f offset) {
     GameObject::move(offset);
 
-    if (!sprite2.has_value()) {
-        std::cerr << "Sprite Two has not been initializied!" << std::endl;
+    if (!sprite2.has_value() || !deathSprite.has_value()) {
+        std::cerr << " A sprite has not been initializied!" << std::endl;
     }
-    sprite2->move({ offset.x, offset.y });
+    sprite2->move(offset);
+    deathSprite->move(offset);
+
 }
 
 
