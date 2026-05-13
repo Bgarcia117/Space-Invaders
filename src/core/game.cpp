@@ -257,6 +257,8 @@ void Game::checkBulletAlienCollision() {
 
 		for (auto& alien : aliens) {
 			if (!alien.isDying() && alien.collidesWith(bullet)) {
+				score += alien.getPointValue();
+				ui.setP1Score(score);
 				alien.kill();
 				return true;
 			}

@@ -12,8 +12,8 @@ constexpr sf::Color LIGHT_GREEN(42, 249, 50);
 
 // HUD Text Positions
 // Player 1
-constexpr sf::Vector2f P1_SCORE_TEXT_POS = { 115.f, 90.f };
-constexpr sf::Vector2f P1_SCORE_NUM_POS = { 70.f, 45.f };
+constexpr sf::Vector2f P1_SCORE_TEXT_POS = { 70.f, 45.f };
+constexpr sf::Vector2f P1_SCORE_NUM_POS = { 115.f, 90.f };
 
 // Player 2
 constexpr sf::Vector2f P2_SCORE_TEXT_POS = { 530.f, 45.f };
@@ -61,8 +61,8 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
 	selectPromptText(font),
 	onePlayerText(font),
 	twoPlayerText(font),
-	p1ScoreText(font, scoreToText(score)),
-	p1Score(font),
+	p1ScoreText(font),
+	p1Score(font, scoreToText(score)),
 	p2ScoreText(font),
 	highScoreText(font),
 	highScoreNum(font, scoreToText(highScore)),
@@ -219,14 +219,28 @@ void UI::updateTypeWriter(float deltaTime) {
 	}
 }
 
+void UI::setP1Score(int score) {
+	p1Score.setString(scoreToText(score));
+}
+
 // ================================= Private Functions ========================================
 void UI::setUpHUD() {
 	// Player 1
+	/*
 	p1ScoreText.setCharacterSize(TEXT_SIZE);
 	p1ScoreText.setPosition(P1_SCORE_TEXT_POS);
 	p1Score.setString("SCORE<1>");
 	p1Score.setCharacterSize(TEXT_SIZE);
 	p1Score.setPosition(P1_SCORE_NUM_POS);
+	*/
+
+
+	p1ScoreText.setCharacterSize(TEXT_SIZE);
+	p1ScoreText.setPosition(P1_SCORE_TEXT_POS);
+	p1ScoreText.setString("SCORE<1>");
+	p1Score.setCharacterSize(TEXT_SIZE);
+	p1Score.setPosition(P1_SCORE_NUM_POS);
+
 
 	// Player 2
 	p2ScoreText.setString("SCORE<2>");

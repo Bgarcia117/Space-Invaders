@@ -20,6 +20,7 @@ public:
 	void startTypingCoinMenu();
 	void startTypingTableMenu();
 	void updateTypeWriter(float deltaTime);
+	void setP1Score(int score);
 
 private:
 	// Type writer helpers

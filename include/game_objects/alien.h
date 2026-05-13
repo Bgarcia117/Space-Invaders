@@ -20,6 +20,7 @@ public:
 	bool isDying() const { return dying; }
 	bool isDead() const { return dying && deathTimer <= 0.f; }
 	void kill() { dying = true; }
+	int getPointValue() { return pointValue; }
 
 private:
 	enum class SpriteState { ARMSUP, ARMSDOWN, DEATH };
