@@ -62,17 +62,17 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 				return bullet.getPosition().y < 0.f;
 			});
 
-			// Manual erase so we can keep nextAlienToMove pointing at the same
-			// logical alien even when indices shift due to erasure mid-cycle.
-			for (auto it = aliens.begin(); it != aliens.end(); ) {
-				if (it->isDead()) {
-					std::size_t deadIndex = std::distance(aliens.begin(), it);
-					it = aliens.erase(it);
-					if (deadIndex < nextAlienToMove && nextAlienToMove > 0) {
+			// Manually erases aliens so we can keep nextAlienToMove synced with the vector
+			// Keeps aliens in formation after aliens die
+			for (std::size_t i = 0; i < aliens.size();) {
+				if (aliens[i].isDead()) {
+					aliens.erase(aliens.begin() + i);
+
+					if (i < static_cast<std::size_t>(nextAlienToMove)) {
 						nextAlienToMove--;
 					}
 				} else {
-					++it;
+					i++;
 				}
 			}
 
@@ -230,7 +230,14 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 			}
 		}
 
-		alienMoveTimer = ALIEN_SPEED;
+		// Increases speed as aliens die
+		float speedScalar = aliens.size() / 55.f;
+
+		// Prevents speed from dropping below 30% of base speed
+		if (speedScalar < 0.3f) {
+			speedScalar = 0.3f;
+		}
+		alienMoveTimer = ALIEN_SPEED * speedScalar;
 	}
 }
 
