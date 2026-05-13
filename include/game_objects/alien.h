@@ -1,5 +1,4 @@
 #pragma once
-#include <coroutine>
 #include <SFML/Graphics.hpp>
 #include "core/game_object.h"
 #include "managers/resource_manager.h"

@@ -1,7 +1,6 @@
 #include <string>
 #include <algorithm>
 #include <optional>
-#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
@@ -9,12 +8,14 @@
 #include "game_objects/alien.h"
 #include <UI/ui.h>
 
-constexpr int MAX_SIDE_MOVES = 8;
 constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
+constexpr float SCREEN_LEFT_EDGE = 0.f;
+constexpr float SCREEN_RIGHT_EDGE = 768.f;
+constexpr float ALIEN_WIDTH = 50.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -199,12 +200,34 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 			return;
 		}
 
-		if (alienMoveCounter == MAX_SIDE_MOVES) {
+		// Find the left most and right most aliens
+		float leftAlien = aliens[0].getPosition().x;
+		float rightAlien = aliens[0].getPosition().x;
+
+		for (auto& alien : aliens) {
+			float alienPos = alien.getPosition().x;
+			if (alienPos < leftAlien) {
+				leftAlien = alienPos;
+			}
+			if (alienPos > rightAlien) {
+				rightAlien = alienPos;
+			}
+		}
+
+		// Checks if we have reached the screen edge
+		bool atRightEdge = (aliensDirection == alienDirection::RIGHT) &&
+			               (rightAlien + ALIEN_WIDTH >= SCREEN_RIGHT_EDGE);
+
+		bool atLeftEdge  = (aliensDirection == alienDirection::LEFT) &&
+			               (leftAlien <= SCREEN_LEFT_EDGE);
+
+		if (atRightEdge || atLeftEdge) {
+			// Move down first
 			for (auto& alien : aliens) {
 				alien.move(ALIEN_VERTICAL_STEP);
 			}
-			alienMoveCounter = 0;
 
+			// Switch directions
 			if (aliensDirection == alienDirection::RIGHT) {
 				aliensDirection = alienDirection::LEFT;
 			} else {
@@ -226,7 +249,6 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 
 			if (nextAlienToMove >= aliens.size()) {
 				nextAlienToMove = 0;
-				alienMoveCounter++;
 			}
 		}
 

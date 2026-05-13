@@ -35,7 +35,6 @@ private:
 	bool gameOver = false;
 	int score = 0;
 	int highScore = 0;
-	int alienMoveCounter = 0;
 	float alienMoveTimer = 0.f;
 	int nextAlienToMove = 0;
 
