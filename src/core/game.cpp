@@ -76,9 +76,16 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 					i++;
 				}
 			}
+			if (aliens.empty()) {
+				gameState = GameState::ROUNDWON;
+			}
 
 			break;
 		case GAMEOVER:
+			break;
+		case ROUNDWON:
+			resetGame();
+			gameState = GameState::PLAYING;
 			break;
 
 	}
@@ -298,4 +305,14 @@ std::string Game::convertScore(int score) {
 	}
 
 	return strScore;
+}
+
+void Game::resetGame() {
+	bullets.clear();
+	aliens.clear();
+	initAliens();
+	aliensDirection = alienDirection::RIGHT;
+	nextAlienToMove = 0;
+	alienMoveTimer = 0;
+	player.setPosition(PLAYER_START_POS);
 }

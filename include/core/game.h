@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 #include <vector>
 #include <string>
 #include <optional>
@@ -10,7 +9,7 @@
 #include "game_objects/bullet.h"
 #include <UI/ui.h>
 
-enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER };
+enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER, ROUNDWON };
 
 class Game {
 public:
@@ -51,4 +50,5 @@ private:
 	void spawnUFO();
 	void checkBulletAlienCollision();
 	std::string convertScore(int score);
+	void resetGame();
 };
