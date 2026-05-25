@@ -313,6 +313,6 @@ void Game::resetGame() {
 	initAliens();
 	aliensDirection = alienDirection::RIGHT;
 	nextAlienToMove = 0;
-	alienMoveTimer = 0;
+	alienMoveTimer = ALIEN_SPEED;
 	player.setPosition(PLAYER_START_POS);
 }
