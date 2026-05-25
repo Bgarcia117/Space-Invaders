@@ -116,12 +116,16 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		}
 
 		target.draw(player.getSprite());
-		target.draw(ufo->getSprite()); // DEBUGGING
+
+		if (ufo) {
+			target.draw(ufo->getSprite()); // DEBUGGING
+		}
+		break;
+	case ROUNDWON:
 		break;
 
-	default:
-		ui.renderHUD(target, player, true);
-		std::cout << "Default case! Check code!";
+	case GAMEOVER:
+		break;
 
 	}
 }
