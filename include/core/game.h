@@ -31,7 +31,6 @@ private:
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
-	bool gameOver = false;
 	int score = 0;
 	int highScore = 0;
 	float alienMoveTimer = 0.f;
@@ -51,4 +50,5 @@ private:
 	void checkBulletAlienCollision();
 	std::string convertScore(int score);
 	void resetGame();
+	bool aliensReachedGround() const;
 };

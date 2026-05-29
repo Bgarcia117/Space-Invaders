@@ -16,6 +16,7 @@ constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
 constexpr float SCREEN_LEFT_EDGE = 0.f;
 constexpr float SCREEN_RIGHT_EDGE = 768.f;
 constexpr float ALIEN_WIDTH = 50.f;
+constexpr float ALIEN_GROUND_LIMIT = 820.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -45,6 +46,10 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 		case PLAYING:
 			player.update(deltaTime);
 			moveAliens(aliens, deltaTime);
+
+			if (aliensReachedGround()) {
+				gameState = GameState::GAMEOVER;
+			}
 
 			for (auto& bullet : bullets) {
 				bullet.update(deltaTime);
@@ -319,4 +324,14 @@ void Game::resetGame() {
 	nextAlienToMove = 0;
 	alienMoveTimer = ALIEN_SPEED;
 	player.setPosition(PLAYER_START_POS);
+}
+
+bool Game::aliensReachedGround() const {
+	for (const auto& alien : aliens) {
+		if (alien.getPosition().y >= ALIEN_GROUND_LIMIT) {
+			return true;
+		}
+	}
+
+	return false;
 }
