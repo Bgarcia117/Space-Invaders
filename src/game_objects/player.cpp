@@ -4,8 +4,9 @@
 #include "managers/resource_manager.h"  // Resource/Sprite Manager
 #include "core/resource_ids.h"          // Texture map keys and paths
 
-constexpr float PLAYER_WIDTH = 50.f;
-constexpr float PLAYER_HEIGHT = 30.f;
+constexpr float PLAYER_WIDTH = 55.f;
+constexpr float PLAYER_HEIGHT = 50.f;
+constexpr float BULLET_OFFSET = -11.f;
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
 constexpr sf::Color LIGHT_GREEN(42, 249, 50);
 
@@ -34,5 +35,12 @@ void Player::update(float deltaTime) {
 }
 
 Bullet Player::shoot(const ResourceManager& resourceManager) {
-	return Bullet(resourceManager, getPosition(), BulletOwner::PLAYER);
+	Bullet bullet(resourceManager, getPosition(), BulletOwner::PLAYER);
+	float bulletWidth = bullet.getSprite().getGlobalBounds().size.x;
+
+	sf::Vector2f bulletPos = getPosition();
+	bulletPos.x += PLAYER_WIDTH / 2.f - bulletWidth / 2.f + BULLET_OFFSET;
+	bullet.setPosition(bulletPos);
+
+	return bullet;
 }

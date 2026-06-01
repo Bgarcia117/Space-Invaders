@@ -25,7 +25,7 @@ void GameObject::setPosition(sf::Vector2f pos) {
 	sprite->setPosition(pos);
 }
 
-sf::Vector2f GameObject::getPosition() {
+sf::Vector2f GameObject::getPosition() const {
 	if (!sprite.has_value()) {
 		std::cerr << "Sprite has not been initializied!" << std::endl;
 	}
