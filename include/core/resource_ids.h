@@ -7,6 +7,7 @@ namespace ResourceKeys {
 	const std::string bulletKey = "bullet";
 	const std::string barrierKey = "barrier";
 	const std::string effectsKey = "effect";
+	const std::string playerShootSoundKey = "player_shoot";
 }
 
 namespace ResourcePaths {
@@ -15,4 +16,5 @@ namespace ResourcePaths {
 	const std::string bulletPath = "assets/sprites/bullets.png";
 	const std::string barrierPath;
 	const std::string effectsPath = "assets/sprites/effects.png";
+	const std::string playerShootSoundPath = "assets/sounds/player_bullet.wav";
 }

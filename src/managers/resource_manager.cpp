@@ -40,6 +40,10 @@ ResourceManager::ResourceManager() {
         std::cerr << "Failed to load required game textures!" << std::endl;
     }
 
+    if (!loadAllSounds()) {
+        std::cerr << "Failed to load all sounds!" << std::endl;
+    }
+
     if (!font.openFromFile("assets/fonts/font.ttf")) {
         std::cerr << "Failed to load font!" << std::endl;
     }
@@ -142,6 +146,16 @@ sf::Sprite ResourceManager::createSprite(const std::string& spriteKey) const {
     return sprite;
 }
 
+const sf::SoundBuffer &ResourceManager::getSoundBuffer(const std::string &key) const {
+    auto it = soundBuffers.find(key);
+
+    if (it == soundBuffers.end()) {
+        throw std::runtime_error("Sound buffer not found: " + key);
+    }
+
+    return it->second;
+}
+
 /*
  * @brief Loads all game textures into memory
  * 
@@ -161,6 +175,24 @@ bool ResourceManager::loadAllTextures() {
     success &= loadTexture(ResourceKeys::effectsKey, ResourcePaths::effectsPath);
 
 
+    return success;
+}
+
+bool ResourceManager::loadSoundBuffer(const std::string &key, const std::string &filepath) {
+    if (!soundBuffers[key].loadFromFile(filepath)) {
+        soundBuffers.erase(key);
+        std::cout << "Failed to load sound from: " << filepath << std::endl;
+        return false;
+    }
+
+    std::cout << "Succeeded to load sound!" << std::endl;
+    return true;
+}
+
+bool ResourceManager::loadAllSounds() {
+    bool success = true;
+
+    success &= loadSoundBuffer(ResourceKeys::playerShootSoundKey, ResourcePaths::playerShootSoundPath);
     return success;
 }
 

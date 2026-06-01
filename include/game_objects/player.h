@@ -2,6 +2,8 @@
 #include "core/game_object.h"
 #include "managers/resource_manager.h"
 #include "game_objects/bullet.h"
+#include <SFML/Audio.hpp>
+#include <optional>
 
 class Player : public GameObject {
 public:
@@ -12,4 +14,5 @@ public:
 
 private:
 	int lives;
+	std::optional<sf::Sound> shootSound;
 };

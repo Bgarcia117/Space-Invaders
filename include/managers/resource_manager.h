@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 struct SpriteConfig {
 	std::string textureKey;
@@ -21,13 +22,19 @@ public:
 	const SpriteConfig& getSpriteConfig(const std::string& spriteKey) const;
 	sf::Sprite createSprite(const std::string& spriteKey) const;
 
+	const sf::SoundBuffer& getSoundBuffer(const std::string& key) const;
+
 
 private:
 	sf::Font font;
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, SpriteConfig> spriteConfigs;
+	std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
 
 	bool loadTexture(const std::string&, const std::string& filepath);
 	bool loadAllTextures();
+	bool loadSoundBuffer(const std::string& key, const std::string& filepath);
+	bool loadAllSounds();
+
 	void defineSpriteConfig(const std::string& spriteKey, const SpriteConfig& config);
 };

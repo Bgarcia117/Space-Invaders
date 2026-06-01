@@ -54,4 +54,4 @@ target_compile_features(SpaceInvaders PRIVATE cxx_std_20)
 # ----------------------------------------------------------------------------
 # Link the SFML graphics module (includes Window, System, etc.)
 # ----------------------------------------------------------------------------
-target_link_libraries(SpaceInvaders PRIVATE SFML::Graphics)
+target_link_libraries(SpaceInvaders PRIVATE SFML::Graphics SFML::Audio)

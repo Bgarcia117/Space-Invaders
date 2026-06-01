@@ -13,6 +13,7 @@ constexpr sf::Color LIGHT_GREEN(42, 249, 50);
 Player::Player(const ResourceManager& resourceManager, sf::Vector2f position) :
 	GameObject(resourceManager, "player", position), lives(3) {
 	setSpriteColor(LIGHT_GREEN);
+	shootSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerShootSoundKey));
 }
 
 void Player::update(float deltaTime) {
@@ -42,5 +43,6 @@ Bullet Player::shoot(const ResourceManager& resourceManager) {
 	bulletPos.x += PLAYER_WIDTH / 2.f - bulletWidth / 2.f + BULLET_OFFSET;
 	bullet.setPosition(bulletPos);
 
+	shootSound->play();
 	return bullet;
 }
