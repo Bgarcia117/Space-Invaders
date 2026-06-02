@@ -1,6 +1,7 @@
 #include <string>
 #include <algorithm>
 #include <optional>
+#include <random>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
@@ -19,6 +20,8 @@ constexpr float SCREEN_LEFT_EDGE = 0.f;
 constexpr float SCREEN_RIGHT_EDGE = 768.f;
 constexpr float ALIEN_WIDTH = 50.f;
 constexpr float ALIEN_GROUND_LIMIT = 820.f;
+constexpr float	ALIEN_COLUMN_SPACING = 50.f;
+constexpr float ALIEN_ROW_SPACING = 50.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -49,6 +52,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 		case PLAYING:
 			player.update(deltaTime);
 			moveAliens(aliens, deltaTime);
+			updateAlienShots(deltaTime);
 
 			if (aliensReachedGround()) {
 				gameState = GameState::GAMEOVER;
@@ -193,7 +197,7 @@ void Game::initAliens() {
 		for (int col = 0; col < 11; col++) {
 			AlienType type = AlienType::SQUID;
 			// Left offset + (col * spacing), Top offset + (row * spacing)
-			sf::Vector2f position = { 89.f + col * 50.f, 200.f + row * 50 };
+			sf::Vector2f position = { 89.f + col * ALIEN_COLUMN_SPACING, 200.f + row * ALIEN_ROW_SPACING };
 
 			if (row > 0 && row < 3) {
 				type = AlienType::CRAB;
@@ -308,6 +312,59 @@ void Game::checkBulletAlienCollision() {
 
 		return false;
 	});
+}
+
+void Game::updateAlienShots(float deltaTime) {
+	if (aliens.empty()) {
+		return;
+	}
+
+	alienShootTimer -= deltaTime;
+	if (alienShootTimer > 0.f) {
+		return;
+	}
+
+	// Aliens are stored from bottom first and relies on this
+	std::vector<std::size_t> bottomAliensPerColumn;
+	std::vector<int> columnsSeen;          // Avoids copying another alien in same column
+	bottomAliensPerColumn.reserve(11);  // Only 11 bottom level aliens are possible
+	columnsSeen.reserve(11);            // Only 11 columns exists
+
+	for (std::size_t i = 0; i < aliens.size(); i++) {
+		if (!aliens[i].isDying()) {
+			// Finds the column number of the current alien
+			int columnNum = static_cast<int>(aliens[i].getPosition().x / ALIEN_COLUMN_SPACING);
+
+			// Check if an alien has already been seen on this column
+			if (std::find(columnsSeen.begin(), columnsSeen.end(), columnNum) == columnsSeen.end()) {
+				columnsSeen.push_back(columnNum);
+				bottomAliensPerColumn.push_back(i);
+			}
+		}
+	}
+
+	if (bottomAliensPerColumn.empty()) {
+		return;
+	}
+
+	// Random number generator
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+
+	// Equally distribute chances among all bottom aliens
+	std::uniform_int_distribution<std::size_t> distribute(0, bottomAliensPerColumn.size() - 1);
+
+	// Picking the alien to shoot
+	const Alien& shooter = aliens[bottomAliensPerColumn[distribute(gen)]];
+
+	// Starting position for the bullet
+	sf::Vector2f pos = shooter.getPosition();
+	pos.x += 20.f;   // Center bullet with alien
+	pos.y += 40.f;   // Move bullet down to start at bottom of alien
+
+	bullets.emplace_back(resourceManager, pos, BulletOwner::ALIEN);
+
+	alienShootTimer = alienShootInterval;
 }
 
 std::string Game::convertScore(int score) {

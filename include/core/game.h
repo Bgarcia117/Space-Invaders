@@ -42,6 +42,8 @@ private:
 	int playerShotCount = 0;
 	int ufoScoreThreshold = 23;
 	float ufoSpawnTimer = 25.6f;
+	float alienShootTimer = 1.0f;
+	float alienShootInterval = 1.0f;
 
 	UI ui;
 
@@ -50,6 +52,8 @@ private:
 	void updateUFOTimer(float deltaTime);
 	void spawnUFO();
 	void checkBulletAlienCollision();
+	void checkBulletPlayerCollision();
+	void updateAlienShots(float deltaTime);
 	std::string convertScore(int score);
 	void resetGame();
 	bool aliensReachedGround() const;

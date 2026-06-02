@@ -10,6 +10,8 @@ public:
 	Player(const ResourceManager& resourceManager, sf::Vector2f position);
 	void update(float deltaTime) override;
 	int getLives() const { return lives; }
+	void loseLife() { if (lives > 0) lives--; }
+	void resetLives() { lives = 3; }
 	Bullet shoot(const ResourceManager& resourceManager);
 
 private:
