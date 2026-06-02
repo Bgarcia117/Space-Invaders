@@ -8,6 +8,8 @@
 #include "game_objects/alien.h"
 #include <UI/ui.h>
 
+#include "core/resource_ids.h"
+
 constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
@@ -28,6 +30,7 @@ Game::Game() : resourceManager(),
 void Game::init() {
 	initAliens();
 	spawnUFO();
+	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
 }
 
 void Game::begin() {
@@ -298,6 +301,7 @@ void Game::checkBulletAlienCollision() {
 				score += alien.getPointValue();
 				ui.setP1Score(score);
 				alien.kill();
+				alienExplosionSound->play();
 				return true;
 			}
 		}

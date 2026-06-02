@@ -3,6 +3,7 @@
 #include <string>
 #include <optional>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "managers/resource_manager.h"
 #include "game_objects/alien.h"
 #include "game_objects/player.h"
@@ -28,6 +29,7 @@ private:
 	std::vector<Alien> aliens;
 	std::vector<Bullet> bullets;
 	std::optional<Alien> ufo;
+	std::optional<sf::Sound> alienExplosionSound;
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
