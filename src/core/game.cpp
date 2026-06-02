@@ -68,11 +68,12 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 			}
 
 			checkBulletAlienCollision();
+			checkBulletPlayerCollision();
 
 			// TODO: ADD EXPLOSION ANIMATION LIKE IN ORIGINAL GAME (COLOR: RED)
 			// Remove bullets if they reach the top of the screen
 			std::erase_if(bullets, [](Bullet& bullet) {
-				return bullet.getPosition().y < 0.f;
+				return bullet.getPosition().y < 0.f || bullet.getPosition().y > 1024.f;
 			});
 
 			// Manually erases aliens so we can keep nextAlienToMove synced with the vector
@@ -308,6 +309,25 @@ void Game::checkBulletAlienCollision() {
 				alienExplosionSound->play();
 				return true;
 			}
+		}
+
+		return false;
+	});
+}
+
+void Game::checkBulletPlayerCollision() {
+	std::erase_if(bullets, [this](const Bullet& bullet) {
+		if (bullet.getOwner() != BulletOwner::ALIEN) {
+			return false;
+		}
+
+		if (player.collidesWith(bullet)) {
+			player.loseLife();
+
+			if (player.getLives() <= 0) {
+				gameState = GameState::GAMEOVER;
+			}
+			return true;
 		}
 
 		return false;
