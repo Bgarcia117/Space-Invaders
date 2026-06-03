@@ -52,6 +52,9 @@ constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
+// Game Over Screen Text Positions
+constexpr sf::Vector2f GAME_OVER_TEXT_POS = { 290.f, 500.f };
+
 // Pause Duration before Revealing Table
 constexpr float TABLE_REVEAL_PAUSE = 1.0f;
 
@@ -74,11 +77,13 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
     squidPointsText(font),
     crabPointsText(font),
     octopusPointsText(font),
+	gameOverText(font),
 	livesLeft(font, std::to_string(playerLives)) {
 
 	setUpHUD();
 	setUpCoinMenu();
 	setUpTableMenu();
+	setUpGameOverScreen();
 	setUpSprites(resourceManager);
 	// TODO: Add game over screen
 	startTypingCoinMenu();
@@ -141,6 +146,10 @@ void UI::renderTableMenu(sf::RenderTarget& target) {
 	target.draw(creditsText);
 }
 
+void UI::renderGameOver(sf::RenderTarget &target) {
+	target.draw(gameOverText);
+}
+
 void UI::handleMenuInput(sf::Keyboard::Key key) {
 	if (key == sf::Keyboard::Key::W || key == sf::Keyboard::Key::Up) {
 		onePlayerText.setFillColor(LIGHT_GREEN);
@@ -179,6 +188,16 @@ void UI::startTypingTableMenu() {
 	typingQueue.push({"=20 POINTS", &crabPointsText});
 	typingQueue.push({"=10 POINTS", &octopusPointsText});
 
+	startNextText();
+}
+
+void UI::startTypingGameOver() {
+	while (!typingQueue.empty()) {
+		typingQueue.pop();
+	}
+
+	gameOverText.setString("");
+	typingQueue.push({"GAME OVER", &gameOverText});
 	startNextText();
 }
 
@@ -308,6 +327,11 @@ void UI::setUpTableMenu() {
 
 }
 
+void UI::setUpGameOverScreen() {
+	gameOverText.setCharacterSize(TEXT_SIZE);
+	gameOverText.setPosition(GAME_OVER_TEXT_POS);
+	gameOverText.setFillColor(LIGHT_GREEN);
+}
 
 void UI::setUpSprites(ResourceManager& resourceManager) {
 	lifeSprite = resourceManager.createSprite("player");

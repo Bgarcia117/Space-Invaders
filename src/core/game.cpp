@@ -57,6 +57,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			if (aliensReachedGround()) {
 				gameState = GameState::GAMEOVER;
+				ui.startTypingGameOver();
 			}
 
 			for (auto& bullet : bullets) {
@@ -96,6 +97,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			break;
 		case GAMEOVER:
+			ui.updateTypeWriter(deltaTime);
 			break;
 		case ROUNDWON:
 			resetGame();
@@ -139,6 +141,8 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		break;
 
 	case GAMEOVER:
+		ui.renderHUD(target, player, false);
+		ui.renderGameOver(target);
 		break;
 
 	}
@@ -184,6 +188,14 @@ void Game::handleInput(const sf::Event& event) {
 				break;
 
 			case GAMEOVER:
+				if (key->code == sf::Keyboard::Key::Enter) {
+					player.resetLives();
+					score = 0;
+					ui.setP1Score(score);
+					resetGame();
+					gameState = GameState::COINMENU;
+					ui.startTypingCoinMenu();
+				}
 				break;
 
 			default:
@@ -328,6 +340,7 @@ void Game::checkBulletPlayerCollision() {
 
 			if (player.getLives() <= 0) {
 				gameState = GameState::GAMEOVER;
+				ui.startTypingGameOver();
 			}
 			return true;
 		}

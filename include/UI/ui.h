@@ -15,10 +15,12 @@ public:
 	void renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives);
 	void renderCoinMenu(sf::RenderTarget& target);
 	void renderTableMenu(sf::RenderTarget& target);
+	void renderGameOver(sf::RenderTarget& target);
 	void handleMenuInput(sf::Keyboard::Key key);
 
 	void startTypingCoinMenu();
 	void startTypingTableMenu();
+	void startTypingGameOver();
 	void updateTypeWriter(float deltaTime);
 	void setP1Score(int score);
 
@@ -63,6 +65,8 @@ private:
 	sf::Text octopusPointsText;
 	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
 
+	// Game Over Screen Text
+	sf::Text gameOverText;
 
 	// HUD display while in game
 	sf::Text livesLeft;
@@ -71,6 +75,7 @@ private:
 	void setUpHUD();
 	void setUpCoinMenu();
 	void setUpTableMenu();
+	void setUpGameOverScreen();
 	void setUpSprites(ResourceManager& resourceManager);
 	void startNextText();
 
