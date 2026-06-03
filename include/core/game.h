@@ -30,6 +30,7 @@ private:
 	std::vector<Bullet> bullets;
 	std::optional<Alien> ufo;
 	std::optional<sf::Sound> alienExplosionSound;
+	std::optional<sf::Sound> playerDeathSound;
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 

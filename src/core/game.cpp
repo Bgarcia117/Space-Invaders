@@ -34,6 +34,7 @@ void Game::init() {
 	initAliens();
 	spawnUFO();
 	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
+	playerDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerDeathSoundKey));
 }
 
 void Game::begin() {
@@ -323,6 +324,7 @@ void Game::checkBulletPlayerCollision() {
 
 		if (player.collidesWith(bullet)) {
 			player.loseLife();
+			playerDeathSound->play();
 
 			if (player.getLives() <= 0) {
 				gameState = GameState::GAMEOVER;

@@ -194,6 +194,7 @@ bool ResourceManager::loadAllSounds() {
 
     success &= loadSoundBuffer(ResourceKeys::playerShootSoundKey, ResourcePaths::playerShootSoundPath);
     success &= loadSoundBuffer(ResourceKeys::alienExplosionSoundKey, ResourcePaths::alienExplosionSoundPath);
+    success &= loadSoundBuffer(ResourceKeys::playerDeathSoundKey, ResourcePaths::playerDeathSoundPath);
 
     return success;
 }

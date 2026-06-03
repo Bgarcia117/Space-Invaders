@@ -9,6 +9,7 @@ namespace ResourceKeys {
 	const std::string effectsKey = "effect";
 	const std::string playerShootSoundKey = "player_shoot";
 	const std::string alienExplosionSoundKey = "alien_explosion";
+	const std::string playerDeathSoundKey = "player_death";
 }
 
 namespace ResourcePaths {
@@ -19,4 +20,5 @@ namespace ResourcePaths {
 	const std::string effectsPath = "assets/sprites/effects.png";
 	const std::string playerShootSoundPath = "assets/sounds/player_bullet.wav";
 	const std::string alienExplosionSoundPath = "assets/sounds/alien_explosion.wav";
+	const std::string playerDeathSoundPath = "assets/sounds/player_death.wav";
 }
