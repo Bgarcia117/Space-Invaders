@@ -5,7 +5,7 @@
 #include "core/resource_ids.h"
 
 // Sprite Rectangles
-// IntRect: {{x, y}  {width, height}} where {x, y} denote a position on the sprite sheet
+// IntRect: {{x, y}  {width, height}} where {x, y} denote the top left corner of the sprite on the sheet
 constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 22, 20 });
 constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 96, 54 }, { 6, 30 });
 constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
@@ -33,6 +33,13 @@ constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
 constexpr sf::Vector2f DEATH_SCALE = { 0.45f, 0.55f };
+
+constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
+constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
+
+constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 });
+
+constexpr sf::IntRect BARRIER_RECT = sf::IntRect({ 7, 9 }, { 18, 14 });
 
 
 ResourceManager::ResourceManager() {
