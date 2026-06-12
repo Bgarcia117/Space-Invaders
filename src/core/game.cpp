@@ -27,9 +27,6 @@ constexpr float SCREEN_RIGHT_EDGE = 768.f;
 
 constexpr float BARRIER_Y = 760.f;
 constexpr int NUM_OF_BARRIERS = 4;
-constexpr float BARRIER_WIDTH = 72.f;
-constexpr float BARRIER_GAP = 60.f;
-
 constexpr float BARRIER_START_X_POS = 150.0f;
 constexpr float BARRIER_SPACING = 132.0f;
 

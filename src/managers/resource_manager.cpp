@@ -12,12 +12,15 @@ constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_RECT = sf::IntRect({ 1, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_RECT = sf::IntRect({ 3, 53 }, { 18, 14 });
 constexpr sf::IntRect UFO_RECT = sf::IntRect({ 0, 77 }, { 24, 14 });
+constexpr sf::IntRect BARRIER_RECT = sf::IntRect({ 7, 9 }, { 18, 14 });
 
 constexpr sf::IntRect SQUID_TWO_RECT = sf::IntRect({ 29, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_TWO_RECT = sf::IntRect({ 25, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 
-constexpr sf::IntRect DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
+constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
+constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
+constexpr sf::IntRect ALIEN_DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
@@ -32,16 +35,16 @@ constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
-constexpr sf::Vector2f DEATH_SCALE = { 0.45f, 0.55f };
+constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
+constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
 
 constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
-constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
-constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
+
 
 constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 });
 
-constexpr sf::IntRect BARRIER_RECT = sf::IntRect({ 7, 9 }, { 18, 14 });
+
 
 
 ResourceManager::ResourceManager() {
@@ -62,7 +65,7 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("barrier", {ResourceKeys::barrierKey, BARRIER_RECT, BARRIER_SCALE});
 
     // TESTING
-    defineSpriteConfig("death", { ResourceKeys::effectsKey, DEATH_RECT, DEATH_SCALE });
+    defineSpriteConfig("alien_death", { ResourceKeys::effectsKey, ALIEN_DEATH_RECT, ALIEN_DEATH_SCALE });
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed

@@ -32,7 +32,7 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
         sprite2->setPosition({ position });
 
         // Sprite shown upon death
-        const SpriteConfig& spriteConfig2 = resourceManager.getSpriteConfig("death");
+        const SpriteConfig& spriteConfig2 = resourceManager.getSpriteConfig("alien_death");
         const sf::Texture& texture2 = resourceManager.getTexture(spriteConfig2.textureKey);
 
         deathSprite.emplace(texture2);
