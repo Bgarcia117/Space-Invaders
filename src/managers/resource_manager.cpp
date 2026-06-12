@@ -21,10 +21,12 @@ constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
 constexpr sf::IntRect ALIEN_DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
+constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 });
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
 constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
+constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
@@ -37,12 +39,8 @@ constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
 constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
 constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
+constexpr sf::Vector2f EXPLOSION_SCALE = {0.5f, 0.5f };
 
-constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
-
-
-
-constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 });
 
 
 
@@ -85,10 +83,11 @@ ResourceManager::ResourceManager() {
     // Crabs Arms Down
     defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, CRAB_TWO_RECT, CRAB_TWO_SCALE });  
     // Octopus Arms Closed
-    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, OCTOPUS_TWO_RECT, OCTOPUS_TWO_SCALE });  
+    defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, OCTOPUS_TWO_RECT, OCTOPUS_TWO_SCALE });
+
+    // ==================== Effects =================================
+    defineSpriteConfig("explosion", {ResourceKeys::effectsKey, EXPLOSION_RECT, EXPLOSION_SCALE});
 }
-
-
 
 bool ResourceManager::loadFont(const std::string& filepath) {
     if (!font.openFromFile(filepath)) {

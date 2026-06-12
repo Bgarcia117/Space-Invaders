@@ -30,6 +30,8 @@ constexpr int NUM_OF_BARRIERS = 4;
 constexpr float BARRIER_START_X_POS = 150.0f;
 constexpr float BARRIER_SPACING = 132.0f;
 
+constexpr float EXPLOSION_Y_LEVEL = 125.f;
+
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
 	           alienMoveTimer(ALIEN_SPEED),
@@ -81,9 +83,20 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 			checkBulletPlayerCollision();
 
 			// TODO: ADD EXPLOSION ANIMATION LIKE IN ORIGINAL GAME (COLOR: RED)
-			// Remove bullets if they reach the top of the screen
+			for (auto& bullet : bullets) {
+				if (bullet.getOwner() == BulletOwner::PLAYER && !bullet.isExploding() &&
+					bullet.getPosition().y < EXPLOSION_Y_LEVEL) {
+					bullet.explode();
+				}
+			}
+
+			// Remove bullets once explosion animation is finished
 			std::erase_if(bullets, [](Bullet& bullet) {
-				return bullet.getPosition().y < 0.f || bullet.getPosition().y > 1024.f;
+				if (bullet.isExploding()) {
+					return bullet.isFinishedExploding();
+				}
+
+				return bullet.getPosition().y > 1024.0f;
 			});
 
 			// Manually erases aliens so we can keep nextAlienToMove synced with the vector
@@ -140,7 +153,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		}
 
 		for (auto& bullet : bullets) {
-			target.draw(bullet.getSprite());
+			target.draw(bullet.getCurrentSprite());
 		}
 
 		target.draw(player.getSprite());
@@ -329,7 +342,7 @@ void Game::spawnUFO() {
 
 void Game::checkBulletAlienCollision() {
 	std::erase_if(bullets, [this](const Bullet& bullet) {
-		if (bullet.getOwner() != BulletOwner::PLAYER) {
+		if ((bullet.getOwner() != BulletOwner::PLAYER) || bullet.isExploding()) {
 			return false;
 		}
 
