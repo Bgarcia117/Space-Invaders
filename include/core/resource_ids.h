@@ -16,7 +16,7 @@ namespace ResourcePaths {
 	const std::string playerPath = "assets/sprites/player_sheet.png";
 	const std::string alienPath =  "assets/sprites/alien_sprites.png";
 	const std::string bulletPath = "assets/sprites/bullets.png";
-	const std::string barrierPath;
+	const std::string barrierPath = "assets/sprites/barriers.png";
 	const std::string effectsPath = "assets/sprites/effects.png";
 	const std::string playerShootSoundPath = "assets/sounds/player_bullet.wav";
 	const std::string alienExplosionSoundPath = "assets/sounds/alien_explosion.wav";

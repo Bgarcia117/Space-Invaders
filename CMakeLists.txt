@@ -30,7 +30,10 @@ file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*.h" "include/*.hpp")
 # ----------------------------------------------------------------------------
 # Create the executable from all source and header files
 # ----------------------------------------------------------------------------
-add_executable(SpaceInvaders ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(SpaceInvaders ${SOURCE_FILES} ${HEADER_FILES}
+        include/game_objects/barrier.h
+        src/game_objects/barrier.cpp
+)
 
 # ----------------------------------------------------------------------------
 # Copy assets to build directory after building

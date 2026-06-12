@@ -14,14 +14,24 @@
 constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
-constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
-constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
-constexpr float SCREEN_LEFT_EDGE = 0.f;
-constexpr float SCREEN_RIGHT_EDGE = 768.f;
 constexpr float ALIEN_WIDTH = 50.f;
 constexpr float ALIEN_GROUND_LIMIT = 820.f;
 constexpr float	ALIEN_COLUMN_SPACING = 50.f;
 constexpr float ALIEN_ROW_SPACING = 50.f;
+
+constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
+constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
+
+constexpr float SCREEN_LEFT_EDGE = 0.f;
+constexpr float SCREEN_RIGHT_EDGE = 768.f;
+
+constexpr float BARRIER_Y = 760.f;
+constexpr int NUM_OF_BARRIERS = 4;
+constexpr float BARRIER_WIDTH = 72.f;
+constexpr float BARRIER_GAP = 60.f;
+
+constexpr float BARRIER_START_X_POS = 150.0f;
+constexpr float BARRIER_SPACING = 132.0f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -32,6 +42,7 @@ Game::Game() : resourceManager(),
 
 void Game::init() {
 	initAliens();
+	initBarriers();
 	spawnUFO();
 	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
 	playerDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerDeathSoundKey));
@@ -121,6 +132,10 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 	case PLAYING:
 		ui.renderHUD(target, player, true);
+
+		for (auto& barrier : barriers) {
+			target.draw(barrier.getSprite());
+		}
 
 		// Draw alien after flipping sprite
 		for (auto& alien : aliens) {
@@ -300,6 +315,13 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 	}
 }
 
+void Game::initBarriers() {
+	for (int i = 0; i < NUM_OF_BARRIERS; i++) {
+		float barrierPos = BARRIER_START_X_POS + i * BARRIER_SPACING;
+		barriers.emplace_back(resourceManager, sf::Vector2f{barrierPos, BARRIER_Y});
+	}
+}
+
 void Game::updateUFOTimer(float deltaTime) {
 
 }
@@ -415,7 +437,9 @@ std::string Game::convertScore(int score) {
 void Game::resetGame() {
 	bullets.clear();
 	aliens.clear();
+	barriers.clear();
 	initAliens();
+	initBarriers();
 	aliensDirection = alienDirection::RIGHT;
 	nextAlienToMove = 0;
 	alienMoveTimer = ALIEN_SPEED;

@@ -8,6 +8,7 @@
 #include "game_objects/alien.h"
 #include "game_objects/player.h"
 #include "game_objects/bullet.h"
+#include "game_objects/barrier.h"
 #include <UI/ui.h>
 
 enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER, ROUNDWON };
@@ -28,6 +29,7 @@ private:
 	Player player;
 	std::vector<Alien> aliens;
 	std::vector<Bullet> bullets;
+	std::vector<Barrier> barriers;
 	std::optional<Alien> ufo;
 	std::optional<sf::Sound> alienExplosionSound;
 	std::optional<sf::Sound> playerDeathSound;
@@ -50,10 +52,12 @@ private:
 
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
+	void initBarriers();
 	void updateUFOTimer(float deltaTime);
 	void spawnUFO();
 	void checkBulletAlienCollision();
 	void checkBulletPlayerCollision();
+	void checkBulletBarrierCollision();
 	void updateAlienShots(float deltaTime);
 	std::string convertScore(int score);
 	void resetGame();

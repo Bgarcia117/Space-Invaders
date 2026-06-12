@@ -26,13 +26,15 @@ constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_SCALE = { 1.50f, 1.50f };
-constexpr sf::Vector2f UFO_SCALE = { 2.f, 1.75f };
+constexpr sf::Vector2f UFO_SCALE = { 2.0f, 1.75f };
 
 constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
 constexpr sf::Vector2f DEATH_SCALE = { 0.45f, 0.55f };
+
+constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
 constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
@@ -57,6 +59,7 @@ ResourceManager::ResourceManager() {
 
     defineSpriteConfig("player", { ResourceKeys::playerKey, PLAYER_RECT, PLAYER_SCALE });
     defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT, BULLET_SCALE });
+    defineSpriteConfig("barrier", {ResourceKeys::barrierKey, BARRIER_RECT, BARRIER_SCALE});
 
     // TESTING
     defineSpriteConfig("death", { ResourceKeys::effectsKey, DEATH_RECT, DEATH_SCALE });
@@ -178,7 +181,7 @@ bool ResourceManager::loadAllTextures() {
     success &= loadTexture(ResourceKeys::alienKey, ResourcePaths::alienPath);
     success &= loadTexture(ResourceKeys::playerKey, ResourcePaths::playerPath);
     success &= loadTexture(ResourceKeys::bulletKey, ResourcePaths::bulletPath);
-    // success &= loadTexture(ResourceKeys::barrierKey, ResourcePaths::barrierPath);
+    success &= loadTexture(ResourceKeys::barrierKey, ResourcePaths::barrierPath);
     success &= loadTexture(ResourceKeys::effectsKey, ResourcePaths::effectsPath);
 
 
