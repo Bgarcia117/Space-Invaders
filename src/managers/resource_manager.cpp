@@ -37,7 +37,7 @@ constexpr sf::Vector2f SQUID_TWO_SCALE = { 1.75f, 1.75f };
 constexpr sf::Vector2f CRAB_TWO_SCALE = { 1.50f, 1.50f };
 constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
-constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
+// constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
 constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
 constexpr sf::Vector2f EXPLOSION_SCALE = {0.5f, 0.5f };
 
@@ -61,9 +61,6 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("player", { ResourceKeys::playerKey, PLAYER_RECT, PLAYER_SCALE });
     defineSpriteConfig("bullet",  { ResourceKeys::bulletKey, BULLET_RECT, BULLET_SCALE });
     defineSpriteConfig("barrier", {ResourceKeys::barrierKey, BARRIER_RECT, BARRIER_SCALE});
-
-    // TESTING
-    defineSpriteConfig("alien_death", { ResourceKeys::effectsKey, ALIEN_DEATH_RECT, ALIEN_DEATH_SCALE });
  
     // ===================== Alien Sprite Position One ============
     // Squid Arms Crossed
@@ -87,6 +84,9 @@ ResourceManager::ResourceManager() {
 
     // ==================== Effects =================================
     defineSpriteConfig("explosion", {ResourceKeys::effectsKey, EXPLOSION_RECT, EXPLOSION_SCALE});
+    defineSpriteConfig("player_death_one", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_ONE, PLAYER_SCALE});
+    defineSpriteConfig("player_death_two", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_TWO, PLAYER_SCALE});
+    defineSpriteConfig("alien_death", { ResourceKeys::effectsKey, ALIEN_DEATH_RECT, ALIEN_DEATH_SCALE });
 }
 
 bool ResourceManager::loadFont(const std::string& filepath) {

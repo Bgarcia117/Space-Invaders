@@ -62,8 +62,16 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 			break;
 		case PLAYING:
 			player.update(deltaTime);
-			moveAliens(aliens, deltaTime);
-			updateAlienShots(deltaTime);
+
+			if (!player.isDying()) {
+				moveAliens(aliens, deltaTime);
+				updateAlienShots(deltaTime);
+
+				for (auto& alien : aliens) {
+					alien.update(deltaTime);
+					target.draw(alien.getCurrentSprite());
+				}
+			}
 
 			if (aliensReachedGround()) {
 				gameState = GameState::GAMEOVER;
@@ -74,13 +82,19 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 				bullet.update(deltaTime);
 			}
 
-			for (auto& alien : aliens) {
-				alien.update(deltaTime);
-				target.draw(alien.getCurrentSprite());
-			}
-
 			checkBulletAlienCollision();
 			checkBulletPlayerCollision();
+
+			if (player.isDead()) {
+				player.loseLife();
+
+				if (player.getLives() <= 0) {
+					gameState = GameState::GAMEOVER;
+					ui.startTypingGameOver();
+				} else {
+					player.respawn(PLAYER_START_POS);
+				}
+			}
 
 			// TODO: ADD EXPLOSION ANIMATION LIKE IN ORIGINAL GAME (COLOR: RED)
 			for (auto& bullet : bullets) {
@@ -156,7 +170,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 			target.draw(bullet.getCurrentSprite());
 		}
 
-		target.draw(player.getSprite());
+		target.draw(player.getCurrentSprite());
 
 		if (ufo) {
 			target.draw(ufo->getSprite()); // DEBUGGING
@@ -205,7 +219,7 @@ void Game::handleInput(const sf::Event& event) {
 						}
 					}
 
-					if (!playerBulletExists) {
+					if (!playerBulletExists && !player.isDying()) {
 						bullets.push_back(player.shoot(resourceManager));
 						playerShotCount++;
 					}
@@ -361,19 +375,18 @@ void Game::checkBulletAlienCollision() {
 }
 
 void Game::checkBulletPlayerCollision() {
+	if (player.isDying()) {
+		return;
+	}
+
 	std::erase_if(bullets, [this](const Bullet& bullet) {
 		if (bullet.getOwner() != BulletOwner::ALIEN) {
 			return false;
 		}
 
 		if (player.collidesWith(bullet)) {
-			player.loseLife();
+			player.kill();
 			playerDeathSound->play();
-
-			if (player.getLives() <= 0) {
-				gameState = GameState::GAMEOVER;
-				ui.startTypingGameOver();
-			}
 			return true;
 		}
 
@@ -453,7 +466,7 @@ void Game::resetGame() {
 	aliensDirection = alienDirection::RIGHT;
 	nextAlienToMove = 0;
 	alienMoveTimer = ALIEN_SPEED;
-	player.setPosition(PLAYER_START_POS);
+	player.respawn(PLAYER_START_POS);
 }
 
 bool Game::aliensReachedGround() const {
