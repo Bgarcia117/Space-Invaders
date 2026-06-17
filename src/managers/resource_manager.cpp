@@ -21,7 +21,17 @@ constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
 constexpr sf::IntRect ALIEN_DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
-constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 });
+constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 }); // player bullet explosion
+constexpr sf::IntRect ALIEN_BULLET_EXPLOSION_RECT = sf::IntRect({ 78, 252 }, { 36, 48 });
+
+// Bullet IntRects
+constexpr sf::IntRect BULLET_PULSE_ONE = sf::IntRect({ 474, 246 }, { 18, 30 });
+constexpr sf::IntRect BULLET_PULSE_TWO = sf::IntRect({ 282, 246 }, { 18, 30 });
+constexpr sf::IntRect BULLET_PULSE_THREE = sf::IntRect({ 90, 246 }, { 18, 30 });
+constexpr sf::IntRect BULLET_PULSE_FOUR = sf::IntRect({ 474, 54 }, { 18, 30 });
+constexpr sf::IntRect BULLET_PULSE_FIVE = sf::IntRect({ 282, 54 }, { 18, 30 });
+constexpr sf::IntRect LIGHTNING_BULLET = sf::IntRect({ 282, 54 }, { 18, 42 });
+constexpr sf::IntRect LIGHTNING_PULSE_BULLET = sf::IntRect({ 282, 438 }, { 18, 42 });
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
@@ -40,6 +50,7 @@ constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 // constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
 constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
 constexpr sf::Vector2f EXPLOSION_SCALE = {0.5f, 0.5f };
+constexpr sf::Vector2f ALIEN_BULLET_EXPLOSION_SCALE = { 1.0f, 1.0f };
 
 
 
