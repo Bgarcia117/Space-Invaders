@@ -442,7 +442,9 @@ void Game::updateAlienShots(float deltaTime) {
 	pos.x += 20.f;   // Center bullet with alien
 	pos.y += 40.f;   // Move bullet down to start at bottom of alien
 
-	bullets.emplace_back(resourceManager, pos, BulletOwner::ALIEN);
+	std::uniform_int_distribution<int> typeDistribution(0, 2);
+	AlienBulletType bulletType = static_cast<AlienBulletType>(typeDistribution(gen));
+	bullets.emplace_back(resourceManager, pos, BulletOwner::ALIEN, bulletType);
 
 	alienShootTimer = alienShootInterval;
 }

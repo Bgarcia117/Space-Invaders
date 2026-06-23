@@ -1,18 +1,40 @@
 #include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include "game_objects/bullet.h"
 #include "core/game_object.h"
 
 constexpr float EXPLOSION_DURATION = 0.2f;
 constexpr float EXPLOSION_X_OFFSET = -10.f;
+constexpr float SPRITE_DURATION = 0.25f;
 constexpr sf::Color RED(233, 37, 28);
 
-Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, BulletOwner owner) :
+Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, BulletOwner owner,
+               AlienBulletType bulletType) :
 	GameObject(resourceManager, "bullet", position), owner(owner)  {
 
 	if (owner == BulletOwner::PLAYER) {
 		explosionSprite = resourceManager.createSprite("explosion");
 		explosionSprite->setColor(RED);
+		return;
+	}
+
+	for (const auto& key : getSpriteKeys(bulletType)) {
+		sf::Sprite sprite = resourceManager.createSprite(key);
+
+		// Centering origins to flip sprite
+		auto bounds = sprite.getLocalBounds();
+		sprite.setOrigin({bounds.size.x / 2.0f, bounds.size.y / 2.0f});
+		sprite.setPosition(position);
+		spriteStates.push_back(sprite);
+	}
+
+	// Creating flipped lightning sprite
+	if ((bulletType == AlienBulletType::LIGHTNING || bulletType == AlienBulletType::LIGHTNING_PULSE)
+		&& !spriteStates.empty()) {
+		sf::Sprite flippedSprite = spriteStates[0];
+		flippedSprite.setScale({ -flippedSprite.getScale().x, flippedSprite.getScale().y });
+		spriteStates.push_back(flippedSprite);
 	}
 }
 
@@ -27,11 +49,27 @@ void Bullet::update(float deltaTime) {
 		return; // Stop bullet from moving
 	}
 
-
 	if (owner == BulletOwner::PLAYER) {
 		move({bulletSpeed.x, -bulletSpeed.y * deltaTime});
 	} else {
 		move({bulletSpeed.x, bulletSpeed.y * deltaTime});
+
+		if (spriteStates.size() > 1) {
+			spriteTimer += deltaTime;
+
+			if (spriteTimer >= SPRITE_DURATION) {
+				spriteTimer = 0.0f;
+				currentSprite = (currentSprite + 1) % spriteStates.size();
+			}
+		}
+	}
+}
+
+void Bullet::move(sf::Vector2f offset) {
+	GameObject::move(offset);
+
+	for (auto& sprite : spriteStates) {
+		sprite.move(offset);
 	}
 }
 
@@ -55,5 +93,26 @@ const sf::Sprite &Bullet::getCurrentSprite() const {
 		return *explosionSprite;
 	}
 
+	if (!spriteStates.empty()) {
+		return spriteStates[currentSprite];
+	}
+
 	return getSprite();
+}
+
+std::vector<std::string> Bullet::getSpriteKeys(AlienBulletType alienType) const {
+	switch (alienType) {
+		case AlienBulletType::PULSE:
+			return {"bullet_pulse_five", "bullet_pulse_four", "bullet_pulse_three", "bullet_pulse_two",
+				       "bullet_pulse_one" };
+
+		case AlienBulletType::LIGHTNING:
+			return {"lightning_bullet"};
+
+		case AlienBulletType::LIGHTNING_PULSE:
+			return {"lightning_pulse_bullet"};
+
+	}
+
+	return {"bullet_pulse_one"};
 }

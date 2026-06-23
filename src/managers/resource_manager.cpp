@@ -30,12 +30,13 @@ constexpr sf::IntRect BULLET_PULSE_TWO = sf::IntRect({ 282, 246 }, { 18, 30 });
 constexpr sf::IntRect BULLET_PULSE_THREE = sf::IntRect({ 90, 246 }, { 18, 30 });
 constexpr sf::IntRect BULLET_PULSE_FOUR = sf::IntRect({ 474, 54 }, { 18, 30 });
 constexpr sf::IntRect BULLET_PULSE_FIVE = sf::IntRect({ 282, 54 }, { 18, 30 });
-constexpr sf::IntRect LIGHTNING_BULLET = sf::IntRect({ 282, 54 }, { 18, 42 });
+constexpr sf::IntRect LIGHTNING_BULLET = sf::IntRect({ 84, 450 }, { 18, 42 });
 constexpr sf::IntRect LIGHTNING_PULSE_BULLET = sf::IntRect({ 282, 438 }, { 18, 42 });
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
 constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
+constexpr sf::Vector2f ALIEN_BULLET_SCALE = {0.5f, 0.6f };
 constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
@@ -83,15 +84,22 @@ ResourceManager::ResourceManager() {
    
     defineSpriteConfig("UFO",     { ResourceKeys::alienKey, UFO_RECT, UFO_SCALE });
 
-
-
-    // ===================== Alien Sprite Position Two ============
+    // ===================== Alien Sprite Position Two ==============
     // Squid Arms Open   
     defineSpriteConfig("squidTwo",   { ResourceKeys::alienKey, SQUID_TWO_RECT,  SQUID_TWO_SCALE }); 
     // Crabs Arms Down
     defineSpriteConfig("crabTwo",    { ResourceKeys::alienKey, CRAB_TWO_RECT, CRAB_TWO_SCALE });  
     // Octopus Arms Closed
     defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, OCTOPUS_TWO_RECT, OCTOPUS_TWO_SCALE });
+
+    // ===================== Alien Bullets ==========================
+    defineSpriteConfig("bullet_pulse_one", {ResourceKeys::bulletKey, BULLET_PULSE_ONE, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_two", {ResourceKeys::bulletKey, BULLET_PULSE_TWO, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_three", {ResourceKeys::bulletKey, BULLET_PULSE_THREE, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_four", {ResourceKeys::bulletKey, BULLET_PULSE_FOUR, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_five", {ResourceKeys::bulletKey, BULLET_PULSE_FIVE, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_bullet", {ResourceKeys::bulletKey, LIGHTNING_BULLET, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_pulse_bullet", {ResourceKeys::bulletKey, LIGHTNING_PULSE_BULLET, ALIEN_BULLET_SCALE});
 
     // ==================== Effects =================================
     defineSpriteConfig("explosion", {ResourceKeys::effectsKey, EXPLOSION_RECT, EXPLOSION_SCALE});
