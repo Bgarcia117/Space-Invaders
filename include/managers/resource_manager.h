@@ -24,12 +24,15 @@ public:
 
 	const sf::SoundBuffer& getSoundBuffer(const std::string& key) const;
 
+	const sf::Image& getEffectsSpriteSheetImg() const { return effectsSpriteSheetImg; }
 
 private:
 	sf::Font font;
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, SpriteConfig> spriteConfigs;
 	std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
+
+	sf::Image effectsSpriteSheetImg;
 
 	bool loadTexture(const std::string&, const std::string& filepath);
 	bool loadAllTextures();

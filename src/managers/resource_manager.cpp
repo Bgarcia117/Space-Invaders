@@ -7,7 +7,7 @@
 // Sprite Rectangles
 // IntRect: {{x, y}  {width, height}} where {x, y} denote the top left corner of the sprite on the sheet
 constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 22, 20 });
-constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 96, 54 }, { 6, 30 });
+constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 79, 68 }, { 2, 18 });
 constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_RECT = sf::IntRect({ 1, 28 }, { 22, 16 });
 constexpr sf::IntRect OCTOPUS_RECT = sf::IntRect({ 3, 53 }, { 18, 14 });
@@ -21,21 +21,46 @@ constexpr sf::IntRect OCTOPUS_TWO_RECT = sf::IntRect({ 27, 53 }, { 18, 14 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_ONE = sf::IntRect({ 40, 12 }, { 15, 8 });
 constexpr sf::IntRect PLAYER_DEATH_RECT_TWO = sf::IntRect({ 8, 44 }, { 16, 8 });
 constexpr sf::IntRect ALIEN_DEATH_RECT = sf::IntRect({ 252, 54 }, { 78, 42 });
-constexpr sf::IntRect EXPLOSION_RECT = sf::IntRect({ 72, 66 }, { 48, 48 }); // player bullet explosion
-constexpr sf::IntRect ALIEN_BULLET_EXPLOSION_RECT = sf::IntRect({ 78, 252 }, { 36, 48 });
+constexpr sf::IntRect UFO_DEATH_RECT = sf::IntRect({246, 464}, {84, 32});
+
+constexpr sf::IntRect PLAYER_BULLET_EXPLOSION = sf::IntRect({ 72, 66 }, { 48, 48 });
+constexpr sf::IntRect ALIEN_BULLET_EXPLOSION = sf::IntRect({ 83, 270 }, { 24, 32 });
+constexpr sf::IntRect BULLET_COLLISION_ONE = sf::IntRect({272, 271}, {32, 32});
+constexpr sf::IntRect BULLET_COLLISION_TWO = sf::IntRect({464, 271}, {32, 44});
+constexpr sf::IntRect BULLET_COLLISION_THREE = sf::IntRect({80, 463}, {32, 32});
+
 
 // Bullet IntRects
-constexpr sf::IntRect BULLET_PULSE_ONE = sf::IntRect({ 474, 246 }, { 18, 30 });
-constexpr sf::IntRect BULLET_PULSE_TWO = sf::IntRect({ 282, 246 }, { 18, 30 });
-constexpr sf::IntRect BULLET_PULSE_THREE = sf::IntRect({ 90, 246 }, { 18, 30 });
-constexpr sf::IntRect BULLET_PULSE_FOUR = sf::IntRect({ 474, 54 }, { 18, 30 });
-constexpr sf::IntRect BULLET_PULSE_FIVE = sf::IntRect({ 282, 54 }, { 18, 30 });
-constexpr sf::IntRect LIGHTNING_BULLET = sf::IntRect({ 84, 450 }, { 18, 42 });
-constexpr sf::IntRect LIGHTNING_PULSE_BULLET = sf::IntRect({ 282, 438 }, { 18, 42 });
+constexpr sf::IntRect BULLET_PULSE_ONE = sf::IntRect({ 44, 36 }, { 8, 21 });
+constexpr sf::IntRect BULLET_PULSE_TWO = sf::IntRect({ 76, 36 }, { 8, 21 });
+constexpr sf::IntRect BULLET_PULSE_THREE = sf::IntRect({ 12, 68 }, { 8, 21 });
+constexpr sf::IntRect BULLET_PULSE_FOUR = sf::IntRect({ 44, 68 }, { 8, 21 });
+
+constexpr sf::IntRect LIGHTNING_BULLET_ONE = sf::IntRect({ 18, 4 }, { 9, 21 });
+constexpr sf::IntRect LIGHTNING_BULLET_TWO = sf::IntRect({ 47, 4 }, { 9, 21 });
+constexpr sf::IntRect LIGHTNING_BULLET_THREE = sf::IntRect({ 82, 4 }, { 9, 21 });
+constexpr sf::IntRect LIGHTNING_BULLET_FOUR = sf::IntRect({ 15, 36 }, { 9, 21 });
+
+
+constexpr sf::IntRect LIGHTNING_PULSE_ONE = sf::IntRect({ 5, 4 }, { 6, 21 });
+constexpr sf::IntRect LIGHTNING_PULSE_TWO = sf::IntRect({ 39, 4 }, { 2, 21 });
+constexpr sf::IntRect LIGHTNING_PULSE_THREE = sf::IntRect({ 69, 4 }, { 6, 21 });
+constexpr sf::IntRect LIGHTNING_PULSE_FOUR = sf::IntRect({ 7, 36 }, { 2, 21 });
+
+// Letters
+constexpr sf::IntRect LETTER_G_RECT = sf::IntRect({427, 446}, {20, 28});
+constexpr sf::IntRect LETTER_A_RECT = sf::IntRect({457, 446}, {20, 28});
+constexpr sf::IntRect LETTER_M_RECT = sf::IntRect({484, 446}, {20, 28});
+constexpr sf::IntRect LETTER_E_RECT = sf::IntRect({513, 446}, {20, 28});
+constexpr sf::IntRect LETTER_O_RECT = sf::IntRect({426, 486}, {20, 28});
+constexpr sf::IntRect LETTER_V_RECT = sf::IntRect({457, 486}, {20, 28});
+constexpr sf::IntRect LETTER_R_RECT = sf::IntRect({512, 486}, {20, 28});
+
+
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
-constexpr sf::Vector2f BULLET_SCALE = { 0.3f, 0.4f };
+constexpr sf::Vector2f BULLET_SCALE = { 1.5f, 1.0f };
 constexpr sf::Vector2f ALIEN_BULLET_SCALE = {0.5f, 0.6f };
 constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
@@ -50,17 +75,16 @@ constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
 // constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
 constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
-constexpr sf::Vector2f EXPLOSION_SCALE = {0.5f, 0.5f };
-constexpr sf::Vector2f ALIEN_BULLET_EXPLOSION_SCALE = { 1.0f, 1.0f };
-
-
-
-
+constexpr sf::Vector2f PLAYER_BULLET_EXPLOSION_SCALE = {0.5f, 0.5f };
+constexpr sf::Vector2f ALIEN_BULLET_EXPLOSION_SCALE = { 0.70f, 0.70f };
 
 ResourceManager::ResourceManager() {
     if (!loadAllTextures()) {
         std::cerr << "Failed to load required game textures!" << std::endl;
     }
+
+    // CPU copy of sprite sheet to carve barrier without redownloading
+    effectsSpriteSheetImg = getTexture(ResourceKeys::effectsKey).copyToImage();
 
     if (!loadAllSounds()) {
         std::cerr << "Failed to load all sounds!" << std::endl;
@@ -93,16 +117,26 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("octopusTwo", { ResourceKeys::alienKey, OCTOPUS_TWO_RECT, OCTOPUS_TWO_SCALE });
 
     // ===================== Alien Bullets ==========================
-    defineSpriteConfig("bullet_pulse_one", {ResourceKeys::bulletKey, BULLET_PULSE_ONE, ALIEN_BULLET_SCALE});
-    defineSpriteConfig("bullet_pulse_two", {ResourceKeys::bulletKey, BULLET_PULSE_TWO, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_one",   {ResourceKeys::bulletKey, BULLET_PULSE_ONE,   ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_two",   {ResourceKeys::bulletKey, BULLET_PULSE_TWO,   ALIEN_BULLET_SCALE});
     defineSpriteConfig("bullet_pulse_three", {ResourceKeys::bulletKey, BULLET_PULSE_THREE, ALIEN_BULLET_SCALE});
-    defineSpriteConfig("bullet_pulse_four", {ResourceKeys::bulletKey, BULLET_PULSE_FOUR, ALIEN_BULLET_SCALE});
-    defineSpriteConfig("bullet_pulse_five", {ResourceKeys::bulletKey, BULLET_PULSE_FIVE, ALIEN_BULLET_SCALE});
-    defineSpriteConfig("lightning_bullet", {ResourceKeys::bulletKey, LIGHTNING_BULLET, ALIEN_BULLET_SCALE});
-    defineSpriteConfig("lightning_pulse_bullet", {ResourceKeys::bulletKey, LIGHTNING_PULSE_BULLET, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("bullet_pulse_four",  {ResourceKeys::bulletKey, BULLET_PULSE_FOUR,  ALIEN_BULLET_SCALE});
+
+    defineSpriteConfig("lightning_bullet_one",   {ResourceKeys::bulletKey, LIGHTNING_BULLET_ONE,   ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_bullet_two",   {ResourceKeys::bulletKey, LIGHTNING_BULLET_TWO,   ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_bullet_three", {ResourceKeys::bulletKey, LIGHTNING_BULLET_THREE, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_bullet_four",  {ResourceKeys::bulletKey, LIGHTNING_BULLET_FOUR,  ALIEN_BULLET_SCALE});
+
+    defineSpriteConfig("lightning_pulse_one",   {ResourceKeys::bulletKey, LIGHTNING_PULSE_ONE,   ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_pulse_two",   {ResourceKeys::bulletKey, LIGHTNING_PULSE_TWO,   ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_pulse_three", {ResourceKeys::bulletKey, LIGHTNING_PULSE_THREE, ALIEN_BULLET_SCALE});
+    defineSpriteConfig("lightning_pulse_four",  {ResourceKeys::bulletKey, LIGHTNING_PULSE_FOUR,  ALIEN_BULLET_SCALE});
 
     // ==================== Effects =================================
-    defineSpriteConfig("explosion", {ResourceKeys::effectsKey, EXPLOSION_RECT, EXPLOSION_SCALE});
+    defineSpriteConfig("player_bullet_explosion",
+        {ResourceKeys::effectsKey, PLAYER_BULLET_EXPLOSION, PLAYER_BULLET_EXPLOSION_SCALE});
+    defineSpriteConfig("alien_bullet_explosion",
+        {ResourceKeys::effectsKey, ALIEN_BULLET_EXPLOSION, ALIEN_BULLET_EXPLOSION_SCALE});
     defineSpriteConfig("player_death_one", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_ONE, PLAYER_SCALE});
     defineSpriteConfig("player_death_two", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_TWO, PLAYER_SCALE});
     defineSpriteConfig("alien_death", { ResourceKeys::effectsKey, ALIEN_DEATH_RECT, ALIEN_DEATH_SCALE });
