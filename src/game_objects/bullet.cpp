@@ -14,7 +14,7 @@ Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, Bu
 	GameObject(resourceManager, "bullet", position), owner(owner)  {
 
 	if (owner == BulletOwner::PLAYER) {
-		explosionSprite = resourceManager.createSprite("explosion");
+		explosionSprite = resourceManager.createSprite("player_bullet_explosion");
 		explosionSprite->setColor(RED);
 		return;
 	}
@@ -103,16 +103,17 @@ const sf::Sprite &Bullet::getCurrentSprite() const {
 std::vector<std::string> Bullet::getSpriteKeys(AlienBulletType alienType) const {
 	switch (alienType) {
 		case AlienBulletType::PULSE:
-			return {"bullet_pulse_five", "bullet_pulse_four", "bullet_pulse_three", "bullet_pulse_two",
-				       "bullet_pulse_one" };
+			return { "bullet_pulse_one", "bullet_pulse_two",
+				     "bullet_pulse_three", "bullet_pulse_four" };
 
 		case AlienBulletType::LIGHTNING:
-			return {"lightning_bullet"};
+			return { "lightning_bullet_one", "lightning_bullet_two",
+				     "lightning_bullet_three", "lightning_bullet_four" };
 
 		case AlienBulletType::LIGHTNING_PULSE:
-			return {"lightning_pulse_bullet"};
-
+			return { "lightning_pulse_one", "lightning_pulse_two",
+				     "lightning_pulse_three", "lightning_pulse_four" };
 	}
 
-	return {"bullet_pulse_one"};
+	return { "bullet_pulse_one" };
 }

@@ -84,6 +84,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			checkBulletAlienCollision();
 			checkBulletPlayerCollision();
+			checkBulletBarrierCollision();
 
 			if (player.isDead()) {
 				player.loseLife();
@@ -130,6 +131,10 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 				gameState = GameState::ROUNDWON;
 			}
 
+			std::erase_if(barriers, [](const Barrier& barrier) {
+				return barrier.isDestroyed();
+			});
+
 			break;
 		case GAMEOVER:
 			ui.updateTypeWriter(deltaTime);
@@ -158,7 +163,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		ui.renderHUD(target, player, true);
 
 		for (auto& barrier : barriers) {
-			target.draw(barrier.getSprite());
+			target.draw(barrier.getBarrierTextureSprite());
 		}
 
 		// Draw alien after flipping sprite
@@ -340,6 +345,8 @@ void Game::moveAliens(std::vector<Alien>& aliens, float deltaTime) {
 }
 
 void Game::initBarriers() {
+	barriers.reserve(NUM_OF_BARRIERS);
+
 	for (int i = 0; i < NUM_OF_BARRIERS; i++) {
 		float barrierPos = BARRIER_START_X_POS + i * BARRIER_SPACING;
 		barriers.emplace_back(resourceManager, sf::Vector2f{barrierPos, BARRIER_Y});
@@ -392,6 +399,40 @@ void Game::checkBulletPlayerCollision() {
 
 		return false;
 	});
+}
+
+void Game::checkBulletBarrierCollision() {
+	for (auto& bullet : bullets) {
+		if (bullet.isExploding()) {
+			continue;
+		}
+
+		for (auto& barrier : barriers) {
+			if (barrier.isDestroyed()) {
+				continue;
+			}
+
+			const sf::Sprite& bulletSprite = bullet.getCurrentSprite();
+			if (barrier.collidesWith(bulletSprite)) {
+				// Algins the sprite states to carve out the barrier from the center of the bullet instead of the edge
+				auto barrierBounds = barrier.getSprite().getGlobalBounds();
+				auto bulletBounds = bulletSprite.getGlobalBounds();
+				auto overlap = barrierBounds.findIntersection(bulletBounds);
+
+				// Center of overlap in world coordinates
+				sf::Vector2f impactPos;
+				impactPos.x = overlap->position.x + overlap->size.x / 2.f;
+				impactPos.y = (bullet.getOwner() == BulletOwner::PLAYER) ? bulletBounds.position.y :
+				                                                           bulletBounds.position.y + bulletBounds.size.y;
+
+				const std::string explosionKey = (bullet.getOwner() == BulletOwner::PLAYER) ? "player_bullet_explosion" : "alien_bullet_explosion";
+				sf::Sprite explosion = resourceManager.createSprite(explosionKey);
+				barrier.takeDamage(impactPos, explosion, resourceManager.getEffectsSpriteSheetImg());
+				bullet.explode();
+				break;
+			}
+		}
+	}
 }
 
 void Game::updateAlienShots(float deltaTime) {
