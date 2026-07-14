@@ -110,6 +110,7 @@ void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showL
 
 
 	if (showLives) {
+		livesLeft.setString(std::to_string(playerOne.getLives()));
 		target.draw(livesLeft);
 		//	Displays a player sprite for each life left
 		for (int i = 0; i < playerOne.getLives() - 1; i++) {
