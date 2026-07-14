@@ -60,8 +60,8 @@ constexpr sf::IntRect LETTER_R_RECT = sf::IntRect({512, 486}, {20, 28});
 
 // Sprite Scales
 constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
-constexpr sf::Vector2f BULLET_SCALE = { 1.5f, 1.0f };
-constexpr sf::Vector2f ALIEN_BULLET_SCALE = {0.5f, 0.6f };
+constexpr sf::Vector2f BULLET_SCALE = { 1.0f, 0.50f };
+constexpr sf::Vector2f ALIEN_BULLET_SCALE = {1.0f, 0.75f };
 constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };
