@@ -19,7 +19,7 @@ constexpr float ALIEN_GROUND_LIMIT = 820.f;
 constexpr float	ALIEN_COLUMN_SPACING = 50.f;
 constexpr float ALIEN_ROW_SPACING = 50.f;
 
-constexpr sf::Vector2f PLAYER_START_POS = { 500.f, 870.f };
+constexpr sf::Vector2f PLAYER_START_POS = { 75.f, 870.f };
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
 
 constexpr float SCREEN_LEFT_EDGE = 0.f;
