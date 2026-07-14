@@ -186,6 +186,27 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 	case GAMEOVER:
 		ui.renderHUD(target, player, false);
+
+		for (auto& barrier : barriers) {
+			target.draw(barrier.getBarrierTextureSprite());
+		}
+
+		for (auto& alien : aliens) {
+			target.draw(alien.getCurrentSprite());
+		}
+
+		for (auto& bullet : bullets) {
+			target.draw(bullet.getCurrentSprite());
+		}
+
+		if (!player.isDying()) {
+			target.draw(player.getCurrentSprite());
+		}
+
+		if (ufo) {
+			target.draw(ufo->getSprite());
+		}
+
 		ui.renderGameOver(target);
 		break;
 

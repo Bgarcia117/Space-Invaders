@@ -53,7 +53,9 @@ constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
 // Game Over Screen Text Positions
-constexpr sf::Vector2f GAME_OVER_TEXT_POS = { 290.f, 500.f };
+constexpr sf::Vector2f GAME_OVER_TEXT_START_POS = { 250.f, 180.0f };
+constexpr float GAME_OVER_LETTER_SPACING = 30.0f;
+constexpr float GAME_OVER_SPACES_WIDTH = 32.0f;
 
 // Pause Duration before Revealing Table
 constexpr float TABLE_REVEAL_PAUSE = 1.0f;
@@ -77,13 +79,11 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
     squidPointsText(font),
     crabPointsText(font),
     octopusPointsText(font),
-	gameOverText(font),
 	livesLeft(font, std::to_string(playerLives)) {
 
 	setUpHUD();
 	setUpCoinMenu();
 	setUpTableMenu();
-	setUpGameOverScreen();
 	setUpSprites(resourceManager);
 	// TODO: Add game over screen
 	startTypingCoinMenu();
@@ -148,7 +148,9 @@ void UI::renderTableMenu(sf::RenderTarget& target) {
 }
 
 void UI::renderGameOver(sf::RenderTarget &target) {
-	target.draw(gameOverText);
+	for (int i = 0; i < gameOverLettersShown; i++) {
+		target.draw(gameOverLetters[i]);
+	}
 }
 
 void UI::handleMenuInput(sf::Keyboard::Key key) {
@@ -193,13 +195,9 @@ void UI::startTypingTableMenu() {
 }
 
 void UI::startTypingGameOver() {
-	while (!typingQueue.empty()) {
-		typingQueue.pop();
-	}
-
-	gameOverText.setString("");
-	typingQueue.push({"GAME OVER", &gameOverText});
-	startNextText();
+	gameOverLettersShown = 0;
+	gameOverTypeTimer = 0.0f;
+	gameOverTyping = true;
 }
 
 /**
@@ -214,28 +212,42 @@ void UI::startTypingGameOver() {
  */
 void UI::updateTypeWriter(float deltaTime) {
 	// Error handling for text pointer
-	if (!currentTextPtr && currentFullText != "displayTable") return;
+	if (currentTextPtr || currentFullText == "displayTable") {
+		timePassed += deltaTime;
 
-	timePassed += deltaTime;
+		if (currentTextPtr) {
+			while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
+				charIndex++;
+				timePassed -= timePerChar; // Accounts for leftover time
 
-	if (currentTextPtr) {
-		while (timePassed >= timePerChar && charIndex < currentFullText.length()) {
-			charIndex++;
-			timePassed -= timePerChar; // Accounts for leftover time
+				// Show more of the full string
+				currentTextPtr->setString(currentFullText.substr(0, charIndex));
 
-			// Show more of the full string
-			currentTextPtr->setString(currentFullText.substr(0, charIndex));
-
-			// Move to next text to show in the queue
-			if (charIndex >= currentFullText.length()) {
-				startNextText();
+				// Move to next text to show in the queue
+				if (charIndex >= currentFullText.length()) {
+					startNextText();
+				}
 			}
+
+		} else if (currentFullText == "displayTable" && timePassed >= TABLE_REVEAL_PAUSE) {
+			scoreTable.setString("*SCORE ADVANCE TABLE*");
+			startNextText();
+			showTableSprites = true;
+		}
+	}
+
+	if (gameOverTyping) {
+		gameOverTypeTimer += deltaTime;
+
+		while (gameOverTypeTimer >= timePerChar &&
+			   gameOverLettersShown < static_cast<int>(gameOverLetters.size())) {
+			gameOverLettersShown++;
+			gameOverTypeTimer -= timePerChar;
 		}
 
-	} else if (currentFullText == "displayTable" && timePassed >= TABLE_REVEAL_PAUSE) {
-		scoreTable.setString("*SCORE ADVANCE TABLE*");
-		startNextText();
-		showTableSprites = true;
+		if (gameOverLettersShown >= static_cast<int>(gameOverLetters.size())) {
+			gameOverTyping = false;
+		}
 	}
 }
 
@@ -328,16 +340,12 @@ void UI::setUpTableMenu() {
 
 }
 
-void UI::setUpGameOverScreen() {
-	gameOverText.setCharacterSize(TEXT_SIZE);
-	gameOverText.setPosition(GAME_OVER_TEXT_POS);
-	gameOverText.setFillColor(LIGHT_GREEN);
-}
-
 void UI::setUpSprites(ResourceManager& resourceManager) {
+	// Player sprite reused to show remaining lives in the HUD
 	lifeSprite = resourceManager.createSprite("player");
 	lifeSprite->setColor(LIGHT_GREEN);
 
+	// Alien sprites shown next to their point values in the score advance table
 	menuAliensSprites[0] = resourceManager.createSprite("UFO");
 	menuAliensSprites[1] = resourceManager.createSprite("squid");
 	menuAliensSprites[2] = resourceManager.createSprite("crabTwo");
@@ -360,6 +368,22 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 	menuAliensSprites[3]->setScale(MENU_OCTOPUS_SCALE);
 	menuAliensSprites[3]->setColor(LIGHT_GREEN);
 
+	// Builds the GAME OVER sprite letters
+	const std::string gameOverFullText = "GAME OVER";
+	float xOffset = GAME_OVER_TEXT_START_POS.x;
+
+	for (char letter : gameOverFullText) {
+		if (letter == ' ') {
+			xOffset += GAME_OVER_SPACES_WIDTH;
+			continue;
+		}
+
+		std::string letterKey = std::string("letter_") + letter;
+		sf::Sprite letterSprite = resourceManager.createSprite(letterKey);
+		letterSprite.setPosition({ xOffset, GAME_OVER_TEXT_START_POS.y });
+		gameOverLetters.push_back(letterSprite);
+		xOffset += GAME_OVER_LETTER_SPACING;
+	}
 }
 
 /**

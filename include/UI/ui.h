@@ -1,9 +1,9 @@
 #pragma once
 #include <optional>
 #include <array>
-#include <unordered_map>
 #include <string>
 #include <queue>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include <managers/resource_manager.h>
 #include "game_objects/player.h"
@@ -66,7 +66,10 @@ private:
 	std::array<std::optional<sf::Sprite>, 4> menuAliensSprites;
 
 	// Game Over Screen Text
-	sf::Text gameOverText;
+	std::vector<sf::Sprite> gameOverLetters;
+	int gameOverLettersShown = 0;
+	bool gameOverTyping = false;
+	float gameOverTypeTimer = 0.0f;
 
 	// HUD display while in game
 	sf::Text livesLeft;
@@ -75,7 +78,6 @@ private:
 	void setUpHUD();
 	void setUpCoinMenu();
 	void setUpTableMenu();
-	void setUpGameOverScreen();
 	void setUpSprites(ResourceManager& resourceManager);
 	void startNextText();
 
