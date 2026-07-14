@@ -107,6 +107,7 @@ void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showL
 	target.draw(p2ScoreText);
 	target.draw(highScoreText);
 	target.draw(highScoreNum);
+	target.draw(creditsText);
 
 
 	if (showLives) {

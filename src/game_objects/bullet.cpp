@@ -8,6 +8,11 @@ constexpr float EXPLOSION_DURATION = 0.2f;
 constexpr float EXPLOSION_X_OFFSET = -10.f;
 constexpr float SPRITE_DURATION = 0.25f;
 constexpr sf::Color RED(233, 37, 28);
+constexpr sf::Color WHITE(255, 255, 255);
+constexpr sf::Color GREEN(42, 249, 50);
+
+constexpr float TOP_RED_BAND_MAX_Y = 200.f;
+constexpr float BOTTOM_GREEN_BAND_MIN_Y = 700.f;
 
 Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, BulletOwner owner,
                AlienBulletType bulletType) :
@@ -62,6 +67,22 @@ void Bullet::update(float deltaTime) {
 				currentSprite = (currentSprite + 1) % spriteStates.size();
 			}
 		}
+	}
+
+	// Updates the color of the bullet depending on its y level
+	float bulletYPosition = getPosition().y;
+
+	sf::Color bulletColor = WHITE;
+	if (bulletYPosition <= TOP_RED_BAND_MAX_Y) {
+		bulletColor = RED;
+	} else if (bulletYPosition >= BOTTOM_GREEN_BAND_MIN_Y) {
+		bulletColor = GREEN;
+	}
+
+	setSpriteColor(bulletColor);
+
+	for (auto& sprite : spriteStates) {
+		sprite.setColor(bulletColor);
 	}
 }
 
