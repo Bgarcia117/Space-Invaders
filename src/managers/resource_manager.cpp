@@ -6,7 +6,7 @@
 
 // Sprite Rectangles
 // IntRect: {{x, y}  {width, height}} where {x, y} denote the top left corner of the sprite on the sheet
-constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 22, 20 });
+constexpr sf::IntRect PLAYER_RECT = sf::IntRect({ 9, 12 }, { 13, 8 });
 constexpr sf::IntRect BULLET_RECT = sf::IntRect({ 79, 68 }, { 2, 18 });
 constexpr sf::IntRect SQUID_RECT = sf::IntRect({ 5, 4 }, { 14, 16 });
 constexpr sf::IntRect CRAB_RECT = sf::IntRect({ 1, 28 }, { 22, 16 });
@@ -59,9 +59,9 @@ constexpr sf::IntRect LETTER_R_RECT = sf::IntRect({512, 486}, {20, 28});
 
 
 // Sprite Scales
-constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.5f };
+constexpr sf::Vector2f PLAYER_SCALE = { 2.5f, 2.75f };
 constexpr sf::Vector2f BULLET_SCALE = { 1.0f, 0.50f };
-constexpr sf::Vector2f ALIEN_BULLET_SCALE = {1.0f, 0.75f };
+constexpr sf::Vector2f ALIEN_BULLET_SCALE = {1.0f, 0.80f };
 constexpr sf::Vector2f BARRIER_SCALE = {4.0f, 4.0f };
 
 constexpr sf::Vector2f SQUID_SCALE = { 1.75f, 1.75f };

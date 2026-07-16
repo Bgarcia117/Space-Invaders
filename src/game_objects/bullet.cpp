@@ -24,6 +24,9 @@ Bullet::Bullet(const ResourceManager& resourceManager, sf::Vector2f position, Bu
 		return;
 	}
 
+	explosionSprite = resourceManager.createSprite("alien_bullet_explosion");
+	explosionSprite->setColor(GREEN);
+
 	for (const auto& key : getSpriteKeys(bulletType)) {
 		sf::Sprite sprite = resourceManager.createSprite(key);
 

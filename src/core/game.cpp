@@ -31,6 +31,7 @@ constexpr float BARRIER_START_X_POS = 150.0f;
 constexpr float BARRIER_SPACING = 132.0f;
 
 constexpr float EXPLOSION_Y_LEVEL = 125.f;
+constexpr float GROUND_LEVEL_Y = 931.f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -97,10 +98,14 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 				}
 			}
 
-			// TODO: ADD EXPLOSION ANIMATION LIKE IN ORIGINAL GAME (COLOR: RED)
 			for (auto& bullet : bullets) {
-				if (bullet.getOwner() == BulletOwner::PLAYER && !bullet.isExploding() &&
-					bullet.getPosition().y < EXPLOSION_Y_LEVEL) {
+				if (bullet.isExploding()) {
+					continue;
+				}
+
+				if (bullet.getOwner() == BulletOwner::PLAYER && bullet.getPosition().y < EXPLOSION_Y_LEVEL) {
+					bullet.explode();
+				} else if (bullet.getOwner() == BulletOwner::ALIEN && bullet.getPosition().y > GROUND_LEVEL_Y) {
 					bullet.explode();
 				}
 			}
@@ -161,6 +166,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 	case PLAYING:
 		ui.renderHUD(target, player, true);
+		ui.renderBottomLine(target);
 
 		for (auto& barrier : barriers) {
 			target.draw(barrier.getBarrierTextureSprite());
@@ -186,6 +192,7 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 
 	case GAMEOVER:
 		ui.renderHUD(target, player, false);
+		ui.renderBottomLine(target);
 
 		for (auto& barrier : barriers) {
 			target.draw(barrier.getBarrierTextureSprite());

@@ -23,6 +23,8 @@ constexpr sf::Vector2f HIGH_SCORE_NUM_POS = { 320.f, 90.f };
 constexpr sf::Vector2f LIVES_LEFT_POS = { 65.f, 960.f };
 constexpr sf::Vector2f LIFE_SPRITE_POS = { 110.f, 960.f };
 constexpr float LIFE_SPRITE_SPACING = 45.f;
+constexpr sf::Vector2f BOTTOM_LINE_POS = { 0.f, 957.f };
+constexpr sf::Vector2f BOTTOM_LINE_SIZE = { 768.f, 2.f };
 
 // Coin Menu Text Positons 
 constexpr sf::Vector2f INSERT_COIN_TEXT_POS = { 250.f, 300.f };
@@ -109,7 +111,6 @@ void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showL
 	target.draw(highScoreNum);
 	target.draw(creditsText);
 
-
 	if (showLives) {
 		livesLeft.setString(std::to_string(playerOne.getLives()));
 		target.draw(livesLeft);
@@ -152,6 +153,10 @@ void UI::renderGameOver(sf::RenderTarget &target) {
 	for (int i = 0; i < gameOverLettersShown; i++) {
 		target.draw(gameOverLetters[i]);
 	}
+}
+
+void UI::renderBottomLine(sf::RenderTarget &target) const {
+	target.draw(bottomLine);
 }
 
 void UI::handleMenuInput(sf::Keyboard::Key key) {
@@ -288,6 +293,11 @@ void UI::setUpHUD() {
 
 	livesLeft.setCharacterSize(TEXT_SIZE);
 	livesLeft.setPosition(LIVES_LEFT_POS);
+
+	// Bottom Line
+	bottomLine.setSize(BOTTOM_LINE_SIZE);
+	bottomLine.setPosition(BOTTOM_LINE_POS);
+	bottomLine.setFillColor(LIGHT_GREEN);
 }
 
 void UI::setUpCoinMenu() {

@@ -16,6 +16,7 @@ public:
 	void renderCoinMenu(sf::RenderTarget& target);
 	void renderTableMenu(sf::RenderTarget& target);
 	void renderGameOver(sf::RenderTarget& target);
+	void renderBottomLine(sf::RenderTarget& target) const;
 	void handleMenuInput(sf::Keyboard::Key key);
 
 	void startTypingCoinMenu();
@@ -74,6 +75,7 @@ private:
 	// HUD display while in game
 	sf::Text livesLeft;
 	std::optional<sf::Sprite> lifeSprite;
+	sf::RectangleShape bottomLine;
 
 	void setUpHUD();
 	void setUpCoinMenu();
