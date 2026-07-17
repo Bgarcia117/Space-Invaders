@@ -106,7 +106,18 @@ void Bullet::explode() {
 	exploding = true;
 	explosionTimer = EXPLOSION_DURATION;
 
+	// Set color and offset for explosion
 	if (explosionSprite) {
+		float yPos = getPosition().y;
+
+		sf::Color explosionColor = WHITE;
+		if (yPos <= TOP_RED_BAND_MAX_Y) {
+			explosionColor = RED;
+		} else if (yPos >= BOTTOM_GREEN_BAND_MIN_Y) {
+			explosionColor = GREEN;
+		}
+
+		explosionSprite->setColor(explosionColor);
 		explosionSprite->setPosition({getPosition().x + EXPLOSION_X_OFFSET,
 		                                 getPosition().y});
 	}
