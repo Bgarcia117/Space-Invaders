@@ -45,6 +45,8 @@ private:
 	int playerShotCount = 0;
 	int ufoScoreThreshold = 23;
 	float ufoSpawnTimer = 25.6f;
+	float ufoDirection = 1.f;
+
 	float alienShootTimer = 1.0f;
 	float alienShootInterval = 1.0f;
 
@@ -55,6 +57,7 @@ private:
 	void initBarriers();
 	void updateUFOTimer(float deltaTime);
 	void spawnUFO();
+	int getUFOScore() const;
 	void checkBulletAlienCollision();
 	void checkBulletPlayerCollision();
 	void checkBulletBarrierCollision();

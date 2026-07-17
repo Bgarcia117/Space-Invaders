@@ -49,6 +49,11 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
 // Updates sprite using deltaTime
 void Alien::update(float deltaTime) {
     if (!isDying()) {
+        // Prevents UFO from derefrencing its empty optional sprite2
+        if (type == AlienType::UFO) {
+            return;
+        }
+
         spriteFlipTimer -= deltaTime;
 
         if (spriteFlipTimer <= 0) {
@@ -64,19 +69,18 @@ void Alien::update(float deltaTime) {
         spritesState = SpriteState::DEATH;
         deathTimer -= deltaTime;
     }
-
-
 }
 
 void Alien::move(sf::Vector2f offset) {
     GameObject::move(offset);
 
-    if (!sprite2.has_value() || !deathSprite.has_value()) {
-        std::cerr << " A sprite has not been initializied!" << std::endl;
+    if (sprite2) {
+        sprite2->move(offset);
     }
-    sprite2->move(offset);
-    deathSprite->move(offset);
 
+    if (deathSprite) {
+        deathSprite->move(offset);
+    }
 }
 
 

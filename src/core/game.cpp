@@ -33,6 +33,13 @@ constexpr float BARRIER_SPACING = 132.0f;
 constexpr float EXPLOSION_Y_LEVEL = 125.f;
 constexpr float GROUND_LEVEL_Y = 931.f;
 
+// UFO Stuff
+constexpr float UFO_SPEED = 120.f;
+constexpr float UFO_Y = 150.f;
+constexpr float UFO_SPAWN_DELAY = 25.6f;
+constexpr float UFO_LEFT_SPAWN_X = -50.f;
+constexpr float UFO_RIGHT_SPAWN_X = SCREEN_RIGHT_EDGE + 10.f;
+
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
 	           alienMoveTimer(ALIEN_SPEED),
@@ -43,7 +50,6 @@ Game::Game() : resourceManager(),
 void Game::init() {
 	initAliens();
 	initBarriers();
-	spawnUFO();
 	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
 	playerDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerDeathSoundKey));
 }
@@ -67,6 +73,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 			if (!player.isDying()) {
 				moveAliens(aliens, deltaTime);
 				updateAlienShots(deltaTime);
+				updateUFOTimer(deltaTime);
 
 				for (auto& alien : aliens) {
 					alien.update(deltaTime);
@@ -382,17 +389,60 @@ void Game::initBarriers() {
 }
 
 void Game::updateUFOTimer(float deltaTime) {
+	if (ufo) {
+		ufo->move({ ufoDirection * UFO_SPEED * deltaTime, 0.f });
 
+		float ufoXPos = ufo->getPosition().x;
+
+		// Added another 10 to ensure the entire sprite is off screen
+		if (ufoXPos < UFO_LEFT_SPAWN_X - 10.f || ufoXPos > UFO_RIGHT_SPAWN_X + 10.f) {
+			ufo.reset();
+			ufoSpawnTimer =	UFO_SPAWN_DELAY;
+		}
+		return;
+	}
+
+	ufoSpawnTimer -= deltaTime;
+	if (ufoSpawnTimer <= 0.0f) {
+		spawnUFO();
+	}
 }
 
 void Game::spawnUFO() {
-	ufo = Alien(resourceManager, AlienType::UFO, {50.f, 150.f});
+	ufoDirection = -ufoDirection;
+
+	float ufoStartX = (ufoDirection > 0.0f) ? UFO_LEFT_SPAWN_X : UFO_RIGHT_SPAWN_X;
+
+	ufo = Alien(resourceManager, AlienType::UFO, { ufoStartX, UFO_Y });
+}
+
+int Game::getUFOScore() const {
+	// Score pattern repeats every 15 shots to match original game
+	switch (playerShotCount % 15) {
+		case 8:   // 8th, 23rd, 53rd, and so on are the jackpot slots
+			return 300;
+		case 4: case 13:
+			return 150;
+		case 1: case 2: case 7: case 12:
+			return 50;
+		default:
+			return 100;
+	}
 }
 
 void Game::checkBulletAlienCollision() {
 	std::erase_if(bullets, [this](const Bullet& bullet) {
 		if ((bullet.getOwner() != BulletOwner::PLAYER) || bullet.isExploding()) {
 			return false;
+		}
+
+		if (ufo && ufo->collidesWith(bullet)) {
+			score += getUFOScore();
+			ui.setP1Score(score);
+			alienExplosionSound->play();
+			ufo.reset();
+			ufoSpawnTimer = UFO_SPAWN_DELAY;
+			return true;
 		}
 
 		for (auto& alien : aliens) {
@@ -538,6 +588,8 @@ void Game::resetGame() {
 	nextAlienToMove = 0;
 	alienMoveTimer = ALIEN_SPEED;
 	player.respawn(PLAYER_START_POS);
+	ufo.reset();
+	ufoSpawnTimer = UFO_SPAWN_DELAY;
 }
 
 bool Game::aliensReachedGround() const {
