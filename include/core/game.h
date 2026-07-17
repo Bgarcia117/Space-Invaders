@@ -33,6 +33,7 @@ private:
 	std::optional<Alien> ufo;
 	std::optional<sf::Sound> alienExplosionSound;
 	std::optional<sf::Sound> playerDeathSound;
+	std::optional<sf::Sound> ufoDeathSound;
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 

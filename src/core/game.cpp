@@ -8,6 +8,7 @@
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
 #include <UI/ui.h>
+#include <X11/Xlibint.h>
 
 #include "core/resource_ids.h"
 
@@ -52,6 +53,7 @@ void Game::init() {
 	initBarriers();
 	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
 	playerDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerDeathSoundKey));
+	ufoDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::ufoDeathSoundKey));
 }
 
 void Game::begin() {
@@ -439,7 +441,7 @@ void Game::checkBulletAlienCollision() {
 		if (ufo && ufo->collidesWith(bullet)) {
 			score += getUFOScore();
 			ui.setP1Score(score);
-			alienExplosionSound->play();
+			ufoDeathSound->play();
 			ufo.reset();
 			ufoSpawnTimer = UFO_SPAWN_DELAY;
 			return true;
