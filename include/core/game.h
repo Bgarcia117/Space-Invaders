@@ -48,6 +48,10 @@ private:
 	int ufoScoreThreshold = 23;
 	float ufoSpawnTimer = 25.6f;
 	float ufoDirection = 1.f;
+	float ufoScoreTextTimer = 0.0f;
+	int lastUFOScore = 0;
+	std::optional<sf::Text> ufoScoreText;
+
 
 	float alienShootTimer = 1.0f;
 	float alienShootInterval = 1.0f;

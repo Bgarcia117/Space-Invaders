@@ -9,6 +9,7 @@ constexpr float	ALIEN_WIDTH = 50.f;
 constexpr float ALIEN_HEIGHT = 30.f;
 constexpr float DEATH_TIME = 0.10f;
 constexpr float SPRITE_FLIP_TIME = 1.f;
+constexpr float UFO_DEATH_TIME = 1.0f;
 constexpr sf::Vector2f ALIEN_START_POS = { 0.f, 0.f };
 constexpr sf::Color UFO_RED(223, 37, 28);
 
@@ -42,6 +43,17 @@ Alien::Alien(const ResourceManager& resourceManager, AlienType alienType, sf::Ve
       
     } else {
         setSpriteColor(UFO_RED);
+
+        const SpriteConfig& deathConfig = resourceManager.getSpriteConfig("ufo_death");
+        const sf::Texture& deathTexture = resourceManager.getTexture(deathConfig.textureKey);
+
+        deathSprite.emplace(deathTexture);
+        deathSprite->setTextureRect(deathConfig.textureRect);
+        deathSprite->setScale(deathConfig.scale);
+        deathSprite->setPosition(position);
+        deathSprite->setColor(UFO_RED);
+
+        deathTimer = UFO_DEATH_TIME;
     }
 
 }

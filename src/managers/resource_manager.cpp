@@ -75,6 +75,7 @@ constexpr sf::Vector2f OCTOPUS_TWO_SCALE = { 1.50f, 1.50f };
 
 // constexpr sf::Vector2f PLAYER_DEATH_SCALE = {1.0f, 1.0f };
 constexpr sf::Vector2f ALIEN_DEATH_SCALE = { 0.45f, 0.55f };
+constexpr sf::Vector2f UFO_DEATH_SCALE = { 0.75f, 0.75f };
 constexpr sf::Vector2f PLAYER_BULLET_EXPLOSION_SCALE = {0.5f, 0.5f };
 constexpr sf::Vector2f ALIEN_BULLET_EXPLOSION_SCALE = { 0.70f, 0.70f };
 
@@ -142,6 +143,7 @@ ResourceManager::ResourceManager() {
     defineSpriteConfig("player_death_one", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_ONE, PLAYER_SCALE});
     defineSpriteConfig("player_death_two", {ResourceKeys::playerKey, PLAYER_DEATH_RECT_TWO, PLAYER_SCALE});
     defineSpriteConfig("alien_death", { ResourceKeys::effectsKey, ALIEN_DEATH_RECT, ALIEN_DEATH_SCALE });
+    defineSpriteConfig( "ufo_death", { ResourceKeys::effectsKey, UFO_DEATH_RECT, UFO_DEATH_SCALE });
 
     // ==================== Game Over Screen Letters ================
     defineSpriteConfig("letter_G", { ResourceKeys::effectsKey, LETTER_G_RECT, GAME_OVER_LETTERS_SCALE });

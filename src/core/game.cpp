@@ -40,6 +40,9 @@ constexpr float UFO_Y = 150.f;
 constexpr float UFO_SPAWN_DELAY = 25.6f;
 constexpr float UFO_LEFT_SPAWN_X = -50.f;
 constexpr float UFO_RIGHT_SPAWN_X = SCREEN_RIGHT_EDGE + 10.f;
+constexpr float	UFO_SCORE_TEXT_DURATION = 1.0f;
+constexpr int UFO_SCORE_TEXT_SIZE = 30;
+constexpr sf::Color UFO_TEXT_COLOR(223, 37, 28);
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -195,8 +198,13 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		target.draw(player.getCurrentSprite());
 
 		if (ufo) {
-			target.draw(ufo->getSprite()); // DEBUGGING
+			target.draw(ufo->getCurrentSprite()); // DEBUGGING
 		}
+
+		if (ufoScoreText) {
+			target.draw(*ufoScoreText);
+		}
+
 		break;
 	case ROUNDWON:
 		break;
@@ -222,7 +230,11 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		}
 
 		if (ufo) {
-			target.draw(ufo->getSprite());
+			target.draw(ufo->getCurrentSprite());
+		}
+
+		if (ufoScoreText) {
+			target.draw(*ufoScoreText);
 		}
 
 		ui.renderGameOver(target);
@@ -393,7 +405,37 @@ void Game::initBarriers() {
 }
 
 void Game::updateUFOTimer(float deltaTime) {
+	// Score text is being displayed
+	if (ufoScoreText) {
+		ufoScoreTextTimer -= deltaTime;
+
+		if (ufoScoreTextTimer <= 0.0f) {
+			ufoScoreText.reset();
+			ufoSpawnTimer = UFO_SPAWN_DELAY;
+		}
+
+		return;
+	}
+
 	if (ufo) {
+		// If the ufo is dying, start counting down death timer and then display points awarded
+		if (ufo->isDying()) {
+			ufo->update(deltaTime);
+
+			if (ufo->isDead()) {
+				sf::Vector2f ufoPos = ufo->getPosition();
+
+				ufoScoreText.emplace(resourceManager.getFont(), std::to_string(lastUFOScore), UFO_SCORE_TEXT_SIZE);
+				ufoScoreText->setFillColor(UFO_TEXT_COLOR);
+				ufoScoreText->setPosition(ufoPos);
+
+				ufoScoreTextTimer = UFO_SCORE_TEXT_DURATION;
+				ufo.reset();
+			}
+
+			return;
+		}
+
 		ufo->move({ ufoDirection * UFO_SPEED * deltaTime, 0.f });
 
 		float ufoXPos = ufo->getPosition().x;
@@ -407,6 +449,7 @@ void Game::updateUFOTimer(float deltaTime) {
 		return;
 	}
 
+	// Count down for next ufo spawn
 	ufoSpawnTimer -= deltaTime;
 	if (ufoSpawnTimer <= 0.0f) {
 		spawnUFO();
@@ -442,13 +485,13 @@ void Game::checkBulletAlienCollision() {
 			return false;
 		}
 
-		if (ufo && ufo->collidesWith(bullet)) {
-			score += getUFOScore();
+		if (ufo && !ufo->isDying() && ufo->collidesWith(bullet)) {
+			lastUFOScore = getUFOScore();
+			score += lastUFOScore;
 			ui.setP1Score(score);
 			ufoDeathSound->play();
-			ufo.reset();
 			ufoSound->stop();
-			ufoSpawnTimer = UFO_SPAWN_DELAY;
+			ufo->kill();
 			return true;
 		}
 
@@ -597,6 +640,8 @@ void Game::resetGame() {
 	player.respawn(PLAYER_START_POS);
 	ufo.reset();
 	ufoSound->stop();
+	ufoScoreText.reset();
+	ufoScoreTextTimer = 0.0f;
 	ufoSpawnTimer = UFO_SPAWN_DELAY;
 }
 
