@@ -31,6 +31,7 @@ private:
 	std::vector<Bullet> bullets;
 	std::vector<Barrier> barriers;
 	std::optional<Alien> ufo;
+	std::optional<sf::Sound> ufoSound;
 	std::optional<sf::Sound> alienExplosionSound;
 	std::optional<sf::Sound> playerDeathSound;
 	std::optional<sf::Sound> ufoDeathSound;

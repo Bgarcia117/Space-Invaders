@@ -274,6 +274,7 @@ bool ResourceManager::loadAllSounds() {
     success &= loadSoundBuffer(ResourceKeys::alienExplosionSoundKey, ResourcePaths::alienExplosionSoundPath);
     success &= loadSoundBuffer(ResourceKeys::playerDeathSoundKey, ResourcePaths::playerDeathSoundPath);
     success &= loadSoundBuffer(ResourceKeys::ufoDeathSoundKey, ResourcePaths::ufoDeathSoundPath);
+    success &= loadSoundBuffer(ResourceKeys::ufoSoundKey, ResourcePaths::ufoSoundPath);
 
     return success;
 }

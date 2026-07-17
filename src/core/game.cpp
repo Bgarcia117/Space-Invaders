@@ -54,6 +54,8 @@ void Game::init() {
 	alienExplosionSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::alienExplosionSoundKey));
 	playerDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::playerDeathSoundKey));
 	ufoDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::ufoDeathSoundKey));
+	ufoSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::ufoSoundKey));
+	ufoSound->setLooping(true);
 }
 
 void Game::begin() {
@@ -399,6 +401,7 @@ void Game::updateUFOTimer(float deltaTime) {
 		// Added another 10 to ensure the entire sprite is off screen
 		if (ufoXPos < UFO_LEFT_SPAWN_X - 10.f || ufoXPos > UFO_RIGHT_SPAWN_X + 10.f) {
 			ufo.reset();
+			ufoSound->stop();
 			ufoSpawnTimer =	UFO_SPAWN_DELAY;
 		}
 		return;
@@ -416,6 +419,7 @@ void Game::spawnUFO() {
 	float ufoStartX = (ufoDirection > 0.0f) ? UFO_LEFT_SPAWN_X : UFO_RIGHT_SPAWN_X;
 
 	ufo = Alien(resourceManager, AlienType::UFO, { ufoStartX, UFO_Y });
+	ufoSound->play();
 }
 
 int Game::getUFOScore() const {
@@ -443,6 +447,7 @@ void Game::checkBulletAlienCollision() {
 			ui.setP1Score(score);
 			ufoDeathSound->play();
 			ufo.reset();
+			ufoSound->stop();
 			ufoSpawnTimer = UFO_SPAWN_DELAY;
 			return true;
 		}
@@ -591,6 +596,7 @@ void Game::resetGame() {
 	alienMoveTimer = ALIEN_SPEED;
 	player.respawn(PLAYER_START_POS);
 	ufo.reset();
+	ufoSound->stop();
 	ufoSpawnTimer = UFO_SPAWN_DELAY;
 }
 
