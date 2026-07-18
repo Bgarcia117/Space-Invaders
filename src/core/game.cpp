@@ -2,13 +2,13 @@
 #include <algorithm>
 #include <optional>
 #include <random>
+#include <fstream>
 #include <SFML/Graphics.hpp>
 #include "core/game.h"
 #include "managers/resource_manager.h"
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
 #include <UI/ui.h>
-
 #include "core/resource_ids.h"
 
 // Alien stuff
@@ -44,7 +44,7 @@ constexpr float UFO_SPAWN_DELAY = 25.6f;
 constexpr float UFO_LEFT_SPAWN_X = -50.f;
 constexpr float UFO_RIGHT_SPAWN_X = SCREEN_RIGHT_EDGE + 10.f;
 constexpr float	UFO_SCORE_TEXT_DURATION = 1.0f;
-constexpr int UFO_SCORE_TEXT_SIZE = 30;
+constexpr int UFO_SCORE_TEXT_SIZE = 22;
 constexpr sf::Color UFO_TEXT_COLOR(223, 37, 28);
 
 // Play Player One Screen stuff
@@ -54,6 +54,7 @@ constexpr float PLAY_PLAYER_DURATION = 3.5f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
+               highScore(loadHighScore()),
 	           alienMoveTimer(ALIEN_SPEED),
 	           ui(resourceManager, score, highScore, player.getLives()) {
 
@@ -101,6 +102,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			if (aliensReachedGround()) {
 				gameState = GameState::GAMEOVER;
+				saveHighScore();
 				ui.startTypingGameOver();
 			}
 
@@ -117,6 +119,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 				if (player.getLives() <= 0) {
 					gameState = GameState::GAMEOVER;
+					saveHighScore();
 					ui.startTypingGameOver();
 				} else {
 					player.respawn(PLAYER_START_POS);
@@ -314,6 +317,7 @@ void Game::handleInput(const sf::Event& event) {
 					player.resetLives();
 					score = 0;
 					ui.setP1Score(score);
+					ui.setCredits(0);
 					resetGame();
 					gameState = GameState::COINMENU;
 					ui.startTypingCoinMenu();
@@ -531,6 +535,12 @@ void Game::checkBulletAlienCollision() {
 		if (ufo && !ufo->isDying() && ufo->collidesWith(bullet)) {
 			lastUFOScore = getUFOScore();
 			score += lastUFOScore;
+
+			if (score > highScore) {
+				highScore = score;
+				ui.setHighScore(highScore);
+			}
+
 			ui.setP1Score(score);
 			ufoDeathSound->play();
 			ufoSound->stop();
@@ -541,6 +551,12 @@ void Game::checkBulletAlienCollision() {
 		for (auto& alien : aliens) {
 			if (!alien.isDying() && alien.collidesWith(bullet)) {
 				score += alien.getPointValue();
+
+				if (score > highScore) {
+					highScore = score;
+					ui.setHighScore(highScore);
+				}
+
 				ui.setP1Score(score);
 				alien.kill();
 				alienExplosionSound->play();
@@ -696,4 +712,20 @@ bool Game::aliensReachedGround() const {
 	}
 
 	return false;
+}
+
+int Game::loadHighScore() {
+	// input file stream that tries to open highscore.dat
+	std::ifstream in("highscore.dat");
+	int value = 0;
+
+	if (in) {
+		in >> value;
+	}
+	return value;
+}
+
+void Game::saveHighScore() const {
+	std::ofstream out("highscore.dat");
+	out << highScore;
 }

@@ -25,6 +25,7 @@ public:
 	void startTypingGameOver();
 
 	void setCredits(int credits);
+	void setHighScore(int value);
 
 	/**
 	 * @brief Advances the typewriter to reveal the next letter in the text to be displayed.

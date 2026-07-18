@@ -39,7 +39,7 @@ private:
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
 	int score = 0;
-	int highScore = 0;
+	int highScore;
 	float alienMoveTimer = 0.f;
 	int nextAlienToMove = 0;
 
@@ -66,14 +66,20 @@ private:
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
 	void initBarriers();
 	void updatePlayP1(float deltaTime);
+
 	void updateUFOTimer(float deltaTime);
 	void spawnUFO();
 	int getUFOScore() const;
+
 	void checkBulletAlienCollision();
 	void checkBulletPlayerCollision();
 	void checkBulletBarrierCollision();
+
 	void updateAlienShots(float deltaTime);
 	std::string convertScore(int score);
 	void resetGame();
 	bool aliensReachedGround() const;
+
+	int loadHighScore();
+	void saveHighScore() const;
 };

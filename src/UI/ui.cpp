@@ -223,6 +223,10 @@ void UI::setCredits(int credits) {
 	creditsText.setString("CREDIT 0" + std::to_string(credits));
 }
 
+void UI::setHighScore(int value) {
+	highScoreNum.setString(scoreToText(value));
+}
+
 void UI::updateTypeWriter(float deltaTime) {
 	// Error handling for text pointer
 	if (currentTextPtr || currentFullText == "displayTable") {
@@ -360,7 +364,7 @@ void UI::setUpTableMenu() {
 	octopusPointsText.setPosition(OCTOPUS_POINTS_TEXT_POS);
 	octopusPointsText.setFillColor(LIGHT_GREEN);
 
-	creditsText.setString("CREDIT  00");
+	creditsText.setString("CREDIT 00");
 	creditsText.setCharacterSize(TEXT_SIZE);
 	creditsText.setPosition(CREDITS_TEXT_POS);
 
