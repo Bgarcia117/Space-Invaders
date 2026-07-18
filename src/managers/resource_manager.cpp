@@ -200,7 +200,7 @@ bool ResourceManager::loadTexture(const std::string& key, const std::string& fil
         return false;
     }
 
-    std::cout << "Succeeded to load texture!" << std::endl;
+    // std::cout << "Succeeded to load texture!" << std::endl;
     return true;
 }
 
@@ -265,7 +265,7 @@ bool ResourceManager::loadSoundBuffer(const std::string &key, const std::string 
         return false;
     }
 
-    std::cout << "Succeeded to load sound!" << std::endl;
+    // std::cout << "Succeeded to load sound!" << std::endl;
     return true;
 }
 
