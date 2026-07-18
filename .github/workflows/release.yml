@@ -1,0 +1,67 @@
+# Name shown in the GitHub Actions tab
+name: Build and Release
+
+# When to run this workflow.
+# 'push: tags: v*' means: only run when a tag starting with "v" is pushed
+# (e.g. v1.0, v1.2.3). Regular pushes to branches will NOT trigger this.
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Permissions this workflow needs.
+# 'contents: write' is required so the workflow can create a GitHub Release
+# and upload the built zip to it.
+permissions:
+  contents: write
+
+# A workflow can have one or more jobs. Each job runs on a fresh VM.
+jobs:
+  # Job name — shown in the Actions UI
+  build-windows:
+    # The VM operating system. windows-latest gives us a Windows Server VM
+    # with MSVC, CMake, git, and PowerShell already installed.
+    runs-on: windows-latest
+
+    # Steps run in order. Each step is a shell command or a pre-made action.
+    steps:
+      # Downloads your repo onto the VM so the next steps can build it.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Runs CMake to generate build files. Same command you'd run locally,
+      # plus -DCMAKE_BUILD_TYPE=Release for an optimized (non-debug) build.
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      # Compiles the game. --config Release tells MSVC to produce Release
+      # binaries (matches the flag above).
+      - name: Build
+        run: cmake --build build --config Release
+
+      # Bundles the built exe + assets + DLLs into a single zip file.
+      # 'pwsh' means run these commands in PowerShell (Windows shell).
+      - name: Package release
+        shell: pwsh
+        run: |
+          # ${{ github.ref_name }} is the tag name that triggered the workflow
+          # (e.g. "v1.0"). We use it in the folder and zip name.
+          $version = "${{ github.ref_name }}"
+          $stageDir = "SpaceInvaders-$version"
+
+          # Create a fresh folder and copy everything from build/bin/ into it.
+          # build/bin/ contains the .exe, SFML DLLs, and the assets folder.
+          New-Item -ItemType Directory -Path $stageDir | Out-Null
+          Copy-Item -Recurse -Path build/bin/* -Destination $stageDir
+
+          # Zip that folder into SpaceInvaders-v1.0-windows.zip (or similar).
+          Compress-Archive -Path $stageDir -DestinationPath "SpaceInvaders-$version-windows.zip"
+
+      # Creates a GitHub Release for the tag and attaches the zip to it.
+      # generate_release_notes: true tells GitHub to auto-fill the release
+      # description with commits since the previous tag.
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: SpaceInvaders-*-windows.zip
+          generate_release_notes: true
