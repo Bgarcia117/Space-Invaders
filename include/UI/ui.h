@@ -15,6 +15,7 @@ public:
 	void renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives);
 	void renderCoinMenu(sf::RenderTarget& target);
 	void renderTableMenu(sf::RenderTarget& target);
+	void renderPlayP1(sf::RenderTarget& target);
 	void renderGameOver(sf::RenderTarget& target);
 	void renderBottomLine(sf::RenderTarget& target) const;
 	void handleMenuInput(sf::Keyboard::Key key);
@@ -22,8 +23,23 @@ public:
 	void startTypingCoinMenu();
 	void startTypingTableMenu();
 	void startTypingGameOver();
+
+	void setCredits(int credits);
+
+	/**
+	 * @brief Advances the typewriter to reveal the next letter in the text to be displayed.
+	 *
+	 * Reveals one letter at a time of the current full text to be displayed based on elapsed time.
+	 * When the current text is fully revealed, it moves on to the next text in the queue.
+	 * If the current entry is "displayTable", waits for TABLE_REVEAL_PAUSE seconds before
+	 * displaying the score advance table and its sprites. (Simulates the original game menu)
+	 *
+	 * @param deltaTime the amount of time passed since the last frame was rendered
+	 */
 	void updateTypeWriter(float deltaTime);
 	void setP1Score(int score);
+	void setP1ScoreVisible(bool visible);
+	bool isOnePlayerSelected() const;
 
 private:
 	// Type writer helpers
@@ -56,6 +72,11 @@ private:
 	sf::Text highScoreNum;
 	sf::Text creditsText;
 
+	// Play Player One Menu
+	sf::Text playP1Text;
+	bool p1ScoreVisible = true;
+	bool onePlayerSelected = true;
+
 	// Displayed on Start menu
 	sf::Text titleTopLine;
 	sf::Text titleBottomLine;
@@ -81,6 +102,15 @@ private:
 	void setUpCoinMenu();
 	void setUpTableMenu();
 	void setUpSprites(ResourceManager& resourceManager);
+
+	/**
+	 * @brief Advances the typewriter to the next text to be displayed.
+	 *
+	 * Pops the front entry from the typing queue and resets the typewriter to start
+	 * revealing characters from the start of the string. If the queue is empty, the
+	 * current pointer is set to nullptr which stops the typewriter.
+	 */
 	void startNextText();
+	void setUpPlayP1Text();
 
 };

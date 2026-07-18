@@ -8,10 +8,10 @@
 #include "game_objects/player.h"
 #include "game_objects/alien.h"
 #include <UI/ui.h>
-#include <X11/Xlibint.h>
 
 #include "core/resource_ids.h"
 
+// Alien stuff
 constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
@@ -20,12 +20,15 @@ constexpr float ALIEN_GROUND_LIMIT = 820.f;
 constexpr float	ALIEN_COLUMN_SPACING = 50.f;
 constexpr float ALIEN_ROW_SPACING = 50.f;
 
+// Player stuff
 constexpr sf::Vector2f PLAYER_START_POS = { 75.f, 870.f };
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
 
+// Screen stuff
 constexpr float SCREEN_LEFT_EDGE = 0.f;
 constexpr float SCREEN_RIGHT_EDGE = 768.f;
 
+// Barrier stuff
 constexpr float BARRIER_Y = 760.f;
 constexpr int NUM_OF_BARRIERS = 4;
 constexpr float BARRIER_START_X_POS = 150.0f;
@@ -43,6 +46,11 @@ constexpr float UFO_RIGHT_SPAWN_X = SCREEN_RIGHT_EDGE + 10.f;
 constexpr float	UFO_SCORE_TEXT_DURATION = 1.0f;
 constexpr int UFO_SCORE_TEXT_SIZE = 30;
 constexpr sf::Color UFO_TEXT_COLOR(223, 37, 28);
+
+// Play Player One Screen stuff
+constexpr float PLAY_PLAYER_VISIBLE_TIME = 2.5f;
+constexpr float PLAY_PLAYER_FLASH_TIME = 0.1f;
+constexpr float PLAY_PLAYER_DURATION = 3.5f;
 
 Game::Game() : resourceManager(), 
                player(resourceManager, PLAYER_START_POS),
@@ -73,6 +81,9 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 			break;
 		case TABLEMENU:
 			ui.updateTypeWriter(deltaTime);
+			break;
+		case PLAY_PLAYER_ONE:
+			updatePlayP1(deltaTime);
 			break;
 		case PLAYING:
 			player.update(deltaTime);
@@ -178,6 +189,11 @@ void Game::render(sf::RenderTarget& target, float deltaTime) {
 		ui.renderTableMenu(target);
 		break;
 
+	case PLAY_PLAYER_ONE:
+		ui.renderHUD(target, player, true);
+		ui.renderPlayP1(target);
+		break;
+
 	case PLAYING:
 		ui.renderHUD(target, player, true);
 		ui.renderBottomLine(target);
@@ -260,7 +276,18 @@ void Game::handleInput(const sf::Event& event) {
 
 			case TABLEMENU:
 				if (key->code == sf::Keyboard::Key::Enter) {
-					gameState = GameState::PLAYING;
+					if (ui.isOnePlayerSelected()) {
+						ui.setCredits(1);
+						gameState = GameState::PLAY_PLAYER_ONE;
+						playPlayerTimer = PLAY_PLAYER_DURATION;
+						playPlayerFlashTimer = PLAY_PLAYER_FLASH_TIME;
+						playPlayerShown = true;
+						ui.setP1ScoreVisible(true);
+					} else {
+						// Place holder for 2 player option
+						ui.setCredits(2);
+						gameState = GameState::PLAYING;
+					}
 				}
 				break;
 
@@ -401,6 +428,22 @@ void Game::initBarriers() {
 	for (int i = 0; i < NUM_OF_BARRIERS; i++) {
 		float barrierPos = BARRIER_START_X_POS + i * BARRIER_SPACING;
 		barriers.emplace_back(resourceManager, sf::Vector2f{barrierPos, BARRIER_Y});
+	}
+}
+
+void Game::updatePlayP1(float deltaTime) {
+	playPlayerTimer -= deltaTime;
+	playPlayerFlashTimer -= deltaTime;
+
+	if (playPlayerFlashTimer <= 0.0f) {
+		playPlayerShown = !playPlayerShown;
+		ui.setP1ScoreVisible(playPlayerShown);
+		playPlayerFlashTimer = PLAY_PLAYER_FLASH_TIME;
+	}
+
+	if (playPlayerTimer <= 0.0f) {
+		ui.setP1ScoreVisible(true);
+		gameState = GameState::PLAYING;
 	}
 }
 

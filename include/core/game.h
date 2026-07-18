@@ -11,7 +11,7 @@
 #include "game_objects/barrier.h"
 #include <UI/ui.h>
 
-enum GameState { COINMENU, TABLEMENU, PLAYING, GAMEOVER, ROUNDWON };
+enum GameState { COINMENU, TABLEMENU, PLAY_PLAYER_ONE, PLAYING, GAMEOVER, ROUNDWON };
 
 class Game {
 public:
@@ -43,6 +43,10 @@ private:
 	float alienMoveTimer = 0.f;
 	int nextAlienToMove = 0;
 
+	float playPlayerTimer = 0.f;
+	float playPlayerFlashTimer = 0.f;
+	bool playPlayerShown = true;
+
 	// UFO Variables
 	int playerShotCount = 0;
 	int ufoScoreThreshold = 23;
@@ -61,6 +65,7 @@ private:
 	void initAliens();
 	void moveAliens(std::vector<Alien>& aliens, float deltaTime);
 	void initBarriers();
+	void updatePlayP1(float deltaTime);
 	void updateUFOTimer(float deltaTime);
 	void spawnUFO();
 	int getUFOScore() const;

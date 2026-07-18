@@ -54,6 +54,9 @@ constexpr sf::Vector2f MENU_SQUID_SCALE = { 1.5f, 1.5f };
 constexpr sf::Vector2f MENU_CRAB_SCALE = { 1.37f, 1.35f };
 constexpr sf::Vector2f MENU_OCTOPUS_SCALE = { 1.62f, 1.57f };
 
+// Play Player One Screen Positions
+constexpr sf::Vector2f PLAY_P1_TEXT_POS = { 250.f, 480.f };
+
 // Game Over Screen Text Positions
 constexpr sf::Vector2f GAME_OVER_TEXT_START_POS = { 250.f, 180.0f };
 constexpr float GAME_OVER_LETTER_SPACING = 30.0f;
@@ -81,13 +84,14 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
     squidPointsText(font),
     crabPointsText(font),
     octopusPointsText(font),
+	playP1Text(font),
 	livesLeft(font, std::to_string(playerLives)) {
 
 	setUpHUD();
 	setUpCoinMenu();
 	setUpTableMenu();
+	setUpPlayP1Text();
 	setUpSprites(resourceManager);
-	// TODO: Add game over screen
 	startTypingCoinMenu();
 	// startTypingTableMenu();
 }
@@ -105,7 +109,6 @@ std::string UI::scoreToText(int score) {
 // Displays the HUD overlay
 void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showLives) {
 	target.draw(p1ScoreText);
-	target.draw(p1Score);
 	target.draw(p2ScoreText);
 	target.draw(highScoreText);
 	target.draw(highScoreNum);
@@ -119,6 +122,10 @@ void UI::renderHUD(sf::RenderTarget& target, const Player& playerOne, bool showL
 			lifeSprite->setPosition({ LIFE_SPRITE_POS.x + (i * LIFE_SPRITE_SPACING), LIFE_SPRITE_POS.y });
 			target.draw(*lifeSprite);
 		}
+	}
+
+	if (p1ScoreVisible) {
+		target.draw(p1Score);
 	}
 }
 
@@ -149,6 +156,10 @@ void UI::renderTableMenu(sf::RenderTarget& target) {
 	target.draw(creditsText);
 }
 
+void UI::renderPlayP1(sf::RenderTarget &target) {
+	target.draw(playP1Text);
+}
+
 void UI::renderGameOver(sf::RenderTarget &target) {
 	for (int i = 0; i < gameOverLettersShown; i++) {
 		target.draw(gameOverLetters[i]);
@@ -163,11 +174,13 @@ void UI::handleMenuInput(sf::Keyboard::Key key) {
 	if (key == sf::Keyboard::Key::W || key == sf::Keyboard::Key::Up) {
 		onePlayerText.setFillColor(LIGHT_GREEN);
 		twoPlayerText.setFillColor(sf::Color::White);
+		onePlayerSelected = true;
 	}
 
 	if (key == sf::Keyboard::Key::S || key == sf::Keyboard::Key::Down) {
 		onePlayerText.setFillColor(sf::Color::White);
 		twoPlayerText.setFillColor(LIGHT_GREEN);
+		onePlayerSelected = false;
 	}
 }
 
@@ -206,16 +219,10 @@ void UI::startTypingGameOver() {
 	gameOverTyping = true;
 }
 
-/**
- * @brief Advances the typewriter to reveal the next letter in the text to be displayed.
- *
- * Reveals one letter at a time of the current full text to be displayed based on elapsed time.
- * When the current text is fully revealed, it moves on to the next text in the queue.
- * If the current entry is "displayTable", waits for TABLE_REVEAL_PAUSE seconds before
- * displaying the score advance table and its sprites. (Simulates the original game menu)
- *
- * @param deltaTime the amount of time passed since the last frame was rendered
- */
+void UI::setCredits(int credits) {
+	creditsText.setString("CREDIT 0" + std::to_string(credits));
+}
+
 void UI::updateTypeWriter(float deltaTime) {
 	// Error handling for text pointer
 	if (currentTextPtr || currentFullText == "displayTable") {
@@ -259,6 +266,14 @@ void UI::updateTypeWriter(float deltaTime) {
 
 void UI::setP1Score(int score) {
 	p1Score.setString(scoreToText(score));
+}
+
+void UI::setP1ScoreVisible(bool visible) {
+	p1ScoreVisible = visible;
+}
+
+bool UI::isOnePlayerSelected() const {
+	return onePlayerSelected;
 }
 
 // ================================= Private Functions ========================================
@@ -397,13 +412,6 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 	}
 }
 
-/**
- * @brief Advances the typewriter to the next text to be displayed.
- *
- * Pops the front entry from the typing queue and resets the typewriter to start
- * revealing characters from the start of the string. If the queue is emtpy, the
- * current pointer is set to nullptr which stops the typewriter.
- */
 void UI::startNextText() {
 	// Error handling for an empty queue
 	if (typingQueue.empty()) {
@@ -420,4 +428,11 @@ void UI::startNextText() {
 	charIndex = 0;                       // Starts at the beginning of the string
 	timePassed = 0.0f;                   // Starts timer for chars to be revealed
 
+}
+
+void UI::setUpPlayP1Text() {
+	playP1Text.setString("PLAY PLAYER<1>");
+	playP1Text.setCharacterSize(TEXT_SIZE);
+	playP1Text.setFillColor(sf::Color::White);
+	playP1Text.setPosition(PLAY_P1_TEXT_POS);
 }
