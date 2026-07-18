@@ -8,10 +8,15 @@ A Space Invaders clone built from scratch in C++ using SFML 3. Recreates the arc
 
 - Classic 55-alien formation (5 rows × 11 columns) with three alien types
 - Animated alien sprites that cycle between two frames
+- UFO flyovers with dynamic point values and death animation
+- Destructible barriers with pixel-level damage
+- Player and alien shooting with bullet animation
 - Arcade-style typewriter text effect on menus
-- Coin menu and score table screens mimicking original arcade attract mode
-- HUD displaying Player 1 score, high score, and remaining lives
-- Portrait orientation (768×1024) matching the original arcade cabinet aspect ratio
+- Coin menu, score table, and "PLAY PLAYER<1>" attract screens
+- HUD displaying Player 1 score, high score, credits, and remaining lives
+- Persistent high score saved between sessions
+- Sound effects for shots, explosions, UFO flyover, and death
+- Portrait orientation (768×1024) that matches the original arcade cabinet aspect ratio
 
 ---
 
@@ -58,8 +63,10 @@ The compiled executable and all required assets are placed in `build/bin/`.
 |----------------|-----------------------------|
 | Move left      | `A` or `←`                 |
 | Move right     | `D` or `→`                 |
+| Shoot          | `Space`                     |
 | Navigate menu  | `W` / `S` or `↑` / `↓`    |
-| Confirm        | `Enter`                     |
+| Advance screen | `Enter`                     |
+| Quit game      | `Esc`                       |
 
 ---
 
@@ -69,12 +76,12 @@ The game opens with a coin-insert attract screen and a score table showing the p
 
 | Alien   | Points |
 |---------|--------|
-| UFO     | 50     |
+| UFO     | ???    |
 | Squid   | 30     |
 | Octopus | 30     |
 | Crab    | 20     |
 
-Aliens move in the classic step-right / drop-down / step-left pattern. Collision detection, bullet firing, barriers, and a proper game-over screen are still being implemented (see [Planned Features](#planned-features)).
+Aliens move in the classic step-right / drop-down / step-left pattern, speeding up as their numbers thin out. Destroy the mystery UFO for a variable point bonus — see if you can figure out the pattern.
 
 ---
 
@@ -84,15 +91,16 @@ Aliens move in the classic step-right / drop-down / step-left pattern. Collision
 Space-Invaders/
 ├── assets/
 │   ├── fonts/          # Arcade-style TTF font
-│   └── sprites/        # Sprite sheets (aliens, player, bullets, effects)
+│   ├── sprites/        # Sprite sheets (aliens, player, bullets, effects)
+│   └── sounds/         # WAV files (shots, explosions, UFO, death)
 ├── include/
 │   ├── core/           # Game loop, base GameObject, resource key constants
-│   ├── game_objects/   # Alien, Player, Bullet headers
+│   ├── game_objects/   # Alien, Barrier, Bullet, Player headers
 │   ├── managers/       # ResourceManager header
 │   └── UI/             # UI / HUD header
 └── src/
     ├── core/           # game.cpp, game_object.cpp
-    ├── game_objects/   # alien.cpp, player.cpp, bullet.cpp
+    ├── game_objects/   # alien.cpp, barrier.cpp, bullet.cpp, player.cpp
     ├── managers/       # resource_manager.cpp
     └── UI/             # ui.cpp
 ```
@@ -114,27 +122,7 @@ Space-Invaders/
 
 ---
 
-## Implemented
+## Future Work
 
-- [x] Main game loop with fixed 60 FPS
-- [x] Coin menu and score table attract screens
-- [x] Typewriter text effect on menus
-- [x] 55-alien formation (5 rows × 11 columns)
-- [x] Alien sprite animation (two-frame cycle)
-- [x] Alien step movement (right / drop / left pattern)
-- [x] Player movement (left / right)
-- [x] HUD (scores and lives display)
-- [x] Resource manager for textures and fonts
-
----
-
-## Planned Features
-
-- [ ] Player shooting
-- [ ] Collision detection (bullets ↔ aliens, aliens ↔ player)
-- [ ] Destructible barriers / shields
-- [ ] UFO random flyover
-- [ ] Game over and restart flow
-- [ ] Two-player alternating mode
-- [ ] Sound effects and music
-- [ ] Difficulty scaling as aliens are eliminated
+- Two-player alternating mode
+- Additional difficulty scaling and tuning
