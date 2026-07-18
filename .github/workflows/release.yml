@@ -49,10 +49,10 @@ jobs:
           $version = "${{ github.ref_name }}"
           $stageDir = "SpaceInvaders-$version"
 
-          # Create a fresh folder and copy everything from build/bin/ into it.
-          # build/bin/ contains the .exe, SFML DLLs, and the assets folder.
+          # Create a fresh folder and copy everything from the build output dir.
+          # On Windows MSVC, the exe + DLLs + assets end up in build/bin/Release/.
           New-Item -ItemType Directory -Path $stageDir | Out-Null
-          Copy-Item -Recurse -Path build/bin/* -Destination $stageDir
+          Copy-Item -Recurse -Path build/bin/Release/* -Destination $stageDir
 
           # Zip that folder into SpaceInvaders-v1.0-windows.zip (or similar).
           Compress-Archive -Path $stageDir -DestinationPath "SpaceInvaders-$version-windows.zip"
