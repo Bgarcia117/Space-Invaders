@@ -2,12 +2,15 @@
 name: Build and Release
 
 # When to run this workflow.
-# 'push: tags: v*' means: only run when a tag starting with "v" is pushed
+# 'push: tags: v*' means: run when a tag starting with "v" is pushed
 # (e.g. v1.0, v1.2.3). Regular pushes to branches will NOT trigger this.
+# 'workflow_dispatch' adds a "Run workflow" button in the Actions tab so
+# we can build a test zip on demand without publishing a release.
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 # Permissions this workflow needs.
 # 'contents: write' is required so the workflow can create a GitHub Release
@@ -57,10 +60,23 @@ jobs:
           # Zip that folder into SpaceInvaders-v1.0-windows.zip (or similar).
           Compress-Archive -Path $stageDir -DestinationPath "SpaceInvaders-$version-windows.zip"
 
+      # Uploads the zip as a workflow artifact so it can be downloaded from the
+      # run's summary page (Actions tab > this run > Artifacts). This runs on
+      # every trigger, including manual runs, so we can test builds without
+      # publishing a release. Artifacts are kept for ~90 days by default.
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpaceInvaders-windows
+          path: SpaceInvaders-*-windows.zip
+
       # Creates a GitHub Release for the tag and attaches the zip to it.
       # generate_release_notes: true tells GitHub to auto-fill the release
       # description with commits since the previous tag.
+      # The 'if' gate skips this step on manual (workflow_dispatch) runs
+      # since there's no tag to attach the release to.
       - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: SpaceInvaders-*-windows.zip
