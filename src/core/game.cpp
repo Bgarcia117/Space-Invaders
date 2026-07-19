@@ -16,7 +16,7 @@ constexpr float ALIEN_SPEED = 0.038f;
 constexpr sf::Vector2f ALIEN_HORIZONTAL_STEP = { 8.f, 0.f };
 constexpr sf::Vector2f ALIEN_VERTICAL_STEP = { 0.f, 20.f };
 constexpr float ALIEN_WIDTH = 50.f;
-constexpr float ALIEN_GROUND_LIMIT = 820.f;
+constexpr float ALIEN_GROUND_LIMIT = 865.f;
 constexpr float	ALIEN_COLUMN_SPACING = 50.f;
 constexpr float ALIEN_ROW_SPACING = 50.f;
 
@@ -113,6 +113,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			if (aliensReachedGround()) {
 				gameState = GameState::GAMEOVER;
+				ufoSound->stop();
 				saveHighScore();
 				ui.startTypingGameOver();
 			}
@@ -130,6 +131,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 				if (player.getLives() <= 0) {
 					gameState = GameState::GAMEOVER;
+					ufoSound->stop();
 					saveHighScore();
 					ui.startTypingGameOver();
 				} else {
