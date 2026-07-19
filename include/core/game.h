@@ -35,6 +35,10 @@ private:
 	std::optional<sf::Sound> alienExplosionSound;
 	std::optional<sf::Sound> playerDeathSound;
 	std::optional<sf::Sound> ufoDeathSound;
+	std::vector<sf::Sound> alienMarchSounds;
+	float alienMarchSoundTimer = 0;
+	int nextMarchSound = 0;
+
 	GameState gameState = GameState::COINMENU;
 	alienDirection aliensDirection = alienDirection::RIGHT;
 
@@ -76,6 +80,8 @@ private:
 	void checkBulletBarrierCollision();
 
 	void updateAlienShots(float deltaTime);
+	void updateMarchSound(float deltaTime);
+
 	std::string convertScore(int score);
 	void resetGame();
 	bool aliensReachedGround() const;

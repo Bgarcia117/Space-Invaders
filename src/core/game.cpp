@@ -20,6 +20,9 @@ constexpr float ALIEN_GROUND_LIMIT = 820.f;
 constexpr float	ALIEN_COLUMN_SPACING = 50.f;
 constexpr float ALIEN_ROW_SPACING = 50.f;
 
+constexpr float MARCH_SOUND_INTERVAL = 1.0f;
+constexpr float MARCH_SPEED_SCALAR = 0.15f;
+
 // Player stuff
 constexpr sf::Vector2f PLAYER_START_POS = { 75.f, 870.f };
 constexpr sf::Vector2f PLAYER_SPEED = { 150.f, 0.f };
@@ -68,6 +71,13 @@ void Game::init() {
 	ufoDeathSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::ufoDeathSoundKey));
 	ufoSound.emplace(resourceManager.getSoundBuffer(ResourceKeys::ufoSoundKey));
 	ufoSound->setLooping(true);
+
+	alienMarchSounds.reserve(4);
+	alienMarchSounds.emplace_back(resourceManager.getSoundBuffer(ResourceKeys::alienMarch1Key));
+	alienMarchSounds.emplace_back(resourceManager.getSoundBuffer(ResourceKeys::alienMarch2Key));
+	alienMarchSounds.emplace_back(resourceManager.getSoundBuffer(ResourceKeys::alienMarch3Key));
+	alienMarchSounds.emplace_back(resourceManager.getSoundBuffer(ResourceKeys::alienMarch4Key));
+
 }
 
 void Game::begin() {
@@ -91,6 +101,7 @@ void Game::update(sf::RenderTarget& target, float deltaTime) {
 
 			if (!player.isDying()) {
 				moveAliens(aliens, deltaTime);
+				updateMarchSound(deltaTime);
 				updateAlienShots(deltaTime);
 				updateUFOTimer(deltaTime);
 
@@ -677,6 +688,28 @@ void Game::updateAlienShots(float deltaTime) {
 	alienShootTimer = alienShootInterval;
 }
 
+void Game::updateMarchSound(float deltaTime) {
+	if (aliens.empty()) {
+		return;
+	}
+
+	alienMarchSoundTimer -= deltaTime;
+
+	// Plays through all 4 march sounds and speeds up as aliens do
+	if (alienMarchSoundTimer <= 0.0f) {
+		alienMarchSounds[nextMarchSound].play();
+		nextMarchSound = (nextMarchSound + 1) % 4;
+
+		float speedScalar = aliens.size() / 55.0f;
+		if (speedScalar < MARCH_SPEED_SCALAR) {
+			speedScalar = MARCH_SPEED_SCALAR;
+		}
+
+		// Reset timer
+		alienMarchSoundTimer = MARCH_SOUND_INTERVAL * speedScalar;
+	}
+}
+
 std::string Game::convertScore(int score) {
 	std::string strScore = std::to_string(score);
 
@@ -702,6 +735,8 @@ void Game::resetGame() {
 	ufoScoreText.reset();
 	ufoScoreTextTimer = 0.0f;
 	ufoSpawnTimer = UFO_SPAWN_DELAY;
+	alienMarchSoundTimer = 0.0f;
+	nextAlienToMove = 0;
 }
 
 bool Game::aliensReachedGround() const {

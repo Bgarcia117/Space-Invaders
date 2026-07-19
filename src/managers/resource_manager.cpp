@@ -277,6 +277,10 @@ bool ResourceManager::loadAllSounds() {
     success &= loadSoundBuffer(ResourceKeys::playerDeathSoundKey, ResourcePaths::playerDeathSoundPath);
     success &= loadSoundBuffer(ResourceKeys::ufoDeathSoundKey, ResourcePaths::ufoDeathSoundPath);
     success &= loadSoundBuffer(ResourceKeys::ufoSoundKey, ResourcePaths::ufoSoundPath);
+    success &= loadSoundBuffer(ResourceKeys::alienMarch1Key, ResourcePaths::alienMarch1Path);
+    success &= loadSoundBuffer(ResourceKeys::alienMarch2Key, ResourcePaths::alienMarch2Path);
+    success &= loadSoundBuffer(ResourceKeys::alienMarch3Key, ResourcePaths::alienMarch3Path);
+    success &= loadSoundBuffer(ResourceKeys::alienMarch4Key, ResourcePaths::alienMarch4Path);
 
     return success;
 }
