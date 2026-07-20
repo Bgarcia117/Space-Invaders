@@ -9,7 +9,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # ----------------------------------------------------------------------------
 # Fetch SFML from GitHub using FetchContent
+# Static-link SFML so the built exe doesn't need SFML DLLs shipped alongside it
 # ----------------------------------------------------------------------------
+set(BUILD_SHARED_LIBS OFF)
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
