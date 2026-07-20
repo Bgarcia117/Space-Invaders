@@ -61,6 +61,8 @@ constexpr sf::Vector2f PLAY_P1_TEXT_POS = { 250.f, 480.f };
 constexpr sf::Vector2f GAME_OVER_TEXT_START_POS = { 250.f, 180.0f };
 constexpr float GAME_OVER_LETTER_SPACING = 30.0f;
 constexpr float GAME_OVER_SPACES_WIDTH = 32.0f;
+constexpr sf::Vector2f PRESS_ENTER_TEXT_POS = { 522.f, 930.f };
+constexpr int PRESS_ENTER_TEXT_SIZE = 10;
 
 // Pause Duration before Revealing Table
 constexpr float TABLE_REVEAL_PAUSE = 1.0f;
@@ -85,7 +87,8 @@ UI::UI(ResourceManager& resourceManager, int score, int highScore, int playerLiv
     crabPointsText(font),
     octopusPointsText(font),
 	playP1Text(font),
-	livesLeft(font, std::to_string(playerLives)) {
+	livesLeft(font, std::to_string(playerLives)),
+	pressEnterText(font) {
 
 	setUpHUD();
 	setUpCoinMenu();
@@ -163,6 +166,11 @@ void UI::renderPlayP1(sf::RenderTarget &target) {
 void UI::renderGameOver(sf::RenderTarget &target) {
 	for (int i = 0; i < gameOverLettersShown; i++) {
 		target.draw(gameOverLetters[i]);
+	}
+
+	// Wait until GAME OVER has finished typing before showing the prompt
+	if (gameOverLettersShown >= static_cast<int>(gameOverLetters.size())) {
+		target.draw(pressEnterText);
 	}
 }
 
@@ -414,6 +422,11 @@ void UI::setUpSprites(ResourceManager& resourceManager) {
 		gameOverLetters.push_back(letterSprite);
 		xOffset += GAME_OVER_LETTER_SPACING;
 	}
+
+	pressEnterText.setString("PRESS ENTER TO CONTINUE");
+	pressEnterText.setCharacterSize(PRESS_ENTER_TEXT_SIZE);
+	pressEnterText.setFillColor(LIGHT_GREEN);
+	pressEnterText.setPosition(PRESS_ENTER_TEXT_POS);
 }
 
 void UI::startNextText() {

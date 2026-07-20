@@ -93,6 +93,7 @@ private:
 	int gameOverLettersShown = 0;
 	bool gameOverTyping = false;
 	float gameOverTypeTimer = 0.0f;
+	sf::Text pressEnterText;
 
 	// HUD display while in game
 	sf::Text livesLeft;
