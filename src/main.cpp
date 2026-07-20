@@ -14,6 +14,11 @@ int main() {
 		                                    "Space Invaders Clone");
 	window.setFramerateLimit(60);
 
+	sf::Image icon;
+	if (icon.loadFromFile("assets/space_invaders_icon.png")) {
+		window.setIcon(icon);
+	}
+
 	sf::Clock clock;
 
 	// Run as long as the window is open
