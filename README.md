@@ -1,5 +1,7 @@
 # Space Invaders
 
+[![Latest Release](https://img.shields.io/github/v/release/Bgarcia117/Space-Invaders)](https://github.com/Bgarcia117/Space-Invaders/releases/latest)
+
 A Space Invaders clone built from scratch in C++ using SFML 3. Recreates the arcade experience with classic alien formations, animated sprites, typewriter menu effects, and a retro HUD.
 
 ---
@@ -31,7 +33,17 @@ A Space Invaders clone built from scratch in C++ using SFML 3. Recreates the arc
 
 ---
 
-## Getting Started
+## Download
+
+Grab the latest Windows build from the [Releases page](https://github.com/Bgarcia117/Space-Invaders/releases/latest). Unzip and run `SpaceInvaders.exe` — no installation needed.
+
+> **Note:** Windows may show a SmartScreen warning ("Windows protected your PC") the first time you run the game since the executable is not code-signed. Click **More info** → **Run anyway** to launch it. This is expected for unsigned open-source software.
+
+Building from source is documented below for developers or other platforms.
+
+---
+
+## Building from Source
 
 ### Prerequisites
 
@@ -82,8 +94,8 @@ The game opens with a coin-insert attract screen and a score table showing the p
 |---------|--------|
 | UFO     | ???    |
 | Squid   | 30     |
-| Octopus | 30     |
 | Crab    | 20     |
+| Octopus | 10     |
 
 Aliens move in the classic step-right / drop-down / step-left pattern, speeding up as their numbers thin out. Destroy the mystery UFO for a variable point bonus — see if you can figure out the pattern.
 
