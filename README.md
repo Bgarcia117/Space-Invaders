@@ -21,9 +21,13 @@ A Space Invaders clone built from scratch in C++ using SFML 3. Recreates the arc
 ---
 
 ## Screenshots
-<img width="450" height="1018" alt="player_menu" src="https://github.com/user-attachments/assets/9b9160c1-271a-4d17-9cf0-db64565891cb" />
-<img width="450" height="1019" alt="score_table" src="https://github.com/user-attachments/assets/05b5da61-5525-45af-8b80-374d912191b5" />
-
+<p float="left">
+    <img width="250" alt="first_menu" src="https://github.com/user-attachments/assets/23a76c58-3122-4007-9297-5c6d66567df0" />
+    <img width="250" alt="second_menu" src="https://github.com/user-attachments/assets/258738e9-c0fc-486c-8d55-f8afa611e0c4" />
+    <img width="250" alt="third_menu" src="https://github.com/user-attachments/assets/3d780837-9ef9-4288-8be0-89434d824a68" />    
+    <img width="250" alt="playing" src="https://github.com/user-attachments/assets/99ba4fcb-38d0-4e6d-a7d5-b44aff642ee0" />
+    <img width="250" alt="game_over" src="https://github.com/user-attachments/assets/802d0bd5-1fa8-4654-9a4f-c83afbc0fb7b" />
+</p>
 
 ---
 
