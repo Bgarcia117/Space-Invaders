@@ -31,8 +31,10 @@ file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*.h" "include/*.hpp")
 
 # ----------------------------------------------------------------------------
 # Create the executable from all source and header files
+# WIN32 makes this a Windows GUI-subsystem app so no console window pops up
+# alongside the game. It's ignored on non-Windows platforms.
 # ----------------------------------------------------------------------------
-add_executable(SpaceInvaders ${SOURCE_FILES} ${HEADER_FILES}
+add_executable(SpaceInvaders WIN32 ${SOURCE_FILES} ${HEADER_FILES}
         include/game_objects/barrier.h
         src/game_objects/barrier.cpp
 )
@@ -58,5 +60,7 @@ target_compile_features(SpaceInvaders PRIVATE cxx_std_20)
 
 # ----------------------------------------------------------------------------
 # Link the SFML graphics module (includes Window, System, etc.)
+# SFML::Main is a Windows-only helper that lets us keep using plain int main()
+# even though the WIN32 subsystem expects WinMain. Skipped on other platforms.
 # ----------------------------------------------------------------------------
-target_link_libraries(SpaceInvaders PRIVATE SFML::Graphics SFML::Audio)
+target_link_libraries(SpaceInvaders PRIVATE SFML::Graphics SFML::Audio $<$<PLATFORM_ID:Windows>:SFML::Main>)
